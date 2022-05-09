@@ -12,5 +12,6 @@ void GL_LoadPanel(int tid[3], char *szName);
 void GL_LoadFullPanel(int tid[3][3], char *szName);
 int GL_DrawTGA(int index, int r, int g, int b, int a, int iX, int iY, float scale);
 int GL_DrawTGA2(int index, int iX, int iY, int iW, int iH, int alpha);
+int GL_DrawTGACustom(int index, int iX, int iY, int iW, int iH, float iFrom, int r, int g, int b);
 int GL_DrawPanel(int tid[3], int iX, int iY, int iW, int iH, int alpha);
 int GL_DrawFullPanel(int tid[3][3], int iX, int iY, int iW, int iH, int alpha);

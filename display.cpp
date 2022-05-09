@@ -13,7 +13,7 @@
 #include "client.h"
 #include "util.h"
 #include "Encode.h"
-
+#include "Client/HUD/health.h"
 #include "Client/HUD/ammo.h"
 #include "Client/HUD/DrawTGA.h"
 
@@ -60,12 +60,12 @@ void DisplayRedraw(float flTime, int iIntermission)
 		sprintf(txt,"%d",iRemain);
 		g_Font.DrawString(UTF8ToUnicode(txt), iRemain<10?95:80, 0.4*ScreenHeight+135, 1000, 1000);
 	}
-	if(g_szCurWeapon2 && g_bAlive && (g_iMod == MOD_GD/* || g_iMod == MOD_ZB4*/))
+	/*if (g_szCurWeapon2 && g_bAlive/* || g_iMod == MOD_ZB4)
 	{
 		g_Font.SetColor(251,201,96,255);
 		g_Font.SetWidth(24);
-		g_Font.DrawString(g_szCurWeapon2, ScreenWidth - g_Font.GetLen(g_szCurWeapon2) - 18 ,ScreenHeight - 50, 1000, 1000);
-	}
+		//g_Font.DrawString(g_szCurWeapon2, ScreenWidth - g_Font.GetLen(g_szCurWeapon2) - 18 ,ScreenHeight - 50, 1000, 1000);
+	}*/
 }
 
 int g_bC4Flash = 0;

@@ -14,7 +14,6 @@ CPlayerClassManager &PlayerClassManager()
 
 char *AliasClassName(char *name)
 {
-
 	if (!stricmp(name, "spet"))
 		return "Spetsnaz";
 	else if (!stricmp(name, "ara"))

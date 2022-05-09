@@ -295,6 +295,7 @@ void CheckViewEntity(void)
 
 	if (PlayerClassManager()[id])
 		g_iViewEntityBody = PlayerClassManager()[id].sex - 1;
+	 
 
 	//gEngfuncs.SetViewAngles();
 	if (viewent)

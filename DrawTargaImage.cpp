@@ -32,6 +32,35 @@ int GL_DrawTGA2(int index, int iX, int iY, int iW, int iH, int alpha)
 	return 1;
 }
 
+int GL_DrawTGACustom(int index, int iX, int iY, int iW, int iH, float iFrom, int r, int g, int b)
+{
+	if (!index) return 0;
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, index);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glColor4ub(r, g, b, 255);
+	glBegin(GL_QUADS);
+	 
+	glTexCoord2f(0.0f, iFrom);             // Texture coordinates of the first point of the quadrilateral 
+	glVertex2f(iX, iY + (iH * iFrom) );             // Coordinates of the first point of the quadrilateral 
+
+	glTexCoord2f(1.0f, iFrom);             // texture coordinates of the second point of the quadrilateral 
+	glVertex2f(iX + iW, iY + (iH * iFrom));             // coordinates of the second point of the quadrilateral 
+
+	glTexCoord2f(1.0f, 1.0f);             // the third point of the quadrilateral The texture coordinates of 
+	glVertex2f(iX+iW, iY+iH);
+
+	glTexCoord2f(0.0f, 1.0f);             // The texture coordinates of the 4th point of the quadrilateral 
+	glVertex2f(iX, iY+iH);             // The coordinates of the 3rd point of the quadrilateral 
+
+
+	glEnd();
+	return 1;
+}
+
+
+
 int GL_DrawFullPanel(int tid[3][3], int iX, int iY, int iW, int iH, int alpha)
 {
 	if (!tid[0][0]) return 0;

@@ -384,7 +384,7 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 			else
 				m_iKills++;
 
-			if (IS_ZOMBIE_MODE)
+			/*if (IS_ZOMBIE_MODE)
 			{
 				if (m_iKills >= 6 && !HudAlarm().GetHappenedTimes(ALARM_LIBERATOR))
 					HudAlarm().AddAlarm(ALARM_LIBERATOR);
@@ -429,7 +429,7 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 				HudAlarm().AddAlarm(ALARM_FIRSTBLOOD, false);
 			}
 
-			if (/*IsKnife(szWpnName)*/g_iCurrentWeapon == WEAPON_KNIFE && !iIsZombie)
+			if (/*IsKnife(szWpnName)g_iCurrentWeapon == WEAPON_KNIFE && !iIsZombie)
 			{
 				bAddedAlarm = true;
 				HudAlarm().AddAlarm(ALARM_KNIFE);
@@ -499,7 +499,7 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 					else if (iVictim == iLast)
 						HudAlarm().AddAlarm(ALARM_BACKMARKER);
 				}
-			}
+			}*/
 		}
 	}
 

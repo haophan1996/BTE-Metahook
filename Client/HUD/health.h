@@ -18,6 +18,8 @@ public:
 	int m_iHealth, m_iArmor, m_iArmorType;
 	int m_iHealthExtra;
 	float m_flHealthFade, m_flArmorFade;
+	float iF, iT;
+	
 
 private:
 	int m_iHealthIcon, m_iHealthExtraIcon, m_iArmorIcon[2], m_iArmorFullIcon[2];

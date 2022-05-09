@@ -13,12 +13,19 @@
 
 #include "ammo.h"
 #include "zb3ui.h"
-
 #include "shared_util.h"
 
+#include "Fonts.h" 
+#include "texdraw.h"
+#include "WeaponManager.h"
+#include "Client/HUD/FontText.h"
+#include <HUD/DrawTga.h>
+#include "DrawTargaImage.h"
+
+Font myFont;
 static CHudAmmo g_HudAmmo;
 CHudAmmo &HudAmmo()
-{
+{ 
 	return g_HudAmmo;
 }
 
@@ -89,11 +96,31 @@ void CHudAmmo::Draw(float flTime)
 
 		if (g_iWeaponData[g_iCurrentWeapon].rcAutoaim.right > 0 && g_iWeaponData[g_iCurrentWeapon].rcAutoaim.bottom > 0)
 			gEngfuncs.pfnSPR_DrawHoles(0, x, y, &g_iWeaponData[g_iCurrentWeapon].rcAutoaim);
+	} 
+	//Show weapons label
+	if (g_bAlive) {
+		std::string s = g_iWeaponData[g_iCurrentWeapon].szName;
+		g_FontBold.SetColor(152, 173, 174, 255);
+		g_FontBold.SetWidth(15);
+		char wpnChar[256];
+		if (s.length() > 6) {
+			s = s.substr(7, s.length());
+			char* cstr = new char[s.length() + 1];
+			strcpy(cstr, s.c_str()); 
+
+			sprintf(wpnChar, "gfx\\vgui\\%s", cstr); //LogToFile("test read"); LogToFile(g_Texture[m_wpn].szName);
+			int m_wpn = Hud().m_TGA.FindTexture(wpnChar);
+
+			GL_DrawTGA(g_Texture[m_wpn].iTexture, 255, 255, 255, 255, ScreenWidth - 200, ScreenHeight - 100, 0.7);
+			g_FontBold.DrawString(GetWeaponNameFormat(cstr), ScreenWidth - 180, ScreenHeight - 60, 1000); 
+		}
 	}
 }
 
+
 void CHudAmmo::DrawAmmo(float time)
 {
+	 
 	if ((Hud().m_iHideHUDDisplay & (HIDEWEAPON_WEAPON | HIDEWEAPON_ALL)) || gEngfuncs.IsSpectateOnly())
 		return;
 	if (!(Hud().m_iWeaponBits & (1 << (WEAPON_VEST))))
@@ -159,7 +186,7 @@ void CHudAmmo::DrawAmmo(float time)
 	else
 		iFlags = DHN_DRAWZERO | DHN_3DIGITS;
 
-	Hud().DrawHudNumber(x, y, iFlags, m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType], r, g, b);
+	Hud().DrawHudNumber(x, y, iFlags, m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType], r, g, b); 
 }
 
 int DrawExtraAmmoNumber(int x, int y, int iNumber, int r, int g, int b)
