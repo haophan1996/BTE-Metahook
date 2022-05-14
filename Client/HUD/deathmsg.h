@@ -16,6 +16,7 @@ struct DeathNoticeItem {
 	int Victim;
 	int iHeadShot;
 	int iLocal;
+	int idKiller;
 };
 
 int DrawConsoleString(int x, int y, const char *string);

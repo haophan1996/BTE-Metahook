@@ -100,6 +100,9 @@ auto CPlayerClassManager::LoadClassData(const char *szName) -> ClassData
 	else 
 		Result.sex = SEX_MALE;
 
+	GetPrivateProfileStringA(szName, "Hand", "1", szValue, sizeof(szValue), "cstrike/class.ini");
+	Result.hand = atoi(szValue);
+
 	GetPrivateProfileStringA(szName, "Team", "0", szValue, sizeof(szValue), "cstrike/class.ini");
 	if (szValue[0]=='T' || atoi(szValue) == 1)
 		Result.team = TEAM_TERRORIST;

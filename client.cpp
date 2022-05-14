@@ -294,7 +294,7 @@ void CheckViewEntity(void)
 		id = g_iUser2;
 
 	if (PlayerClassManager()[id])
-		g_iViewEntityBody = PlayerClassManager()[id].sex - 1;
+		g_iViewEntityBody = PlayerClassManager()[id].hand;
 	 
 
 	//gEngfuncs.SetViewAngles();

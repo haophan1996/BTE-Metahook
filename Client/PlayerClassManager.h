@@ -19,7 +19,7 @@ public:
 		Sex_e sex;
 		int team;
 		char szTextureReplaceKey[32];
-
+		int hand;
 		explicit operator bool()
 		{
 			return model[0] != '\0';

@@ -19,6 +19,8 @@
 #include "DrawTABPanel.h"
 #include "Statistics.h"
 #include "Client/HUD/DrawTGA.h"
+#include <calcscreen.h>
+#include <TextureManager.h>
 
 static CHudDeathNotice g_HudDeathNotice;
 CHudDeathNotice &HudDeathNotice()
@@ -232,6 +234,7 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 	{
 		strncpy( m_rgDeathNoticeList[i].szKiller, killer_name, MAX_PLAYER_NAME_LENGTH );
 		m_rgDeathNoticeList[i].szKiller[MAX_PLAYER_NAME_LENGTH-1] = 0;
+		m_rgDeathNoticeList[i].idKiller = iKiller;
 	}
 	// Get the Victim's name
 	char *victim_name = NULL;
@@ -657,6 +660,24 @@ void CHudDeathNotice::Draw(float flTime)
 			}
 			if ( !m_rgDeathNoticeList[i].iSuicide )
 			{
+				if (m_rgDeathNoticeList[i].iLocal == 2) {
+					float vecScreen[2];
+					cl_entity_s* p;
+					p = gEngfuncs.GetEntityByIndex(m_rgDeathNoticeList[i].idKiller); 
+					if (CalcScreen(p->origin, vecScreen) && !g_bAlive)
+					{
+						static auto& KillerIcon = TextureManager()["gfx\\charSystem\\KILLERMARK.tga"];
+						int iX = vecScreen[0] - KillerIcon.w() / 2;
+						int iY = vecScreen[1] - KillerIcon.h() - 10;
+						if (iX > ScreenWidth) iX = ScreenWidth;
+						else if (iX < 0) iX = 0;
+
+						if (iY > ScreenHeight) iX = ScreenHeight;
+						else if (iY < 0) iY = 0;
+						KillerIcon.Draw(iX, iY); 
+					}
+				}
+
 				x -= (5 + ConsoleStringLen( m_rgDeathNoticeList[i].szKiller ) )+BORDER;
 				// Draw killers name
 				if(m_rgDeathNoticeList[i].Killer == 1)

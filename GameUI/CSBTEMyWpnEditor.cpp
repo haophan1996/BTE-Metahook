@@ -234,6 +234,12 @@ CCSBTEMyWpnEditor::CCSBTEMyWpnEditor(Panel *parent, const char *panelName, bool 
 
 			Temp.isMyWpn = false;
 			
+			//Hide weapon cannot buy
+			GetPrivateProfileString(Temp.szName, "CanBuy", "TRUE", szBuffer, sizeof(szBuffer), "cstrike/weapons.ini");
+			if (szBuffer[0] == 'F') {
+				continue;
+			}
+
 			m_WeaponInfoList.push_back(Temp);
 		}
 		fclose(pFile);
