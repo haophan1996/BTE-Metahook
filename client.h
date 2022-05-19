@@ -34,7 +34,7 @@ extern int g_iTattooSmallEnable;
 extern char g_szWeaponSkin[20][20];
 extern int g_iWeaponSkin[20][2],g_iSetupSkin;
 extern int g_iWeaponStat,g_iButton;
-extern int g_iWeaponStat,g_iButton,g_iBl3Muzz, g_bInReload;
+extern int g_iWeaponStat,g_iButton,g_iBl3Muzz, g_bInReload, g_iShooting;
 extern int g_iSpoce;
 extern bool g_iszb4kicking;
 extern int g_iCountBg;

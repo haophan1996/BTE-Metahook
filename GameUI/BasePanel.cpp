@@ -825,7 +825,7 @@ void CBasePanel::CreateGameLogo(void)
 
 void CBasePanel::CreateBinkPanel(void)
 {
-	m_pBinkTexture = new CGL_BinkTexture("resource/bg_bink.bik");
+	/*m_pBinkTexture = new CGL_BinkTexture("resource/bg_bink.bik");
 	if (m_pBinkTexture && m_pBinkTexture->operator bool())
 	{
 		if (m_pBinkTexture->FPlaySound())
@@ -837,7 +837,7 @@ void CBasePanel::CreateBinkPanel(void)
 	{
 		delete m_pBinkTexture;
 		m_pBinkTexture = nullptr;
-	}
+	}*/
 }
 
 void CBasePanel::CreateBackGround(void)
@@ -1148,10 +1148,10 @@ void CBasePanel::RunMenuCommand(const char *command)
 	{
 		OnOpenSubDialog<CCSBTEWpnDataEditor>();
 	}
-	else if (!Q_stricmp(command, "OpenLuckyItemPopupDialog"))
-	{
-		OnOpenSubDialog<CCSOLLuckyItemPopupDialog>("LuckyItemDlg");
-	}
+	//else if (!Q_stricmp(command, "OpenLuckyItemPopupDialog"))
+	//{
+	//	OnOpenSubDialog<CCSOLLuckyItemPopupDialog>("LuckyItemDlg");
+	//}
 	else if (!Q_stricmp(command, "QuitNoConfirm"))
 	{
 		SetVisible(false);

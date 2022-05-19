@@ -78,7 +78,7 @@ HWND WINAPI NewCreateWindowExA(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWin
 			dwStyle &= ~WS_SIZEBOX;
 		}
 
-		HWND hWnd = g_pfnCreateWindowExA(dwExStyle, lpClassName, "Counter-Strike: BreakThrough Edition", dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+		HWND hWnd = g_pfnCreateWindowExA(dwExStyle, lpClassName, "Counter-Strike: Crossfire Mod", dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
 
 		g_lpPrevWndFunc = (WNDPROC)SetWindowLong(hWnd, GWL_WNDPROC, (LONG)&NewWndProcFunc);
 
@@ -104,13 +104,13 @@ void Window_LoadClient(void)
 
 void Window_Reset(void)
 {
-	Window_SetTitle("Counter-Strike: BreakThrough Edition - Loading...");
+	Window_SetTitle("Counter-Strike:Crossfire Mod - Loading...");
 }
 
 void Window_VidInit(void)
 {
 	char title[255];
-	sprintf(title, "%s [%s]", "Counter-Strike: BreakThrough Edition", __DATE__);
+	sprintf(title, "%s [%s]", "Counter-Strike: Crossfire Mod", __DATE__);
 	Window_SetTitle(title);
 
 	if (gEngfuncs.CheckParm("-noborder", NULL))

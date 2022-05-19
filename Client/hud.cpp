@@ -93,7 +93,7 @@ CHud::CHud() :
 void CHud::Init()
 {
 	CounterStrikeViewport_InstallHook();
-	ShutDown();
+	ShutDown(); 
 	
 	/*m_NVG.Init();	// Actually it won't place any other element
 	m_Retina.Init();

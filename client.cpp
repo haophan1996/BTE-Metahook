@@ -25,6 +25,7 @@ int g_iWeaponStat = 0;
 int g_iBl3Muzz = 10;
 int g_iSpoce = 0;
 int g_bInReload = 0;
+int g_iShooting = 0;
 
 PlayerInfo vPlayer[36];
 extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];
@@ -299,7 +300,7 @@ void CheckViewEntity(void)
 
 	//gEngfuncs.SetViewAngles();
 	if (viewent)
-	{
+	{ 
 		if(viewent->model->name && !strstr(viewent->model->name, "v_foot"))
 		{
 			//g_iCurWeapon = 0;
@@ -313,7 +314,7 @@ void CheckViewEntity(void)
 				szCurWeapon[strlen(szCurWeapon) - 2] = 0;
 			}
 			else
-			{
+			{ 
 				//g_iShowCustomCrosshair = 0;
 				Hud().m_iHideHUDDisplay &= ~HIDEWEAPON_CROSSHAIR;
 				//Hud().m_Ammo.m_flNextDrawExtraAmmo = Hud().m_flTime + 0.01f;

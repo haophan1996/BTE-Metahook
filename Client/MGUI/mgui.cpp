@@ -1,4 +1,4 @@
-#include "metahook.h"
+ï»¿#include "metahook.h"
 #include "plugins.h"
 #include "bte_const.h"
 #include "exportfuncs.h"
@@ -20,8 +20,8 @@
 #include "Client/HUD/hud_saytext.h"
 #include "Client/HUD/DrawTGA.h"
 
-MGUI_Panel *pRootPanel = NULL;
-MGUI_Image *pImage;
+MGUI_Panel* pRootPanel = NULL;
+MGUI_Image* pImage;
 WNDPROC g_OldProc;
 
 int g_mgui_keynum = -1;
@@ -32,11 +32,11 @@ int g_mouse_w, g_mouse_h;
 //int g_mgui_tga_button[3];
 float g_mgui_nextclicktime;
 int g_mgui_mouse;
-CANDIDATELIST *CandidateList;
+CANDIDATELIST* CandidateList;
 bool g_bDrawIme = false;
 int iCanSetMouse = 0;
 
-void MGUI_Base::Paint(MGUI_Base *pParent)
+void MGUI_Base::Paint(MGUI_Base* pParent)
 {
 	return;
 }
@@ -70,9 +70,9 @@ int MGUI_Panel::SetTexture(int iTex[3][3])
 	return 1;
 }
 
-MGUI_Panel *MGUI_CreatePanel(int x, int y, int w, int h, int iTitleHeight, bool CanMove, bool bHasMsgBox)
+MGUI_Panel* MGUI_CreatePanel(int x, int y, int w, int h, int iTitleHeight, bool CanMove, bool bHasMsgBox)
 {
-	MGUI_Panel *pPanel = new MGUI_Panel;
+	MGUI_Panel* pPanel = new MGUI_Panel;
 	if (!pPanel)
 	{
 		return NULL;
@@ -99,7 +99,7 @@ MGUI_Panel *MGUI_CreatePanel(int x, int y, int w, int h, int iTitleHeight, bool 
 	}
 	else
 	{
-		MGUI_Panel *pPanelNext = pRootPanel;
+		MGUI_Panel* pPanelNext = pRootPanel;
 		while (pPanelNext->pNextPanel)
 		{
 			pPanelNext = pPanelNext->pNextPanel;
@@ -112,12 +112,12 @@ bool MGUI_Panel::IsInRect(void)
 {
 	int iMouseX, iMouseY;
 	gEngfuncs.GetMousePosition(&iMouseX, &iMouseY);
-	if (iMouseX>x && iMouseX< x + w && iMouseY>y && iMouseY<y + m_iTitleHeight) return true;
+	if (iMouseX > x && iMouseX< x + w && iMouseY>y && iMouseY < y + m_iTitleHeight) return true;
 	return false;
 }
-bool MGUI_Panel::InsertControl(MGUI_Base *pChild)
+bool MGUI_Panel::InsertControl(MGUI_Base* pChild)
 {
-	MGUI_Base *pTemp = (MGUI_Base *)this;
+	MGUI_Base* pTemp = (MGUI_Base*)this;
 	while (pTemp->pNext)
 	{
 		pTemp = pTemp->pNext;
@@ -125,14 +125,14 @@ bool MGUI_Panel::InsertControl(MGUI_Base *pChild)
 	pTemp->pNext = pChild;
 	return true;
 }
-char *MGUI_Panel::GetTextEntryText(int iClass)
+char* MGUI_Panel::GetTextEntryText(int iClass)
 {
-	MGUI_Base *pNext = this;
+	MGUI_Base* pNext = this;
 	while (pNext)
 	{
 		if (pNext->iClass == MGUI_TEXTENTRY)
 		{
-			MGUI_TextEntry *pEntry = (MGUI_TextEntry *)pNext;
+			MGUI_TextEntry* pEntry = (MGUI_TextEntry*)pNext;
 			if (pEntry->m_iClass == iClass)
 			{
 				return pEntry->m_pText;
@@ -142,14 +142,14 @@ char *MGUI_Panel::GetTextEntryText(int iClass)
 	}
 	return NULL;
 }
-void MGUI_Panel::MGUIMessageBox(wchar_t szCaption[], wchar_t szText[], int iType, void(*pfnOKClick)(MGUI_Button *), void(*pfnCancelClick)(MGUI_Button *), int iOKKey, int iCancelKey)
+void MGUI_Panel::MGUIMessageBox(wchar_t szCaption[], wchar_t szText[], int iType, void(*pfnOKClick)(MGUI_Button*), void(*pfnCancelClick)(MGUI_Button*), int iOKKey, int iCancelKey)
 {
-	MGUI_MSGBox *msgbox = MGUI_CreateMessageBox(this, szCaption, szText, iType, pfnOKClick, pfnCancelClick, iOKKey, iCancelKey);
+	MGUI_MSGBox* msgbox = MGUI_CreateMessageBox(this, szCaption, szText, iType, pfnOKClick, pfnCancelClick, iOKKey, iCancelKey);
 	m_pMsgBox = msgbox;
 }
 
 ////////////////////// IMAGE
-void MGUI_Image::SetTexture(char *pName)
+void MGUI_Image::SetTexture(char* pName)
 {
 	//m_iTexture = vgui::surface()->CreateNewTextureID();
 	m_iTexture = Hud().m_TGA.FindTexture(pName);
@@ -162,9 +162,9 @@ void MGUI_Image::SetVisible(bool bVisible)
 	m_bVisible = bVisible;
 }
 
-MGUI_Image *MGUI_CreateImage(MGUI_Base *pParent, int x, int y, int w, int h, bool AutoResize, bool ForceSize)
+MGUI_Image* MGUI_CreateImage(MGUI_Base* pParent, int x, int y, int w, int h, bool AutoResize, bool ForceSize)
 {
-	MGUI_Image *pImage = new MGUI_Image;
+	MGUI_Image* pImage = new MGUI_Image;
 	if (!pImage)
 	{
 		return NULL;
@@ -182,15 +182,15 @@ MGUI_Image *MGUI_CreateImage(MGUI_Base *pParent, int x, int y, int w, int h, boo
 	pImage->m_iTex_Type = MGUI_TEX_TYPE_1;
 	//pImage->m_iTexture = 0;
 	//pImage->m_iTexture = vgui::surface()->CreateNewTextureID();
-	((MGUI_Panel *)pParent)->InsertControl(pImage);
+	((MGUI_Panel*)pParent)->InsertControl(pImage);
 	return pImage;
 }
-void MGUI_Image::Paint(MGUI_Base *pBaseParent)
+void MGUI_Image::Paint(MGUI_Base* pBaseParent)
 {
 	if (!pParent) return;
 	if (pParent == pBaseParent)
 	{
-		if (((MGUI_Panel *)pBaseParent)->m_iClosing || !m_bVisible || (m_iTexture <= 0 && m_iTex_Type == MGUI_TEX_TYPE_1))
+		if (((MGUI_Panel*)pBaseParent)->m_iClosing || !m_bVisible || (m_iTexture <= 0 && m_iTex_Type == MGUI_TEX_TYPE_1))
 			return;
 
 		if (m_iTex_Type == MGUI_TEX_TYPE_1)
@@ -202,12 +202,12 @@ void MGUI_Image::Paint(MGUI_Base *pBaseParent)
 	}
 }
 /////////// TEXTENTRY
-void MGUI_TextEntry::Paint(MGUI_Base *pBaseParent)
+void MGUI_TextEntry::Paint(MGUI_Base* pBaseParent)
 {
 	if (!pParent) return;
 	if (pParent == pBaseParent)
 	{
-		if (((MGUI_Panel *)pBaseParent)->m_iClosing) return;
+		if (((MGUI_Panel*)pBaseParent)->m_iClosing) return;
 		// Draw Bg
 		//GL_DrawTGA2(g_mgui_tga_imebg,x+pParent->x,pParent->y+y,w,48,255);
 		// Draw Text
@@ -225,16 +225,16 @@ void MGUI_TextEntry::Paint(MGUI_Base *pBaseParent)
 				if (g_bDrawIme)
 				{
 					g_Font.SetWidth(20);
-					if (CandidateList->dwCount>1)
+					if (CandidateList->dwCount > 1)
 					{
 						int iLong = 0;
 						for (DWORD i = 0; i < CandidateList->dwCount; i++)
 						{
-							char *pText = (char *)CandidateList + CandidateList->dwOffset[i];
+							char* pText = (char*)CandidateList + CandidateList->dwOffset[i];
 							if (pText)
 							{
 								int iTemp = strlen(pText);
-								if (iTemp>iLong) iLong = iTemp;
+								if (iTemp > iLong) iLong = iTemp;
 
 							}
 						}
@@ -249,7 +249,7 @@ void MGUI_TextEntry::Paint(MGUI_Base *pBaseParent)
 						// GetLongest
 						for (DWORD i = 0; i < CandidateList->dwCount; i++)
 						{
-							char *pText = (char*)CandidateList + CandidateList->dwOffset[i];
+							char* pText = (char*)CandidateList + CandidateList->dwOffset[i];
 							if (pText)
 							{
 								g_Font.SetColor(255, 255, 255, 255);
@@ -278,12 +278,12 @@ bool MGUI_TextEntry::IsInRect(void)
 	gEngfuncs.GetMousePosition(&iMouseX, &iMouseY);
 	int iX = pParent->x + x;
 	int iY = pParent->y + y;
-	if (iMouseX>iX && iMouseX< iX + w && iMouseY>iY && iMouseY<iY + 48) return true;
+	if (iMouseX > iX && iMouseX< iX + w && iMouseY>iY && iMouseY < iY + 48) return true;
 	return false;
 }
-MGUI_TextEntry *MGUI_CreateTextEntry(MGUI_Base *pParent, int x, int y, int w)
+MGUI_TextEntry* MGUI_CreateTextEntry(MGUI_Base* pParent, int x, int y, int w)
 {
-	MGUI_TextEntry *pTextEntry = new MGUI_TextEntry;
+	MGUI_TextEntry* pTextEntry = new MGUI_TextEntry;
 	if (!pTextEntry)
 	{
 		return NULL;
@@ -297,17 +297,17 @@ MGUI_TextEntry *MGUI_CreateTextEntry(MGUI_Base *pParent, int x, int y, int w)
 	pTextEntry->iClass = MGUI_TEXTENTRY;
 	pTextEntry->m_iClass = 0;
 	pTextEntry->SetText("");
-	((MGUI_Panel *)pParent)->InsertControl(pTextEntry);
+	((MGUI_Panel*)pParent)->InsertControl(pTextEntry);
 	return pTextEntry;
 }
-void MGUI_TextEntry::SetText(char *pszText)
+void MGUI_TextEntry::SetText(char* pszText)
 {
 	sprintf(m_pText, "%s", pszText);
 }
 ////////// MENU
-MGUI_Menu *MGUI_CreateMGUI_Menu(MGUI_Base *pParent, int x, int y, int w)
+MGUI_Menu* MGUI_CreateMGUI_Menu(MGUI_Base* pParent, int x, int y, int w)
 {
-	MGUI_Menu *pMenu = new MGUI_Menu;
+	MGUI_Menu* pMenu = new MGUI_Menu;
 	if (!pMenu)
 	{
 		return NULL;
@@ -321,21 +321,21 @@ MGUI_Menu *MGUI_CreateMGUI_Menu(MGUI_Base *pParent, int x, int y, int w)
 	pMenu->m_iNum = 0;
 	pMenu->m_bShow = true;
 	pMenu->m_iOnFocus = 0;
-	((MGUI_Panel *)pParent)->InsertControl(pMenu);
+	((MGUI_Panel*)pParent)->InsertControl(pMenu);
 	return pMenu;
 }
-void MGUI_Menu::AddItem(char *pItemName)
+void MGUI_Menu::AddItem(char* pItemName)
 {
 	m_iNum++;
 	sprintf(pText[m_iNum], "%s", pItemName);
 	return;
 }
-void MGUI_Menu::Paint(MGUI_Base *pBaseParent)
+void MGUI_Menu::Paint(MGUI_Base* pBaseParent)
 {
 	if (!pParent || !m_bShow) return;
 	if (pParent == pBaseParent)
 	{
-		if (((MGUI_Panel *)pBaseParent)->m_iClosing) return;
+		if (((MGUI_Panel*)pBaseParent)->m_iClosing) return;
 
 		// Draw Bg
 		int iTotal = m_iNum;
@@ -373,7 +373,7 @@ int MGUI_Menu::IsInRect(void)
 	int iY = pParent->y + y;
 	for (int i = 1; i <= m_iNum; i++)
 	{
-		if (iMouseX>iX && iMouseX< iX + w && iMouseY>iY && iMouseY<iY + 24 * i)
+		if (iMouseX > iX && iMouseX< iX + w && iMouseY>iY && iMouseY < iY + 24 * i)
 		{
 			m_iOnFocus = i;
 			return i;
@@ -383,9 +383,9 @@ int MGUI_Menu::IsInRect(void)
 	return 0;
 }
 ////// BUTTON
-MGUI_Button *MGUI_CreateButton(MGUI_Base *pParent, int x, int y, int w, int h)
+MGUI_Button* MGUI_CreateButton(MGUI_Base* pParent, int x, int y, int w, int h)
 {
-	MGUI_Button *pButton = new MGUI_Button;
+	MGUI_Button* pButton = new MGUI_Button;
 	if (!pButton)
 	{
 		return NULL;
@@ -429,15 +429,15 @@ MGUI_Button *MGUI_CreateButton(MGUI_Base *pParent, int x, int y, int w, int h)
 	pButton->m_OverPanel = 0x0;
 	pButton->m_iKey = -1;
 
-	((MGUI_Panel *)pParent)->InsertControl(pButton);
+	((MGUI_Panel*)pParent)->InsertControl(pButton);
 	return pButton;
 }
-void MGUI_Button::Paint(MGUI_Base *pBaseParent)
+void MGUI_Button::Paint(MGUI_Base* pBaseParent)
 {
 	if (!pParent || !m_bVisible) return;
 	if (pParent == pBaseParent)
 	{
-		if (((MGUI_Panel *)pBaseParent)->m_iClosing) return;
+		if (((MGUI_Panel*)pBaseParent)->m_iClosing) return;
 
 		if (iTga[m_iStat] != -1/* && m_bEnabled*/)
 		{
@@ -473,7 +473,7 @@ void MGUI_Button::Paint(MGUI_Base *pBaseParent)
 
 	}
 }
-void MGUI_Button::SetImage(char *n, char *o, char *c)
+void MGUI_Button::SetImage(char* n, char* o, char* c)
 {
 	iTga[0] = Hud().m_TGA.FindTexture(n);
 	iTga[1] = Hud().m_TGA.FindTexture(o);
@@ -499,11 +499,11 @@ void MGUI_Button::SetType(int iType)
 {
 	m_iType = iType;
 }
-void MGUI_Button::SetCommand(char *pCommand)
+void MGUI_Button::SetCommand(char* pCommand)
 {
 	sprintf(pszCommand, "%s", pCommand);
 }
-void MGUI_Button::SetCommand2(char *pCommand)
+void MGUI_Button::SetCommand2(char* pCommand)
 {
 	sprintf(pszCommand2, "%s", pCommand);
 }
@@ -537,7 +537,7 @@ bool MGUI_Button::IsInRect(void)
 		m_OverPanel->m_iClosing = 1;
 	return false;
 }
-void MGUI_Send_Cmd(char *szCmd)
+void MGUI_Send_Cmd(char* szCmd)
 {
 	if (strstr(szCmd, "MGUI."))
 	{
@@ -637,7 +637,7 @@ void MGUI_Button::Click(void)
 	g_Next_Key_CanUse = Hud().m_flTime + 0.15;
 	if (m_iType == MGUI_BUTTON_TYPE_CHANGE_NAME)
 	{
-		char *name = ((MGUI_Panel *)pParent)->GetTextEntryText(1);
+		char* name = ((MGUI_Panel*)pParent)->GetTextEntryText(1);
 		if (name)
 		{
 			char szCmd[64];
@@ -648,12 +648,12 @@ void MGUI_Button::Click(void)
 	else if (m_iType == MGUI_BUTTON_TYPE_COMMAND_CLOSEPANEL)
 	{
 		MGUI_Send_Cmd(pszCommand);
-		((MGUI_Panel *)pParent)->m_iClosing = 1;
+		((MGUI_Panel*)pParent)->m_iClosing = 1;
 	}
 	else if (m_iType == MGUI_BUTTON_TYPE_CLOSEALL)
 	{
 		MGUI_Send_Cmd(pszCommand);
-		((MGUI_Panel *)pParent)->m_iClosing = 1;
+		((MGUI_Panel*)pParent)->m_iClosing = 1;
 		g_mgui_candraw = 0;
 	}
 	else if (m_iType == MGUI_BUTTON_TYPE_FUNCTION)
@@ -665,13 +665,13 @@ void MGUI_Button::Click(void)
 	{
 		if (pfnClick)
 			pfnClick(this);
-		((MGUI_Panel *)pParent)->m_iClosing = 1;
+		((MGUI_Panel*)pParent)->m_iClosing = 1;
 	}
 	else if (m_iType == MGUI_BUTTON_TYPE_FUNCTION_CLOSEALL)
 	{
 		if (pfnClick)
 			pfnClick(this);
-		((MGUI_Panel *)pParent)->m_iClosing = 1;
+		((MGUI_Panel*)pParent)->m_iClosing = 1;
 		g_mgui_candraw = 0;
 	}
 	else
@@ -687,13 +687,13 @@ void MGUI_Button::Click2(void)
 	if (m_iType2 == MGUI_BUTTON_TYPE_COMMAND_CLOSEPANEL)
 	{
 		MGUI_Send_Cmd(pszCommand2);
-		((MGUI_Panel *)pParent)->m_iClosing = 1;
+		((MGUI_Panel*)pParent)->m_iClosing = 1;
 		g_Next_Key_CanUse = Hud().m_flTime + 0.1;
 	}
 	else if (m_iType2 == MGUI_BUTTON_TYPE_CLOSEALL)
 	{
 		MGUI_Send_Cmd(pszCommand2);
-		((MGUI_Panel *)pParent)->m_iClosing = 1;
+		((MGUI_Panel*)pParent)->m_iClosing = 1;
 		g_mgui_candraw = 0;
 		g_Next_Key_CanUse = Hud().m_flTime + 0.1;
 	}
@@ -707,14 +707,14 @@ void MGUI_Button::Click2(void)
 	{
 		if (pfnClick2)
 			pfnClick2(this);
-		((MGUI_Panel *)pParent)->m_iClosing = 1;
+		((MGUI_Panel*)pParent)->m_iClosing = 1;
 		g_Next_Key_CanUse = Hud().m_flTime + 0.1;
 	}
 	else if (m_iType == MGUI_BUTTON_TYPE_FUNCTION_CLOSEALL)
 	{
 		if (pfnClick2)
 			pfnClick2(this);
-		((MGUI_Panel *)pParent)->m_iClosing = 1;
+		((MGUI_Panel*)pParent)->m_iClosing = 1;
 		g_mgui_candraw = 0;
 		g_Next_Key_CanUse = Hud().m_flTime + 0.1;
 	}
@@ -723,7 +723,7 @@ void MGUI_Button::Click2(void)
 		MGUI_Send_Cmd(pszCommand2);
 	}
 }
-void MGUI_Button::SetLabel(wchar_t *pLabel)
+void MGUI_Button::SetLabel(wchar_t* pLabel)
 {
 	wcscpy(pszLabel, pLabel);
 	for (int i = 0; i < 30; i++)	// not 31 so we can directly check the shortcut
@@ -740,9 +740,9 @@ void MGUI_Button::SetLabel(wchar_t *pLabel)
 	g_Font.LoadStr(pLabel);
 }
 ////////////// Label
-MGUI_Label *MGUI_CreateLabel(MGUI_Base *pParent, int x, int y, int w, int h)
+MGUI_Label* MGUI_CreateLabel(MGUI_Base* pParent, int x, int y, int w, int h)
 {
-	MGUI_Label *pLabel = new MGUI_Label;
+	MGUI_Label* pLabel = new MGUI_Label;
 	if (!pLabel)
 	{
 		return NULL;
@@ -760,7 +760,7 @@ MGUI_Label *MGUI_CreateLabel(MGUI_Base *pParent, int x, int y, int w, int h)
 	pLabel->iClass = MGUI_LABEL;
 	pLabel->m_iAlignment = MGUI_Left;
 	pLabel->m_iType = pLabel->m_iMaxHeight = 0;
-	((MGUI_Panel *)pParent)->InsertControl(pLabel);
+	((MGUI_Panel*)pParent)->InsertControl(pLabel);
 	return pLabel;
 }
 void MGUI_Label::SetSize(int size)
@@ -771,12 +771,12 @@ void MGUI_Label::SetVisible(bool bVisible)
 {
 	m_bVisible = bVisible;
 }
-void MGUI_Label::Paint(MGUI_Base *pBaseParent)
+void MGUI_Label::Paint(MGUI_Base* pBaseParent)
 {
 	if (!pParent || !m_bVisible) return;
 	if (pParent == pBaseParent)
 	{
-		if (((MGUI_Panel *)pBaseParent)->m_iClosing) return;
+		if (((MGUI_Panel*)pBaseParent)->m_iClosing) return;
 		// Draw Label
 		if (pszLabel[0])
 		{
@@ -800,7 +800,7 @@ void MGUI_Label::SetColor(int r, int g, int b, int a)
 	m_iColor32[2] = b;
 	m_iColor32[3] = a;
 }
-void MGUI_Label::SetLabel(wchar_t *pLabel)
+void MGUI_Label::SetLabel(wchar_t* pLabel)
 {
 	wcscpy(pszLabel, pLabel);
 	g_Font.LoadStr(pLabel);
@@ -815,18 +815,18 @@ MGUI_MSGBox::MGUI_MSGBox()
 
 extern int g_UI_Button[3][3];
 
-void DefaultCloseClickCallback(MGUI_Button *pButton)
+void DefaultCloseClickCallback(MGUI_Button* pButton)
 {
 	if (pButton->pSaveData)
 	{
-		((MGUI_Panel *)pButton->pSaveData)->m_bCanControl = true;
-		((MGUI_Panel *)pButton->pSaveData)->m_bPerformingMessageBox = false;
+		((MGUI_Panel*)pButton->pSaveData)->m_bCanControl = true;
+		((MGUI_Panel*)pButton->pSaveData)->m_bPerformingMessageBox = false;
 	}
 }
 
-MGUI_MSGBox *MGUI_CreateMessageBox(MGUI_Panel *pParent, wchar_t caption[], wchar_t text[], int iType, void(*pfnOKClick)(MGUI_Button *), void(*pfnCancelClick)(MGUI_Button *), int iOKKey, int iCancelKey)
+MGUI_MSGBox* MGUI_CreateMessageBox(MGUI_Panel* pParent, wchar_t caption[], wchar_t text[], int iType, void(*pfnOKClick)(MGUI_Button*), void(*pfnCancelClick)(MGUI_Button*), int iOKKey, int iCancelKey)
 {
-	MGUI_MSGBox *msgbox = pParent->m_pMsgBox;
+	MGUI_MSGBox* msgbox = pParent->m_pMsgBox;
 
 	if (!msgbox)
 	{
@@ -845,7 +845,7 @@ MGUI_MSGBox *MGUI_CreateMessageBox(MGUI_Panel *pParent, wchar_t caption[], wchar
 		msgbox->m_pLabelText = MGUI_CreateLabel(msgbox->m_pPanel, 0, 0, 0, 0);
 
 	wchar_t pText[1024];
-	wchar_t *pNewLine;
+	wchar_t* pNewLine;
 	int iMaxWidth = 0;
 
 	wcscpy(pText, text);
@@ -942,7 +942,7 @@ MGUI_MSGBox *MGUI_CreateMessageBox(MGUI_Panel *pParent, wchar_t caption[], wchar
 }
 
 /////////
-TCHAR		g_szInsert[0x1000] = { 0 };//ÊäÈëµÄ×Ö·û´®
+TCHAR		g_szInsert[0x1000] = { 0 };//è¾“å…¥çš„å­—ç¬¦ä¸²
 LONG		g_lInsertPos = 0;
 
 LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -950,9 +950,9 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	switch (message)
 	{
 	case WM_IME_SETCONTEXT:
-		DefWindowProc(hWnd, WM_IME_SETCONTEXT, wParam, lParam&(~ISC_SHOWUIALLCANDIDATEWINDOW)); // ¸æËßÊäÈë·¨ ÎÒ½«×Ô»æ½çÃæ
+		DefWindowProc(hWnd, WM_IME_SETCONTEXT, wParam, lParam & (~ISC_SHOWUIALLCANDIDATEWINDOW)); // å‘Šè¯‰è¾“å…¥æ³• æˆ‘å°†è‡ªç»˜ç•Œé¢
 	case WM_IME_STARTCOMPOSITION:
-		return 0; // Òş²ØºòÑ¡´Ê
+		return 0; // éšè—å€™é€‰è¯
 	}
 
 	if (*HudSayText().m_bInputing != 1)
@@ -960,39 +960,39 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 	switch (message)
 	{
-	case WM_IME_NOTIFY://ÊäÈë·¨µÄ¶¯×÷
+	case WM_IME_NOTIFY://è¾“å…¥æ³•çš„åŠ¨ä½œ
 	{
 		switch (wParam)
 		{
-		case IMN_OPENCANDIDATE://¿ªÊ¼Ñ¡´Ê
-		case IMN_SETCANDIDATEPOS://Ñ¡´Ê´°¿ÚÒÆ¶¯
-		case IMN_CHANGECANDIDATE://¸Ä±äÑ¡´Ê
-		case IMN_CLOSECANDIDATE://¹Ø±ÕÑ¡´Ê´°¿Ú
-			//Ò»Æğ´¦Àí
+		case IMN_OPENCANDIDATE://å¼€å§‹é€‰è¯
+		case IMN_SETCANDIDATEPOS://é€‰è¯çª—å£ç§»åŠ¨
+		case IMN_CHANGECANDIDATE://æ”¹å˜é€‰è¯
+		case IMN_CLOSECANDIDATE://å…³é—­é€‰è¯çª—å£
+			//ä¸€èµ·å¤„ç†
 		{
 			HIMC hIMC;
 			DWORD dwBufLen;
 			int i;
 			LPCANDIDATELIST pList;
 
-			hIMC = ImmGetContext(hWnd);//È¡µÃÊäÈë·¨¾ä±ú
-			dwBufLen = ImmGetCandidateList(hIMC, 0, NULL, 0);//È¡µÃºòÑ¡´ÊÁĞ±í½á¹¹ÌåµÄ´óĞ¡
+			hIMC = ImmGetContext(hWnd);//å–å¾—è¾“å…¥æ³•å¥æŸ„
+			dwBufLen = ImmGetCandidateList(hIMC, 0, NULL, 0);//å–å¾—å€™é€‰è¯åˆ—è¡¨ç»“æ„ä½“çš„å¤§å°
 
-			if (!dwBufLen)//³É¹¦µÄ»°
+			if (!dwBufLen)//æˆåŠŸçš„è¯
 			{
-				ImmReleaseContext(hWnd, hIMC);//ÊÍ·ÅÊäÈë·¨¾ä±ú
+				ImmReleaseContext(hWnd, hIMC);//é‡Šæ”¾è¾“å…¥æ³•å¥æŸ„
 				break;
 			}
 
-			pList = (LPCANDIDATELIST)malloc(dwBufLen);//½¨Á¢½á¹¹Ìå
+			pList = (LPCANDIDATELIST)malloc(dwBufLen);//å»ºç«‹ç»“æ„ä½“
 			if (!pList)
 			{
-				ImmReleaseContext(hWnd, hIMC);//ÊÍ·ÅÊäÈë·¨¾ä±ú
+				ImmReleaseContext(hWnd, hIMC);//é‡Šæ”¾è¾“å…¥æ³•å¥æŸ„
 				break;
 			}
 
-			ImmGetCandidateList(hIMC, 0, pList, dwBufLen);//È¡µÃºòÑ¡´ÊÁĞ±í
-			if (pList->dwStyle != IME_CAND_CODE)//²»ÄÜÊÇIME_CAND_CODE·ñÔòµ±pList->dwCountÎªÁãµÄÊ±ºò£¬
+			ImmGetCandidateList(hIMC, 0, pList, dwBufLen);//å–å¾—å€™é€‰è¯åˆ—è¡¨
+			if (pList->dwStyle != IME_CAND_CODE)//ä¸èƒ½æ˜¯IME_CAND_CODEå¦åˆ™å½“pList->dwCountä¸ºé›¶çš„æ—¶å€™ï¼Œ
 			{
 				HudSayText().m_iListCount = pList->dwCount;
 				HudSayText().m_iSelection = pList->dwSelection;
@@ -1002,15 +1002,15 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 				for (i = 0; i < HudSayText().m_iListCount; i++)
 				{
-					TCHAR *pSubStr = (TCHAR*)((BYTE*)pList + pList->dwOffset[i]);//È¡µÃºòÑ¡´Ê
+					TCHAR* pSubStr = (TCHAR*)((BYTE*)pList + pList->dwOffset[i]);//å–å¾—å€™é€‰è¯
 
 					wchar_t w[128];
 					wcscpy(w, ANSIToUnicode(pSubStr));
 					swprintf(HudSayText().m_wszList[i], 127, L"%d. %s", i + 1, w);
 				}
 			}
-			free(pList);//ÊÍ·Å½á¹¹ÌåÄÚ´æ
-			ImmReleaseContext(hWnd, hIMC);//ÊÍ·ÅÊäÈë·¨¾ä±ú
+			free(pList);//é‡Šæ”¾ç»“æ„ä½“å†…å­˜
+			ImmReleaseContext(hWnd, hIMC);//é‡Šæ”¾è¾“å…¥æ³•å¥æŸ„
 		}
 		break;
 		}
@@ -1018,13 +1018,13 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	}
 	case WM_IME_COMPOSITION:
 	{
-		if (lParam & CS_INSERTCHAR)//µ±Ç°¹â±ê²åÈëÒ»¸ö×Ö·û
+		if (lParam & CS_INSERTCHAR)//å½“å‰å…‰æ ‡æ’å…¥ä¸€ä¸ªå­—ç¬¦
 		{
-			lstrcat(g_szInsert, (LPCTSTR)& wParam);
+			lstrcat(g_szInsert, (LPCTSTR)&wParam);
 			/*if (CS_NOMOVECARET)
-			;//²»ÒÆ¶¯²åÈë·û*/
+			;//ä¸ç§»åŠ¨æ’å…¥ç¬¦*/
 		}
-		if (lParam & GCS_CURSORPOS)//È¡µÃÕıÔÚÊäÈëµÄ×Ö·û´®£¨Æ´ÒôÖ®ÀàµÄ£©µÄ²åÈë·ûµÄÎ»ÖÃ
+		if (lParam & GCS_CURSORPOS)//å–å¾—æ­£åœ¨è¾“å…¥çš„å­—ç¬¦ä¸²ï¼ˆæ‹¼éŸ³ä¹‹ç±»çš„ï¼‰çš„æ’å…¥ç¬¦çš„ä½ç½®
 		{
 			HIMC hIMC = ImmGetContext(hWnd);
 			g_lInsertPos = ImmGetCompositionString(hIMC, GCS_CURSORPOS, NULL, 0);
@@ -1032,25 +1032,24 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 			ImmReleaseContext(hWnd, hIMC);
 		}
-		if (lParam & GCS_COMPSTR)//È¡µÃÕıÔÚÊäÈëµÄ×Ö·û´®£¨Æ´ÒôÖ®ÀàµÄ£©
+		if (lParam & GCS_COMPSTR)//å–å¾—æ­£åœ¨è¾“å…¥çš„å­—ç¬¦ä¸²ï¼ˆæ‹¼éŸ³ä¹‹ç±»çš„ï¼‰
 		{
 			HIMC hIMC = ImmGetContext(hWnd);
 			UINT uLen, uMem;
-			TCHAR*szCompStr;
+			TCHAR* szCompStr;
 			/*RECT rcWindow;
-
-			GetClientRect(hWnd, &rcWindow);//°ÑÕâÒ»¿é´°ÌåÇå¿Õ
+			GetClientRect(hWnd, &rcWindow);//æŠŠè¿™ä¸€å—çª—ä½“æ¸…ç©º
 			rcWindow.top = IMERECT_COMPSTR;
 			rcWindow.bottom = IMERECT_COMPSTR + IMERECT_STRHEIGHT;
 			FillRect(g_hDC, &rcWindow, g_WCEx.hbrBackground);*/
 
-			uLen = ImmGetCompositionString(hIMC, GCS_COMPSTR, NULL, 0);//È¡µÃÕıÔÚÊäÈëµÄ×Ö·û´®´óĞ¡
-			szCompStr = (TCHAR*)malloc(uMem = (uLen + sizeof(TCHAR)));//·ÖÅäÄÚ´æ
+			uLen = ImmGetCompositionString(hIMC, GCS_COMPSTR, NULL, 0);//å–å¾—æ­£åœ¨è¾“å…¥çš„å­—ç¬¦ä¸²å¤§å°
+			szCompStr = (TCHAR*)malloc(uMem = (uLen + sizeof(TCHAR)));//åˆ†é…å†…å­˜
 
 			if (szCompStr)
 			{
-				szCompStr[uLen] = 0;//½áÎ²µÄ\0
-				ImmGetCompositionString(hIMC, GCS_COMPSTR, szCompStr, uMem);//È¡µÃÕıÔÚÊäÈëµÄ×Ö·û´®
+				szCompStr[uLen] = 0;//ç»“å°¾çš„\0
+				ImmGetCompositionString(hIMC, GCS_COMPSTR, szCompStr, uMem);//å–å¾—æ­£åœ¨è¾“å…¥çš„å­—ç¬¦ä¸²
 
 				if (uLen > 256)
 					szCompStr[255] = 0;
@@ -1058,34 +1057,34 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 				wcscpy(HudSayText().m_wszComp, ANSIToUnicode(szCompStr));
 
 
-				//TextOut(g_hDC, 0, IMERECT_COMPSTR, szCompStr, uLen);//ÏÔÊ¾
-				//GetTextExtentPoint(g_hDC, szCompStr, g_lInsertPos, &Size);//×¼±¸»­²åÈë·û
+				//TextOut(g_hDC, 0, IMERECT_COMPSTR, szCompStr, uLen);//æ˜¾ç¤º
+				//GetTextExtentPoint(g_hDC, szCompStr, g_lInsertPos, &Size);//å‡†å¤‡ç”»æ’å…¥ç¬¦
 				//MoveToEx(g_hDC, Size.cx, IMERECT_COMPSTR, NULL);
-				//LineTo(g_hDC, Size.cx, IMERECT_COMPSTR + Size.cy);//»­Ò»¸ùÊúÏß
+				//LineTo(g_hDC, Size.cx, IMERECT_COMPSTR + Size.cy);//ç”»ä¸€æ ¹ç«–çº¿
 				free(szCompStr);
 			}
 			ImmReleaseContext(hWnd, hIMC);
 		}
-		if (lParam & GCS_RESULTSTR)//È¡µÃ½á¹û×Ö·û´®
+		if (lParam & GCS_RESULTSTR)//å–å¾—ç»“æœå­—ç¬¦ä¸²
 		{
 			HIMC hIMC = ImmGetContext(hWnd);
 			UINT uLen, uMem;
-			TCHAR*szCompStr;
+			TCHAR* szCompStr;
 
-			uLen = ImmGetCompositionString(hIMC, GCS_RESULTSTR, NULL, 0);//È¡µÃ½á¹û×Ö·û´®´óĞ¡
-			szCompStr = (TCHAR*)malloc(uMem = (uLen + sizeof(TCHAR)));//·ÖÅäÄÚ´æ
+			uLen = ImmGetCompositionString(hIMC, GCS_RESULTSTR, NULL, 0);//å–å¾—ç»“æœå­—ç¬¦ä¸²å¤§å°
+			szCompStr = (TCHAR*)malloc(uMem = (uLen + sizeof(TCHAR)));//åˆ†é…å†…å­˜
 			if (szCompStr)
 			{
-				szCompStr[uLen] = 0;//½áÎ²µÄ\0
-				ImmGetCompositionString(hIMC, GCS_RESULTSTR, szCompStr, uMem);//È¡µÃ½á¹û×Ö·û´®
-				lstrcat(g_szInsert, szCompStr);//°Ñ½á¹û×Ö·û´®Ìí¼Óµ½½á¹û×Ö·û´®ÀïÃæ
+				szCompStr[uLen] = 0;//ç»“å°¾çš„\0
+				ImmGetCompositionString(hIMC, GCS_RESULTSTR, szCompStr, uMem);//å–å¾—ç»“æœå­—ç¬¦ä¸²
+				lstrcat(g_szInsert, szCompStr);//æŠŠç»“æœå­—ç¬¦ä¸²æ·»åŠ åˆ°ç»“æœå­—ç¬¦ä¸²é‡Œé¢
 				free(szCompStr);
 			}
 			ImmReleaseContext(hWnd, hIMC);
 		}
 		break;
 	}
-	case WM_IME_ENDCOMPOSITION://´òÍê×Ö
+	case WM_IME_ENDCOMPOSITION://æ‰“å®Œå­—
 	{
 		HudSayText().m_iListCount = 0;
 		HudSayText().m_wszComp[0] = 0;
@@ -1093,14 +1092,13 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 		//HudSayText().m_bInputing = false;
 		/*RECT rcWindow;
-
-		GetClientRect(hWnd, &rcWindow);//°ÑÕâÒ»¿é´°ÌåÇå¿Õ
+		GetClientRect(hWnd, &rcWindow);//æŠŠè¿™ä¸€å—çª—ä½“æ¸…ç©º
 		rcWindow.top = IMERECT_RESULT;
 		rcWindow.bottom = IMERECT_RESULT + IMERECT_STRHEIGHT;
 		FillRect(g_hDC, &rcWindow, g_WCEx.hbrBackground);*/
 
-		//TextOut(g_hDC, 0, IMERECT_RESULT, g_szInsert, lstrlen(g_szInsert));//ÏÔÊ¾×îÖÕ×Ö·û´®
-		//SetWindowText(hWnd, TEXT("½áÊø´ò×Ö"));
+		//TextOut(g_hDC, 0, IMERECT_RESULT, g_szInsert, lstrlen(g_szInsert));//æ˜¾ç¤ºæœ€ç»ˆå­—ç¬¦ä¸²
+		//SetWindowText(hWnd, TEXT("ç»“æŸæ‰“å­—"));
 	}
 
 	/*case WM_CHAR:
@@ -1108,7 +1106,6 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	if (wParam == VK_BACK)
 	{
 	/*int len = strlen(pText);
-
 	if (pText[len - 1] < 0)
 	pText[len - 2] = '\0';
 	else
@@ -1124,10 +1121,8 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	{
 	//MGUI_SetFocusTextEntryDisabled();
 	}
-
 	return 1;
 	}
-
 	case WM_IME_CHAR:
 	{
 	char buf[3];
@@ -1136,8 +1131,6 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	buf[2] = '\0';
 	//strcat(pText, buf);
 	return 1;
-
-
 	break;
 	}*/
 
@@ -1149,7 +1142,6 @@ LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 /*LRESULT CALLBACK g_NewProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 if(!g_mgui_candraw) return CallWindowProc(g_OldProc, hWnd, message, wParam, lParam);
-
 switch (message)
 {
 case WM_CHAR:
@@ -1160,7 +1152,6 @@ if (pText)
 if (wParam == VK_BACK)
 {
 int len = strlen(pText);
-
 if (pText[len - 1] < 0)
 pText[len - 2] = '\0';
 else
@@ -1176,13 +1167,10 @@ else
 {
 MGUI_SetFocusTextEntryDisabled();
 }
-
 return 1;
 }
-
 break;
 }
-
 case WM_IME_CHAR:
 {
 char *pText = MGUI_FindFocusTextEntryText();
@@ -1195,7 +1183,6 @@ buf[2] = '\0';
 strcat(pText, buf);
 return 1;
 }
-
 break;
 }
 case WM_IME_NOTIFY:
@@ -1221,13 +1208,11 @@ g_bDrawIme = false;
 ImmReleaseContext( hWnd, hImc );
 }
 }
-
 return CallWindowProc(g_OldProc, hWnd, message, wParam, lParam);
-
 }*/
-char *MGUI_FindFocusTextEntryText(void)
+char* MGUI_FindFocusTextEntryText(void)
 {
-	MGUI_Base *pNextControl = pRootPanel;
+	MGUI_Base* pNextControl = pRootPanel;
 	while (pNextControl->pNext)
 	{
 		if (pNextControl->pNext->iClass == MGUI_TEXTENTRY)
@@ -1243,7 +1228,7 @@ char *MGUI_FindFocusTextEntryText(void)
 }
 void MGUI_SetFocusTextEntryDisabled(void)
 {
-	MGUI_Base *pNextControl = pRootPanel;
+	MGUI_Base* pNextControl = pRootPanel;
 	while (pNextControl->pNext)
 	{
 		if (pNextControl->pNext->iClass == MGUI_TEXTENTRY)
@@ -1275,13 +1260,13 @@ bool MGUI_IsInRect(int x, int w, int y, int h)
 {
 	int iMouseX, iMouseY;
 	gEngfuncs.GetMousePosition(&iMouseX, &iMouseY);
-	if (iMouseX>x && iMouseX< x + w && iMouseY>y && iMouseY<y + h) return true;
+	if (iMouseX > x && iMouseX< x + w && iMouseY>y && iMouseY < y + h) return true;
 	return false;
 }
-void MGUI_FreePanel(MGUI_Panel *pPanel)
+void MGUI_FreePanel(MGUI_Panel* pPanel)
 {
-	MGUI_Base *pNext = (MGUI_Base *)pPanel;
-	MGUI_Base *pTemp;
+	MGUI_Base* pNext = (MGUI_Base*)pPanel;
+	MGUI_Base* pTemp;
 	if (pNext)
 	{
 		pTemp = pNext;
@@ -1289,11 +1274,11 @@ void MGUI_FreePanel(MGUI_Panel *pPanel)
 		delete pTemp;
 	}
 }
-void MGUI_ProcessMessage(void *pPointer)
+void MGUI_ProcessMessage(void* pPointer)
 {
 	if (!pPointer)
 		return;
-	
+
 	static int iMoving = 0;
 	static int iMousePressedPosX = 0;
 	static int iMousePressedPosY = 0;
@@ -1306,22 +1291,22 @@ void MGUI_ProcessMessage(void *pPointer)
 	// Draw Mouse
 	//GL_DrawTGA(g_mgui_mouse,255,255,255,255,iMousePosX,iMousePoxY,1.0f);
 	//GL_DrawTGA2(g_mgui_mouse,iMousePosX,iMousePoxY,g_MHTga[g_mgui_mouse].width,g_MHTga[g_mgui_mouse].height,255);
-	MGUI_Base *pBase = (MGUI_Base *)pPointer;
+	MGUI_Base* pBase = (MGUI_Base*)pPointer;
 	int iClass = pBase->iClass;
 
 	if (iClass == MGUI_PANEL)
 	{
-		int m_iClosing = ((MGUI_Panel *)pPointer)->m_iClosing;
-		int m_bHasClose = ((MGUI_Panel *)pPointer)->m_bHasClose;
+		int m_iClosing = ((MGUI_Panel*)pPointer)->m_iClosing;
+		int m_bHasClose = ((MGUI_Panel*)pPointer)->m_bHasClose;
 		if ((g_mgui_mouseevent & ME_LEFTCLICK) && (!(g_mgui_oldmouseevent & ME_LEFTCLICK)) && MGUI_IsInRect(pBase->x + pBase->w - 20, 20, pBase->y, 20) && !m_iClosing && m_bHasClose)
 		{
-			((MGUI_Panel *)pPointer)->m_iClosing = 1;
+			((MGUI_Panel*)pPointer)->m_iClosing = 1;
 			g_mgui_candraw = 0;
 		}
 		if (m_iClosing == 1) return;
 
-		if (((MGUI_Panel *)pPointer)->m_bCanMove == false) return;
-		if ((g_mgui_mouseevent & ME_LEFTCLICK) && (!(g_mgui_oldmouseevent & ME_LEFTCLICK)) && ((MGUI_Panel *)pPointer)->IsInRect())
+		if (((MGUI_Panel*)pPointer)->m_bCanMove == false) return;
+		if ((g_mgui_mouseevent & ME_LEFTCLICK) && (!(g_mgui_oldmouseevent & ME_LEFTCLICK)) && ((MGUI_Panel*)pPointer)->IsInRect())
 		{
 			iMoving = 1;
 		}
@@ -1354,8 +1339,8 @@ void MGUI_ProcessMessage(void *pPointer)
 	}
 	else if (iClass == MGUI_TEXTENTRY)
 	{
-		MGUI_TextEntry *pEntry = (MGUI_TextEntry *)pPointer;
-		MGUI_Panel *pEntryPanel = (MGUI_Panel *)pEntry->pParent;
+		MGUI_TextEntry* pEntry = (MGUI_TextEntry*)pPointer;
+		MGUI_Panel* pEntryPanel = (MGUI_Panel*)pEntry->pParent;
 		if (pEntryPanel->m_iClosing) return;
 		if ((g_mgui_mouseevent & ME_LEFTCLICK) && pEntry->IsInRect())
 		{
@@ -1365,15 +1350,15 @@ void MGUI_ProcessMessage(void *pPointer)
 	}
 	else if (iClass == MGUI_MENU)
 	{
-		MGUI_Menu *pMenu = (MGUI_Menu *)pPointer;
-		MGUI_Panel *pMenuPanel = (MGUI_Panel *)pMenu->pParent;
+		MGUI_Menu* pMenu = (MGUI_Menu*)pPointer;
+		MGUI_Panel* pMenuPanel = (MGUI_Panel*)pMenu->pParent;
 		if (pMenuPanel->m_iClosing) return;
 		pMenu->IsInRect();
 	}
 	else if (iClass == MGUI_BUTTON)
 	{
-		MGUI_Button *pButton = (MGUI_Button *)pPointer;
-		MGUI_Panel *pMenuPanel = (MGUI_Panel *)pButton->pParent;
+		MGUI_Button* pButton = (MGUI_Button*)pPointer;
+		MGUI_Panel* pMenuPanel = (MGUI_Panel*)pButton->pParent;
 		if (pMenuPanel->m_iClosing)
 			return;
 
@@ -1395,7 +1380,7 @@ void MGUI_ProcessMessage(void *pPointer)
 			if (g_mgui_mouseevent & ME_RIGHTCLICK)
 			{
 				if ((g_mgui_mouseevent & ME_RIGHTCLICK) && (!(g_mgui_oldmouseevent & ME_RIGHTCLICK)))
-				{			
+				{
 					pButton->Click2();
 					g_mgui_mouseevent = 0;
 				}
@@ -1439,11 +1424,11 @@ void MGUI_Redraw()
 	}
 
 	//MGUI_Base *pNextControl = pRootPanel;
-	MGUI_Panel *pSubPanel = pRootPanel;
+	MGUI_Panel* pSubPanel = pRootPanel;
 	// Draw Panel
 	while (pSubPanel)
 	{
-		MGUI_Base *pNextControl = pSubPanel;
+		MGUI_Base* pNextControl = pSubPanel;
 
 		// Draw X
 		if (!(pSubPanel->m_iClosing))

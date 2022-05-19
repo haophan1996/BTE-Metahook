@@ -8,7 +8,7 @@ CCSBTEMyWpnElement::CCSBTEMyWpnElement(Panel *parent, const char *name) : ImageP
 	SetImage(scheme()->GetImage("resource/itembox", false));
 	m_bShowDesc = false;
 
-	m_pText = new Label(this, "Label", L"ÄûÃÊ´óŒÅ¼¦");
+	m_pText = new Label(this, "Label", L"Edit Weapons");
 	m_pText->SetPaintBackgroundEnabled(false);
 	m_pText->SetBounds(10, 80, 200, 20);
 	int textwide, texttall;

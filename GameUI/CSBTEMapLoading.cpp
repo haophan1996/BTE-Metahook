@@ -79,7 +79,7 @@ CCSBTEMapLoading::CCSBTEMapLoading(Panel *parent, const char *name) : ImagePanel
 	//m_pTipText->SetFgColor(Color(75, 75, 75, 75));
 	m_pTipText->SetTextColorState(Label::CS_DULL);
 
-	m_pServerName = new Label(this, "Label", L"Counter-Strike : BreakThrough Edition - Loading");
+	m_pServerName = new Label(this, "Label", L"Counter-Strike : Crossfire Mod - Loading");
 	m_pServerName->SetBounds(12 * ScreenWidth / 1024.0, 0 * ScreenHeight / 768.0, 400, 50);
 	m_pServerName->SetPaintBackgroundEnabled(false);
 	m_pServerName->SetVisible(true);

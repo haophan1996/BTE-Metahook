@@ -1,4 +1,4 @@
-#include "bte_const.h"
+ï»¿#include "bte_const.h"
 #include "hud.h"
 #include "plugins.h"
 #include "exportfuncs.h"
@@ -26,14 +26,14 @@
 //#define BUTTON_STATIC_DEFINE
 
 // TDM UI
-MGUI_Panel *pTeamSuitPanel;
-// -- ¼ÇÂ¼¿ÉÒÔ¸Ä±äµÄ±êÇ©Ö¸Õë ¹²12¸ö
-MGUI_Label *pTeamSuitLabel[24];
-// -- ¼ÇÂ¼¿ÉÒÔ¸Ä±äµÄÍ¼Æ¬Ö¸Õë ¹²12¸ö
-MGUI_Image *pTeamSuitImage[12];
-MGUI_Image *pTeamSuitImage2[12];
-// -- ¼ÇÂ¼°´Å¥ ¹²4¸ö
-MGUI_Button *pTeamSuitButton[4];
+MGUI_Panel* pTeamSuitPanel;
+// -- è®°å½•å¯ä»¥æ”¹å˜çš„æ ‡ç­¾æŒ‡é’ˆ å…±12ä¸ª
+MGUI_Label* pTeamSuitLabel[24];
+// -- è®°å½•å¯ä»¥æ”¹å˜çš„å›¾ç‰‡æŒ‡é’ˆ å…±12ä¸ª
+MGUI_Image* pTeamSuitImage[12];
+MGUI_Image* pTeamSuitImage2[12];
+// -- è®°å½•æŒ‰é’® å…±4ä¸ª
+MGUI_Button* pTeamSuitButton[4];
 
 // BUY MENU
 char MENU[10][32] = { "#CSO_Pistols", "#CSO_Shotguns", "#CSO_SubMachineGuns", "#CSO_Rifles",
@@ -43,44 +43,44 @@ char MENU[10][32] = { "#CSO_Pistols", "#CSO_Shotguns", "#CSO_SubMachineGuns", "#
 char CMD[10][32] = { "MGUI.BuyMenu_Show 0", "MGUI.BuyMenu_Show 1", "MGUI.BuyMenu_Show 2", "MGUI.BuyMenu_Show 3",
 "MGUI.BuyMenu_Show 4", "primammo", "secammo", "MGUI.BuyMenu_Show 5",
 "MGUI.BuyMenu_Show 6", "MGUI.BuyMenu_BuyDefault" };
-char *WEAPON_INFO_FORMAT[5] = { "#CStrike_%sPrice", "#CStrike_%sCalibre", "#CStrike_%sClipCapacity", "#CStrike_%sRateOfFire", "#CStrike_%sWeightLoaded" };
-char *WEAPON_INFO_LABEL[5] = { "#CStrike_PriceLabel", "#CStrike_CalibreLabel", "#CStrike_ClipCapacityLabel", "#CStrike_RateOfFireLabel", "#CStrike_WeightLoadedLabel" };
+char* WEAPON_INFO_FORMAT[5] = { "#CStrike_%sPrice", "#CStrike_%sCalibre", "#CStrike_%sClipCapacity", "#CStrike_%sRateOfFire", "#CStrike_%sWeightLoaded" };
+char* WEAPON_INFO_LABEL[5] = { "#CStrike_PriceLabel", "#CStrike_CalibreLabel", "#CStrike_ClipCapacityLabel", "#CStrike_RateOfFireLabel", "#CStrike_WeightLoadedLabel" };
 char QUICKBUY_INI[4][16] = { "Primary", "Secondary", "Knife", "Grenade" };
 
-MGUI_Panel *pBuyMenuPanel;
-MGUI_Label *pBuyMenuLabel[10];
-MGUI_Label *pBuyMenuLabelKey[10];
-MGUI_Button *pBuyMenuButton[10];
-MGUI_Button *pBuyMenuButton2[2];
-MGUI_Button *pBuyMenuButtonPage[2];
-MGUI_Image *pBuyMenuImage[10];
-MGUI_Image *pBuyMenuImageWpn[10];
+MGUI_Panel* pBuyMenuPanel;
+MGUI_Label* pBuyMenuLabel[10];
+MGUI_Label* pBuyMenuLabelKey[10];
+MGUI_Button* pBuyMenuButton[10];
+MGUI_Button* pBuyMenuButton2[2];
+MGUI_Button* pBuyMenuButtonPage[2];
+MGUI_Image* pBuyMenuImage[10];
+MGUI_Image* pBuyMenuImageWpn[10];
 
 //MGUI_Image *pBuyMenuImageQuickBuy[10];
-MGUI_Image *pBuyMenuImageQuickBuy[2][5];
+MGUI_Image* pBuyMenuImageQuickBuy[2][5];
 //MGUI_Image *pBuyMenuImageFav[5];
 //MGUI_Image *pBuyMenuImageFavBg[5];
-MGUI_Image *pBuyMenuImageFavWpn[5][3];
-MGUI_Image *pBuyMenuImageFavKey[5];
-MGUI_Label *pBuyMenuLabelFavKey[10];
-MGUI_Button *pBuyMenuButtonFav[5];
-MGUI_Button *pBuyMenuButtonSaveFav[5];
+MGUI_Image* pBuyMenuImageFavWpn[5][3];
+MGUI_Image* pBuyMenuImageFavKey[5];
+MGUI_Label* pBuyMenuLabelFavKey[10];
+MGUI_Button* pBuyMenuButtonFav[5];
+MGUI_Button* pBuyMenuButtonSaveFav[5];
 
-MGUI_Button *pBuyMenuButtonSlot[2];
-MGUI_Label *pBuyMenuLabelSlot;
-MGUI_Image *pBuyMenuImageSlot;
+MGUI_Button* pBuyMenuButtonSlot[2];
+MGUI_Label* pBuyMenuLabelSlot;
+MGUI_Image* pBuyMenuImageSlot;
 
-MGUI_Image *pBuyMenuPanelImageTimer[2];
-MGUI_Label *pBuyMenuPanelLabelTimer[2];
-MGUI_Label *pBuyMenuPanelLabelTimer2[2];
+MGUI_Image* pBuyMenuPanelImageTimer[2];
+MGUI_Label* pBuyMenuPanelLabelTimer[2];
+MGUI_Label* pBuyMenuPanelLabelTimer2[2];
 
-MGUI_Panel *pBuyMenuPanel_WpnInfo[10];
-MGUI_Image *pBuyMenuPanelImage_WpnInfo[10][2];
-MGUI_Label *pBuyMenuPanelLabel_WpnInfo[10][2][5];
+MGUI_Panel* pBuyMenuPanel_WpnInfo[10];
+MGUI_Image* pBuyMenuPanelImage_WpnInfo[10][2];
+MGUI_Label* pBuyMenuPanelLabel_WpnInfo[10][2][5];
 
-MGUI_Button *pBuyMenuButtonClear;
-MGUI_Button *pBuyMenuButtonBuy;
-MGUI_Button *pBuyMenuButtonClose;
+MGUI_Button* pBuyMenuButtonClear;
+MGUI_Button* pBuyMenuButtonBuy;
+MGUI_Button* pBuyMenuButtonClose;
 
 int iPage = 0;
 int iType = 0;
@@ -111,7 +111,7 @@ int g_iScrollBarButton[2][3], g_iScrollBar[3];
 
 //int iWeaponId[7][256];
 //int iWeaponIdInList[9];
-std::vector<CWeaponManager::CustomWeapon *> g_WeaponList[7];
+std::vector<CWeaponManager::CustomWeapon*> g_WeaponList[7];
 
 int bFromEquipMenu;
 
@@ -121,21 +121,21 @@ void BTEPanel_TeamSuit_Read(int iSlot);
 void Cmd_BuyEquip();
 void Cmd_BuyEquip_ZB();
 void Cmd_BuyEquip_Advanced(void);
-void BuyWeapon(char *sName, int iSlot);
+void BuyWeapon(char* sName, int iSlot);
 void MakeWeaponList();
 
 int iMonthWeaponBG, iMonthWeaponBG2;
 Tga iMonthWeaponBGLabel;
 
-wchar_t *GetWeaponInfoFormat(int iSlot, const char *pItem)
+wchar_t* GetWeaponInfoFormat(int iSlot, const char* pItem)
 {
-	const char *pTemp = AliasWeaponName(pItem);
-	auto &Item = WeaponManager()[pItem];
+	const char* pTemp = AliasWeaponName(pItem);
+	auto& Item = WeaponManager()[pItem];
 	if (!iSlot)
 	{
 		if (!stricmp(pTemp, "kevlar_helmet"))
 			pTemp = "kevlarhelmet";
-		char *pPrice = va(": $%d", Item.iPrice);
+		char* pPrice = va(": $%d", Item.iPrice);
 		if (GetLangUtf(va(WEAPON_INFO_FORMAT[iSlot], pTemp))[0] == '#')
 			return UTF8ToUnicode(pPrice);
 	}
@@ -143,15 +143,15 @@ wchar_t *GetWeaponInfoFormat(int iSlot, const char *pItem)
 }
 
 
-void BuyMenuButton_PrePaint(MGUI_Base *control)
+void BuyMenuButton_PrePaint(MGUI_Base* control)
 {
-	if (((MGUI_Button *)control)->m_bVisible)
+	if (((MGUI_Button*)control)->m_bVisible)
 		GL_DrawTGA2(iMonthWeaponBG, control->x + control->pParent->x, control->y + control->pParent->y, control->w, control->h, 255);
 }
 
-void BuyMenuQuickBuyButton_PrePaint(MGUI_Base *control)
+void BuyMenuQuickBuyButton_PrePaint(MGUI_Base* control)
 {
-	if (((MGUI_Image *)control)->m_bVisible)
+	if (((MGUI_Image*)control)->m_bVisible)
 	{
 		GL_DrawTGA2(iMonthWeaponBG2, control->x + control->pParent->x, control->y + control->pParent->y, control->w, control->h, 255);
 		GL_DrawTGA(iMonthWeaponBGLabel.iTexture, 255, 255, 255, 255, control->x + control->pParent->x, control->y + control->pParent->y + control->h - iMonthWeaponBGLabel.iHeight, 1.0);
@@ -232,7 +232,7 @@ void BTEPanel_TeamSuit_SetSlot(int iSlotDelta)
 	BTEPanel_BuyMenu_SetPage(0, 0);
 
 }
-void BTEPanel_TeamSuit_UpdateItems(int iSlot, char *pItems1, char *pItems2, char *pItems3, char *pItems4)
+void BTEPanel_TeamSuit_UpdateItems(int iSlot, char* pItems1, char* pItems2, char* pItems3, char* pItems4)
 {
 	char szTga[64];
 
@@ -315,12 +315,12 @@ void BTEPanel_Init(void)
 	vgui::surface()->DrawSetTextureFile(g_iScrollBar[2], "resource\\control\\scrollbar\\btn_default_scroll_bar_bottom@n", true, false);
 
 
-	// ³õÊ¼»¯ÍÅ¶ÓÌ××°
-	pTeamSuitPanel = MGUI_CreatePanel(50, 100, 602, 550, 20, true/*ÊÇ·ñ¿ÉÒÔÒÆ¶¯*/);
+	// åˆå§‹åŒ–å›¢é˜Ÿå¥—è£…
+	pTeamSuitPanel = MGUI_CreatePanel(50, 100, 602, 550, 20, true/*æ˜¯å¦å¯ä»¥ç§»åŠ¨*/);
 	//pTeamSuitPanel->SetTexture("");
 	wcscpy(pTeamSuitPanel->m_pTitle, GetLangUni("#CSO_WeaponSelect_Label"));
 	pTeamSuitPanel->m_iTitleSize = 16;
-	pTeamSuitPanel->m_bHasClose = false; // ÊÇ·ñÌá¹©X¹Ø±ÕÃæ°å
+	pTeamSuitPanel->m_bHasClose = false; // æ˜¯å¦æä¾›Xå…³é—­é¢æ¿
 	//pTeamSuitPanel->pNextPanel = 0x0;
 
 	//
@@ -336,16 +336,16 @@ void BTEPanel_Init(void)
 	memcpy(pTeamSuitButton[0]->iTga3, g_UI_Button, sizeof(g_UI_Button));
 	pTeamSuitButton[0]->m_Tex_Type = MGUI_TEX_TYPE_3;
 
-	// ±êÌâ µÚÒ»ĞĞ
+	// æ ‡é¢˜ ç¬¬ä¸€è¡Œ
 	int iX = 60;
 	int iY = 60;
 
-	MGUI_Label *pLabel = MGUI_CreateLabel(pTeamSuitPanel, iX + 20, iY, 100, 20);
+	MGUI_Label* pLabel = MGUI_CreateLabel(pTeamSuitPanel, iX + 20, iY, 100, 20);
 	pLabel->SetColor(255, 251, 219, 255);
 	pLabel->SetSize(14);
 	pLabel->SetLabel(GetLangUni("#CSO_ASet"));
-	// ±³¾°Í¼	
-	MGUI_Image *pImage = MGUI_CreateImage(pTeamSuitPanel, iX - 35, iY - 10, 180, 382, true, false);
+	// èƒŒæ™¯å›¾	
+	MGUI_Image* pImage = MGUI_CreateImage(pTeamSuitPanel, iX - 35, iY - 10, 180, 382, true, false);
 	pImage->m_iTex_Type = MGUI_TEX_TYPE_9;
 	memcpy(pImage->m_iTexture9, g_UI_Panel_Gray, sizeof(g_UI_Panel_Gray));
 
@@ -395,10 +395,10 @@ void BTEPanel_Init(void)
 	//pTeamSuitButton[3]->iTga[1] = pTeamSuitButton[3]->iTga[2] = Hud().m_TGA.GetTGA("other\\ui\\panel\\equipbg");
 	pTeamSuitButton[3]->SetKey('3');
 
-	// Í¼Æ¬±³¾° ¼°ÄÚÈİ
+	// å›¾ç‰‡èƒŒæ™¯ åŠå†…å®¹
 	int iDefineX = 34;
 	int iDefineY = iY + 23; // 45
-	// ¹²12 ¸ö
+	// å…±12 ä¸ª
 
 	for (int iLine = 0; iLine < 4; iLine++)
 	{
@@ -408,7 +408,7 @@ void BTEPanel_Init(void)
 			iY = iDefineY + 85 * iLine; // iY = iDefineY + 100* iLine;
 
 
-			// -- ÏÂÃæµÄÎäÆ÷Ãû×Ö
+			// -- ä¸‹é¢çš„æ­¦å™¨åå­—
 			pTeamSuitLabel[iLine * 3 + iRow] = MGUI_CreateLabel(pTeamSuitPanel, iX + 5, iY + 63, 164, 20);
 			pTeamSuitLabel[iLine * 3 + iRow]->SetColor(255, 255, 255, 255);
 			pTeamSuitLabel[iLine * 3 + iRow]->SetSize(14);
@@ -420,10 +420,10 @@ void BTEPanel_Init(void)
 
 			pImage = MGUI_CreateImage(pTeamSuitPanel, iX, iY, 164, 63, true, false);
 			pImage->SetTexture("gfx\\ui\\panel\\equipslot");
-			pTeamSuitImage[iLine * 3 + iRow] = MGUI_CreateImage(pTeamSuitPanel, iX + 7, iY + 4, 150, 53, true, false);// ÎäÆ÷tga
+			pTeamSuitImage[iLine * 3 + iRow] = MGUI_CreateImage(pTeamSuitPanel, iX + 7, iY + 4, 150, 53, true, false);// æ­¦å™¨tga
 			pTeamSuitImage[iLine * 3 + iRow]->m_iTexture = 0;
 
-			pTeamSuitImage2[iLine * 3 + iRow] = MGUI_CreateImage(pTeamSuitPanel, iX + 7, iY + 4, 150, 53, true, false);// ÎäÆ÷tga
+			pTeamSuitImage2[iLine * 3 + iRow] = MGUI_CreateImage(pTeamSuitPanel, iX + 7, iY + 4, 150, 53, true, false);// æ­¦å™¨tga
 			pTeamSuitImage2[iLine * 3 + iRow]->SetTexture("gfx\\vgui\\cannotuse");
 			pTeamSuitImage2[iLine * 3 + iRow]->SetVisible(true);
 			//pTeamSuitImage[iLine*3 + iRow]->SetTexture("gfx\\vgui\\cannotuse");
@@ -450,21 +450,19 @@ void BTEPanel_Init(void)
 	pTeamSuitLabel[iLine*3 + iRow + 12] = MGUI_CreateLabel(pTeamSuitPanel,iX+8,iY+40,164,20);
 	pTeamSuitLabel[iLine*3 + iRow + 12]->SetColor(128,128,128,255);
 	pTeamSuitLabel[iLine*3 + iRow + 12]->SetSize(13);
-
-
 	}
 	for(int iRow = 0 ; iRow <3 ; iRow++)
 	{
 	iX = iRow * 175 + iDefineX;
 	iY = iDefineY + 85* iLine; // iY = iDefineY + 100* iLine;
-	// -- ÏÂÃæµÄÎäÆ÷Ãû×Ö
+	// -- ä¸‹é¢çš„æ­¦å™¨åå­—
 	pTeamSuitLabel[iLine*3 + iRow] = MGUI_CreateLabel(pTeamSuitPanel,iX+5,iY+63,100,20);
 	pTeamSuitLabel[iLine*3 + iRow]->SetColor(255,255,255,255);
 	pTeamSuitLabel[iLine*3 + iRow]->SetSize(16);
 	pTeamSuitLabel[iLine*3 + iRow]->SetLabel(L"");
 	}
 	}*/
-	// ÎªÊ²Ã´²»Ìá¹©Ò»¸öÊäÈë¿òÄØ SB
+	// ä¸ºä»€ä¹ˆä¸æä¾›ä¸€ä¸ªè¾“å…¥æ¡†å‘¢ SB
 	// MGUI_TextEntry *pTextEntry = MGUI_CreateTextEntry(pTeamSuitPanel,100,100,300);
 
 	iMonthWeaponBG = g_Texture[Hud().m_TGA.FindTexture("resource\\month_weapon_longbg")].iTexture;
@@ -526,7 +524,7 @@ void ShowBuyMenu(int type, int page)
 	}
 
 	//int result[9];
-	CWeaponManager::CustomWeapon *WeaponsInPage[9];
+	CWeaponManager::CustomWeapon* WeaponsInPage[9];
 	memset(WeaponsInPage, 0, sizeof(WeaponsInPage));
 	//decltype(g_WeaponInPage) result;
 	int total = 0;
@@ -568,12 +566,12 @@ void ShowBuyMenu(int type, int page)
 
 #include "keydefs.h"
 
-void BuyWeapon(char *sName, int iSlot)
+void BuyWeapon(char* sName, int iSlot)
 {
 	if (!sName || !strlen(sName))
 		return;
 
-	auto &Weapon = WeaponManager()[sName];
+	auto& Weapon = WeaponManager()[sName];
 	//int i = FindWeaponData(sName);
 
 	if (Weapon.iModeLimit && (!(Weapon.iModeLimit & (1 << 4)) && IS_ZOMBIE_MODE))
@@ -737,12 +735,10 @@ void MakeWeaponList()
 	{
 		/*
 		int total = 0;
-
 		for (int i = 1; i <= 255; i++)
 		{
 		if (!g_WeaponData[i].szName)
 		break;
-
 		if (g_WeaponData[i].bCanBuy && g_WeaponData[i].iMenu == type && g_WeaponData[i].iMenu >= 0 && strcmp(g_WeaponData[i].szName, "hegrenade"))
 		{
 		iWeaponId[type][total] = i;
@@ -750,7 +746,7 @@ void MakeWeaponList()
 		}
 		}*/
 		g_WeaponList[type].clear();
-		for (auto &x : WeaponManager())
+		for (auto& x : WeaponManager())
 		{
 			if (!x.szName)
 				break;
@@ -1157,7 +1153,7 @@ void BTEPanel_BuyMenu_Reset()
 	pBuyMenuButtonClose->m_fNextClick = 0.0f;
 
 }
-void BTEPanel_BuyMenu_UpdateItems(int iSlot, char *pItems)
+void BTEPanel_BuyMenu_UpdateItems(int iSlot, char* pItems)
 {
 	if (bFirst)
 		BTEPanel_BuyMenu_First();
@@ -1322,7 +1318,7 @@ void BTEPanel_BuyMenu_UpdateItems(int iSlot, char *pItems)
 		pBuyMenuButton[6]->SetType(MGUI_BUTTON_TYPE_CLOSEALL);
 		pBuyMenuButton[9]->SetType(MGUI_BUTTON_TYPE_CLOSEALL);
 
-		auto &MonthWeapon = WeaponManager()[szMonthWpn];
+		auto& MonthWeapon = WeaponManager()[szMonthWpn];
 		if (MonthWeapon)
 		{
 			int iMenu = static_cast<int>(MonthWeapon.iMenu);
@@ -1412,7 +1408,7 @@ void BTEPanel_BuyMenu_UpdateItems(int iSlot, char *pItems)
 
 				//int iWeapon = FindWeaponData(pItems);
 				//CUSTOMWEAPON Item = g_WeaponData[iWeapon];
-				auto &Weapon = WeaponManager()[pItems];
+				auto& Weapon = WeaponManager()[pItems];
 				if (Weapon.iSlot == 3)
 				{
 					pBuyMenuPanelLabel_WpnInfo[iSlot][1][0]->SetLabel(L": $0");
@@ -1722,7 +1718,7 @@ void BTEPanel_BuyMenu_First()
 	pBuyMenuButtonClear->x = 345 * scale;
 	pBuyMenuButtonClear->y = 386.875 * scale;
 	pBuyMenuButtonClear->w = 45 * scale;
-	pBuyMenuButtonClear->h = 13.125* scale;
+	pBuyMenuButtonClear->h = 13.125 * scale;
 
 	pBuyMenuButtonBuy->x = 411.25 * scale;
 	pBuyMenuButtonBuy->y = 385 * scale;
@@ -1756,7 +1752,7 @@ void BTEPanel_BuyMenu_First()
 	pBuyMenuButtonSlot[1]->h = 21 * scale;
 
 
-	// ¼ì²éÄ£Ê½
+	// æ£€æŸ¥æ¨¡å¼
 	if (g_iMod)
 	{
 		if (g_iMod == MOD_NONE || g_iMod == MOD_ZBS || g_iMod == MOD_GHOST)
@@ -1934,7 +1930,7 @@ int BTEPanel_BuyMenu_Read(int iSlot)
 	return iCheck;
 }
 
-void BTEPanel_BuyMenu_SetQuickBuy(int iSlot, char *pItems)
+void BTEPanel_BuyMenu_SetQuickBuy(int iSlot, char* pItems)
 {
 	char name[32];
 	int iSlot2 = iSlot;
@@ -1949,9 +1945,7 @@ void BTEPanel_BuyMenu_SetQuickBuy(int iSlot, char *pItems)
 		pBuyMenuImageQuickBuy[1][iSlot2]->SetTexture(name);
 	else
 		pBuyMenuImageQuickBuy[1][iSlot2]->m_iTexture = -1;
-
 	strcpy(szFavWpn[5][iSlot - 1], pItems);
-
 	if (!strcmp(pItems, szMonthWpn))
 		pBuyMenuImageQuickBuy[1][iSlot2]->pfnPrePaint = BuyMenuQuickBuyButton_PrePaint;
 	else
@@ -1993,7 +1987,6 @@ void BTEPanel_BuyMenu_SetQuickBuy(int iSlot, char *pItems)
 	}
 
 	/*
-
 	else
 	{
 	pBuyMenuButtonBuy->SetCommand("MGUI.SaveTeamSuit");

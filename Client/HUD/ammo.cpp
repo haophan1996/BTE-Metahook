@@ -108,11 +108,12 @@ void CHudAmmo::Draw(float flTime)
 			char* cstr = new char[s.length() + 1];
 			strcpy(cstr, s.c_str()); 
 
-			sprintf(wpnChar, "gfx\\vgui\\%s", cstr); //LogToFile("test read"); LogToFile(g_Texture[m_wpn].szName);
+			sprintf(wpnChar, "gfx\\vgui\\AMMOICON\\%s_LINE", cstr); //LogToFile("test read"); LogToFile(g_Texture[m_wpn].szName);
 			int m_wpn = Hud().m_TGA.FindTexture(wpnChar);
 
 			GL_DrawTGA(g_Texture[m_wpn].iTexture, 255, 255, 255, 255, ScreenWidth - 200, ScreenHeight - 100, 0.7);
-			g_FontBold.DrawString(GetWeaponNameFormat(cstr), ScreenWidth - 180, ScreenHeight - 60, 1000); 
+			//g_FontBold.DrawString(GetWeaponNameFormat(cstr), ScreenWidth - 180, ScreenHeight - 60, 1000);   
+			g_Font.DrawString(g_szCurWeapon2, ScreenWidth - g_Font.GetLen(g_szCurWeapon2) - 150, ScreenHeight - 60, 1000, 1000);
 		}
 	}
 }

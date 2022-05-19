@@ -458,7 +458,7 @@ void HUD_Init(void)
 	//pCvar_ZombieMenu = gEngfuncs.pfnRegisterVariable("mh_zombiemenu", "1", FCVAR_ARCHIVE);
 
 	cl_crosshair_type = gEngfuncs.pfnRegisterVariable("cl_crosshair_type", "0", FCVAR_ARCHIVE);
-	cl_crosshair_hit = gEngfuncs.pfnRegisterVariable("cl_crosshair_hit", "0", FCVAR_ARCHIVE);
+	cl_crosshair_hit = gEngfuncs.pfnRegisterVariable("cl_crosshair_hit", "1", FCVAR_ARCHIVE);
 
 	cl_gunsmoke = gEngfuncs.pfnRegisterVariable("cl_gunsmoke", "1", FCVAR_ARCHIVE);
 	cl_gunstreak = gEngfuncs.pfnRegisterVariable("cl_gunstreak", "1", FCVAR_ARCHIVE);
