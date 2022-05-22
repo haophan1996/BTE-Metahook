@@ -37,7 +37,7 @@ CHudHealth& HudHealth()
 
 void CHudHealth::Init(void)
 {
-	m_iFlags |= HUD_ACTIVE;
+	m_iFlags |= HUD_ACTIVE; 
 
 	//HOOK_MESSAGE(HealthExtra);
 	gEngfuncs.pfnHookUserMsg("HealthExtra", [](const char* pszName, int iSize, void* pbuf) { return HudHealth().MsgFunc_HealthExtra(pszName, iSize, pbuf); });

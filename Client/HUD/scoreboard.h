@@ -23,6 +23,8 @@ private:
 	int m_iTextCT, m_iTextTR, m_iTextRound, m_iTextKill;
 	int m_iTextHM, m_iTextZB;
 	int m_iText1st;
+	//
+	int boardGR, boardBL, bluePoint, yellowPoint, grayPoint, totalGR, totalBL;
 };
 
 CHudScoreBoard &HudScoreBoard();
