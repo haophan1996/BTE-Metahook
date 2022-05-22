@@ -102,26 +102,29 @@ void CHudHealth::DrawHealth(float time)
 	sprintf(cEffect, "gfx\\charSystem\\HP_FBGEFFECT_%s", iName);
 	sprintf(cFline, "gfx\\charSystem\\HP_FLINE_%s", iName);
 
-	int r, g, b;
+	int r, g, b, a;
 	if (HudHealth().m_iHealth >= 51) {
-		r = 64, g = 140, b = 85; // green
+		r = 64, g = 140, b = 85, a = 255; // green 
 	}
 	else if (HudHealth().m_iHealth <= 50 && HudHealth().m_iHealth >= 21) {
-		r = 205, g = 117, b = 32; //orgrange
+		r = 205, g = 117, b = 32, a = 255; //orgrange
 	}
 	else {
-		r = 147, g = 33, b = 29; //red
+		r = 147, g = 33, b = 29; //red 
+		if ((int)(time * 10) % 2 == 0) a = 255;
+		else a = 0;
 	}
 	GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(cFbg)].iTexture, 69, 154, 98, 255, 5, ScreenHeight - 90, 1.0);
-	GL_DrawTGACustom(g_Texture[Hud().m_TGA.FindTexture(cEffect)].iTexture, 5, ScreenHeight - 90, 128, 128, (atoi(iT) / 100.0f) - (float(HudHealth().m_iHealth) / 100) * ((atoi(iT) / 100.0f) - (atoi(iF) / 100.0f)), r, g, b);
+	GL_DrawTGACustom(g_Texture[Hud().m_TGA.FindTexture(cEffect)].iTexture, 5, ScreenHeight - 90, 128, 128, (atoi(iT) / 100.0f) - (float(HudHealth().m_iHealth) / 100) * ((atoi(iT) / 100.0f) - (atoi(iF) / 100.0f)), r, g, b,a);
 	GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(cFline)].iTexture, 255, 255, 255, 255, 5, ScreenHeight - 90, 1.0);
 
 	//Display HP & AC
-	char hp[10], ac[10];
-	sprintf(hp, "%i", HudHealth().m_iHealth);
-	sprintf(ac, "%i", HudHealth().m_iArmor);
-	g_Font.DrawString(UTF8ToUnicode(ac), ScreenWidth / 6.5, ScreenHeight - 44, 1000, 1000);
-	g_Font.DrawString(UTF8ToUnicode(hp), ScreenWidth / 6.5, ScreenHeight - 14, 1000, 1000);
+	char num[10]; 
+	sprintf(num, "%i", HudHealth().m_iArmor <= 0 ? 0 : HudHealth().m_iArmor);
+	g_Font.DrawString(UTF8ToUnicode(num), (ScreenWidth / 6.5 + 40) - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 44, 1000, 1000); // Display AC 
+
+	sprintf(num, "%i", HudHealth().m_iHealth <= 0 ? 0 : HudHealth().m_iHealth);
+	g_Font.DrawString(UTF8ToUnicode(num), (ScreenWidth / 6.5 + 40) - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 14, 1000, 1000); // Display Health
 
 }
 

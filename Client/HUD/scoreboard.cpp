@@ -210,13 +210,13 @@ void CHudScoreBoard::Draw(float time)
 			sprintf(num, "%i", m_iRight); //gr 
 
 			for (int i = 1; i <= totalBL; i++) {
-				if (i <= m_iLeft2) GL_DrawTGA(g_Texture[yellowPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 - 34) - ((g_Texture[bluePoint].iWidth + 2) * i), 31, 1.0);
-				else GL_DrawTGA(g_Texture[grayPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 - 34) - ((g_Texture[bluePoint].iWidth + 2) * i), 31, 1.0);
+				if (i <= m_iLeft2) GL_DrawTGA(g_Texture[yellowPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 - 34) - ((g_Texture[bluePoint].iWidth + 2) * (i <= 8 ? i : i - 8)), i <= 8 ? 31 : 32 + g_Texture[bluePoint].iHeight, 1.0);
+				else GL_DrawTGA(g_Texture[grayPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 - 34) - ((g_Texture[bluePoint].iWidth + 2) * (i <= 8 ? i : i - 8)), i <= 8 ? 31 : 32 + g_Texture[bluePoint].iHeight, 1.0);
 			}
 
 			for (int i = 1; i <= totalGR; i++) {
-				if (i <= m_iRight2) GL_DrawTGA(g_Texture[bluePoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 + 27) + ((g_Texture[yellowPoint].iWidth + 2) * i), 31, 1.0);
-				else GL_DrawTGA(g_Texture[grayPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 + 27) + ((g_Texture[yellowPoint].iWidth + 2) * i), 31, 1.0);
+				if (i <= m_iRight2) GL_DrawTGA(g_Texture[bluePoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 + 27) + ((g_Texture[yellowPoint].iWidth + 2) * (i <= 8 ? i : i - 8)), i <= 8 ? 31 : 32 + g_Texture[bluePoint].iHeight, 1.0);
+				else GL_DrawTGA(g_Texture[grayPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 + 27) + ((g_Texture[yellowPoint].iWidth + 2) * (i <= 8 ? i : i - 8)), i <= 8 ? 31 : 32 + g_Texture[yellowPoint].iHeight, 1.0);
 			}
 		}
 		else if (PlayerClassManager()[id].team == 2) { //gr
@@ -226,13 +226,13 @@ void CHudScoreBoard::Draw(float time)
 			g_FontBold.DrawString(UTF8ToUnicode(num), (ScreenWidth / 2 - 33) - g_Font.GetLen(UTF8ToUnicode(num)), 21, (ScreenWidth - g_Font.GetLen(UTF8ToUnicode(num))) / 2 - 33, 1000);
 			 
 			for (int i = 1; i <= totalGR; i++) {
-				if (i <= m_iRight2) GL_DrawTGA(g_Texture[bluePoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 - 34) - ((g_Texture[bluePoint].iWidth + 2) * i), 31, 1.0);
-				else GL_DrawTGA(g_Texture[grayPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 - 34) - ((g_Texture[bluePoint].iWidth + 2) * i), 31, 1.0);
+				if (i <= m_iRight2) GL_DrawTGA(g_Texture[bluePoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 - 34) - ((g_Texture[bluePoint].iWidth + 1) * (i <= 8 ? i : i - 8)), i <= 8 ? 31 : 32 + g_Texture[bluePoint].iHeight, 1.0);
+				else GL_DrawTGA(g_Texture[grayPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 - 34) - ((g_Texture[bluePoint].iWidth + 1) * (i <= 8 ? i : i - 8)), i <= 8 ? 31 : 32 + g_Texture[bluePoint].iHeight, 1.0);
 			} 
 
 			for (int i = 1; i <= totalBL; i++) {
-				if (i <= m_iLeft2) GL_DrawTGA(g_Texture[yellowPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 + 27) + ((g_Texture[yellowPoint].iWidth + 2) * i), 31, 1.0);
-				else GL_DrawTGA(g_Texture[grayPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 + 27) + ((g_Texture[yellowPoint].iWidth + 2) * i), 31, 1.0);
+				if (i <= m_iLeft2) GL_DrawTGA(g_Texture[yellowPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 + 27) + ((g_Texture[yellowPoint].iWidth + 1) * (i <= 8 ? i : i - 8)), i <= 8 ? 31 : 32 + g_Texture[yellowPoint].iHeight, 1.0);
+				else GL_DrawTGA(g_Texture[grayPoint].iTexture, 255, 255, 255, 255, (ScreenWidth / 2 + 27) + ((g_Texture[yellowPoint].iWidth + 1) * (i <= 8 ? i : i - 8)), i <= 8 ? 31 : 32 + g_Texture[yellowPoint].iHeight, 1.0);
 			}
 			 
 

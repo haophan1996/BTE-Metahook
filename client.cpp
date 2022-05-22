@@ -24,8 +24,7 @@ wchar_t g_szCurWeapon2[64];
 int g_iWeaponStat = 0;
 int g_iBl3Muzz = 10;
 int g_iSpoce = 0;
-int g_bInReload = 0;
-int g_iShooting = 0;
+int g_bInReload = 0; 
 
 PlayerInfo vPlayer[36];
 extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];

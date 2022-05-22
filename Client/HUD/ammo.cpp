@@ -21,6 +21,8 @@
 #include "Client/HUD/FontText.h"
 #include <HUD/DrawTga.h>
 #include "DrawTargaImage.h"
+#include "Encode.h"
+
 
 Font myFont;
 static CHudAmmo g_HudAmmo;
@@ -30,8 +32,11 @@ CHudAmmo &HudAmmo()
 }
 
 int WEAPON_AMMOID[31] = { -1, 9, -1, 2, 12, 5, 14, 6, 4, 13, 10, 7, 6, 4, 4, 4, 6, 10, 1, 10, 3, 5, 4, 10, 2, 11, 8, 4, 2, -1, 7 };
-extern int g_iShotsFired; // ev_hldm.cpp
-
+bool shooting = false;
+float te = 0;
+int r = 255, g = 255, b = 255 , a = 0, count = 0;
+extern int g_iShotsFired; // ev_hldm.cpp 
+ 
 void CHudAmmo::Draw(float flTime)
 {
 	gEngfuncs.pfnDrawConsoleString(-10, -10, "!");	// Don't know why
@@ -99,21 +104,41 @@ void CHudAmmo::Draw(float flTime)
 	} 
 	//Show weapons label
 	if (g_bAlive) {
-		std::string s = g_iWeaponData[g_iCurrentWeapon].szName;
-		g_FontBold.SetColor(152, 173, 174, 255);
-		g_FontBold.SetWidth(15);
+		std::string s = g_iWeaponData[g_iCurrentWeapon].szName; 
 		char wpnChar[256];
 		if (s.length() > 6) {
 			s = s.substr(7, s.length());
 			char* cstr = new char[s.length() + 1];
 			strcpy(cstr, s.c_str()); 
 
-			sprintf(wpnChar, "gfx\\vgui\\AMMOICON\\%s_LINE", cstr); //LogToFile("test read"); LogToFile(g_Texture[m_wpn].szName);
-			int m_wpn = Hud().m_TGA.FindTexture(wpnChar);
 
-			GL_DrawTGA(g_Texture[m_wpn].iTexture, 255, 255, 255, 255, ScreenWidth - 200, ScreenHeight - 100, 0.7);
-			//g_FontBold.DrawString(GetWeaponNameFormat(cstr), ScreenWidth - 180, ScreenHeight - 60, 1000);   
-			g_FontBold.DrawString(g_szCurWeapon2, ScreenWidth - g_Font.GetLen(g_szCurWeapon2) - 150, ScreenHeight - 60, 1000, 1000);
+			if (g_iCurrentWeapon != WEAPON_KNIFE && g_iCurrentWeapon != WEAPON_SMOKEGRENADE && g_iCurrentWeapon != WEAPON_FLASHBANG && g_iCurrentWeapon != WEAPON_HEGRENADE && g_iCurrentWeapon != WEAPON_C4) {
+				sprintf(wpnChar, "gfx\\vgui\\AMMOICON\\%s_BG", cstr); //LogToFile("test read"); LogToFile(g_Texture[m_wpn].szName); 
+				GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(wpnChar)].iTexture, 255, 255, 255, 255, ScreenWidth - 256, ScreenHeight - 65, 1.0);
+
+				sprintf(wpnChar, "gfx\\vgui\\AMMOICON\\%s_EFFECT", cstr);
+				if (shooting) {
+					te = flTime + 0.4f;
+					//r = 255, g = 0, b = 0; 
+					count += 1;
+					a = 255;
+					if (count <= 5) r = 64, g = 140, b = 85;
+					else if (count >= 6 && count <= 15) r = 205, g = 117, b = 32;
+					else r = 147, g = 33, b = 29;
+				}
+				else if (flTime >= te) {
+					count = 0;
+					te = 0;
+					r = 255, g = 255, b = 255, a = 0;
+				}
+				GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(wpnChar)].iTexture, r, g, b, a, ScreenWidth - 256, ScreenHeight - 65, 1.0); 
+			}
+			sprintf(wpnChar, "gfx\\vgui\\AMMOICON\\%s_LINE", cstr);
+			GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(wpnChar)].iTexture, 255, 255, 255, 255, ScreenWidth - 256, ScreenHeight - 65, 1.0);
+
+			g_FontBold.SetColor(255, 255, 255, 255);
+			g_FontBold.SetWidth(15); 
+			g_FontBold.DrawString(g_szCurWeapon2, ScreenWidth - g_Font.GetLen(g_szCurWeapon2) - 80, ScreenHeight - 67, 1000, 1000); 
 		}
 	}
 }
@@ -135,7 +160,7 @@ void CHudAmmo::DrawAmmo(float time)
 	if (gConfigs.bEnableNewHud)
 		return;
 
-	int x, y;
+	/*int x, y;
 	int r, g, b, a;
 	int iFlags;
 
@@ -161,7 +186,7 @@ void CHudAmmo::DrawAmmo(float time)
 		else
 			iFlags = DHN_DRAWZERO | DHN_3DIGITS;
 
-		x = Hud().DrawHudNumber(x, y, iFlags, m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType], r, g, b);
+		//x = Hud().DrawHudNumber(x, y, iFlags, m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType], r, g, b);
 		return;
 	}
 	x = ScreenWidth - 8 * Hud().m_iFontWidth - iIconWidth;
@@ -187,7 +212,30 @@ void CHudAmmo::DrawAmmo(float time)
 	else
 		iFlags = DHN_DRAWZERO | DHN_3DIGITS;
 
-	Hud().DrawHudNumber(x, y, iFlags, m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType], r, g, b); 
+	//Hud().DrawHudNumber(x, y, iFlags, m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType], r, g, b); 
+	*/
+	char num[30];
+	g_Font.SetColor(255, 255, 255, 255);
+	g_Font.SetWidth(19);
+
+	GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture("gfx\\charSystem\\AMMO_BG")].iTexture, 255, 255, 255, 255, ScreenWidth - 256, ScreenHeight - 25, 1.0);
+
+	if (g_iCurrentWeapon == WEAPON_SMOKEGRENADE || g_iCurrentWeapon == WEAPON_HEGRENADE || g_iCurrentWeapon == WEAPON_FLASHBANG) {
+		sprintf(num, "%i", g_iWeaponData[g_iCurrentWeapon].iClip <= 0 ? 0 : g_iWeaponData[g_iCurrentWeapon].iClip);
+		g_Font.DrawString(UTF8ToUnicode(num), ScreenWidth - 167, ScreenHeight - 8, 1000, 1000);
+
+		sprintf(num, "%i", m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType]);
+		g_Font.DrawString(UTF8ToUnicode(num), ScreenWidth - 178 - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 8, 1000, 1000); 
+	}
+	else {
+		sprintf(num, "%i", m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType]);
+		g_Font.DrawString(UTF8ToUnicode(num), ScreenWidth - 167, ScreenHeight - 8, 1000, 1000);
+
+		sprintf(num, "%i", g_iWeaponData[g_iCurrentWeapon].iClip <= 0 ? 0 : g_iWeaponData[g_iCurrentWeapon].iClip);
+		g_Font.DrawString(UTF8ToUnicode(num), ScreenWidth - 178 - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 8, 1000, 1000);
+	}
+	 
+	 
 }
 
 int DrawExtraAmmoNumber(int x, int y, int iNumber, int r, int g, int b)
@@ -438,7 +486,7 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 	iWeaponAccuracyFlags = GetWeaponAccuracyFlags(weaponid);
 
 	if (iWeaponAccuracyFlags != 0 && cl_dynamiccrosshair && cl_dynamiccrosshair->value != 0.0)
-	{
+	{ 
 		if ((g_iPlayerFlags & FL_ONGROUND) || !(iWeaponAccuracyFlags & 1))
 		{
 			if ((g_iPlayerFlags & FL_DUCKING) && (iWeaponAccuracyFlags & 4))
@@ -491,7 +539,8 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 	}
 
 	if (g_iShotsFired > m_iAmmoLastCheck)
-	{
+	{ 
+		shooting = true;
 		m_flCrosshairDistance += iDeltaDistance;
 		m_iAlpha -= 40;
 
@@ -502,9 +551,10 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 			m_iAlpha = 120;
 	}
 	else
-	{
+	{ 
 		m_flCrosshairDistance -= (0.013 * m_flCrosshairDistance) + 0.1;
-		m_iAlpha += 2;
+		m_iAlpha += 2; 
+		shooting = false;
 	}
 
 	if (g_iShotsFired > 600)
@@ -567,7 +617,7 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 		DrawCrosshairEx(flTime, weaponid, iBarSize, flCrosshairDistance, m_bAdditive, m_R, m_G, m_B, m_iAlpha);
 
 	return 1;
-}
+} 
 void CHudAmmo::SetNvgOn(bool bNvg)
 {
 	m_bNvgOn = bNvg;

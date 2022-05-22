@@ -32,14 +32,14 @@ int GL_DrawTGA2(int index, int iX, int iY, int iW, int iH, int alpha)
 	return 1;
 }
 
-int GL_DrawTGACustom(int index, int iX, int iY, int iW, int iH, float iFrom, int r, int g, int b)
+int GL_DrawTGACustom(int index, int iX, int iY, int iW, int iH, float iFrom, int r, int g, int b, int a)
 {
 	if (!index) return 0;
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, index);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glColor4ub(r, g, b, 255);
+	glColor4ub(r, g, b, a);
 	glBegin(GL_QUADS);
 	 
 	glTexCoord2f(0.0f, iFrom);             // Texture coordinates of the first point of the quadrilateral 

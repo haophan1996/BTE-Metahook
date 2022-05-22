@@ -73,10 +73,7 @@ void HUD_PostRunCmd(struct local_state_s *from, struct local_state_s *to, struct
 			if (g_iBTEWeapon == WPN_GAUSS)
 				g_irunninggausspred = true; 
 		}
-		if (cmd->buttons & IN_ATTACK)
-		{
-			g_iShooting = true;
-		}
+		 
 
 		else g_iButton = 0;
 
@@ -97,9 +94,5 @@ void HUD_PostRunCmd(struct local_state_s *from, struct local_state_s *to, struct
 		gEngfuncs.pfnAngleVectors(v_angles, forward, NULL, NULL);
 		to->client.velocity = to->client.velocity - forward * g_flApplyVel * 5;
 		g_irunninggausspred = false;
-	}
-
-	if (g_iShooting == 1) {
-		g_iShooting = false;
-	}
+	} 
 }
