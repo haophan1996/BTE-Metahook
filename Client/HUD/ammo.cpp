@@ -110,7 +110,7 @@ void CHudAmmo::Draw(float flTime)
 			s = s.substr(7, s.length());
 			char* cstr = new char[s.length() + 1];
 			strcpy(cstr, s.c_str()); 
-
+			 
 
 			if (g_iCurrentWeapon != WEAPON_KNIFE && g_iCurrentWeapon != WEAPON_SMOKEGRENADE && g_iCurrentWeapon != WEAPON_FLASHBANG && g_iCurrentWeapon != WEAPON_HEGRENADE && g_iCurrentWeapon != WEAPON_C4) {
 				sprintf(wpnChar, "gfx\\vgui\\AMMOICON\\%s_BG", cstr); //LogToFile("test read"); LogToFile(g_Texture[m_wpn].szName); 
@@ -118,12 +118,12 @@ void CHudAmmo::Draw(float flTime)
 
 				sprintf(wpnChar, "gfx\\vgui\\AMMOICON\\%s_EFFECT", cstr);
 				if (shooting) {
-					te = flTime + 0.4f;
+					te = flTime + 0.1f;
 					//r = 255, g = 0, b = 0; 
 					count += 1;
 					a = 255;
-					if (count <= 5) r = 64, g = 140, b = 85;
-					else if (count >= 6 && count <= 15) r = 205, g = 117, b = 32;
+					if (count <= 4) r = 64, g = 140, b = 85;
+					else if (count >= 5 && count <= 10) r = 205, g = 117, b = 32;
 					else r = 147, g = 33, b = 29;
 				}
 				else if (flTime >= te) {
@@ -131,14 +131,14 @@ void CHudAmmo::Draw(float flTime)
 					te = 0;
 					r = 255, g = 255, b = 255, a = 0;
 				}
-				GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(wpnChar)].iTexture, r, g, b, a, ScreenWidth - 256, ScreenHeight - 65, 1.0); 
+				GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(wpnChar)].iTexture, r, g, b, a == 255 ? ((int)(flTime * 100) % 2 == 0 ? 255 : 0) : a, ScreenWidth - 256, ScreenHeight - 65, 1.0);
 			}
 			sprintf(wpnChar, "gfx\\vgui\\AMMOICON\\%s_LINE", cstr);
 			GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(wpnChar)].iTexture, 255, 255, 255, 255, ScreenWidth - 256, ScreenHeight - 65, 1.0);
 
 			g_FontBold.SetColor(255, 255, 255, 255);
 			g_FontBold.SetWidth(15); 
-			g_FontBold.DrawString(g_szCurWeapon2, ScreenWidth - g_Font.GetLen(g_szCurWeapon2) - 80, ScreenHeight - 67, 1000, 1000); 
+			g_FontBold.DrawString(g_szCurWeapon2, ScreenWidth - g_Font.GetLen(g_szCurWeapon2) - 80, ScreenHeight - 67, 1000, 1000);  
 		}
 	}
 }
@@ -375,7 +375,7 @@ void CHudAmmo::VidInit(void)
 }
 
 int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
-{
+{ 
 	int iDistance;
 	int iDeltaDistance;
 	int iWeaponAccuracyFlags;
@@ -452,8 +452,8 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 
 	case WEAPON_AUG:
 	{
-		iDistance = 3;
-		iDeltaDistance = 3;
+		iDistance = 9;
+		iDeltaDistance = 4;
 		break;
 	}
 
@@ -605,7 +605,7 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 
 	if (m_iCrosshairScaleBase != ScreenWidth)
 	{
-		flCrosshairDistance *= (float)(ScreenWidth) / m_iCrosshairScaleBase;
+		flCrosshairDistance *= (float)(ScreenWidth) / m_iCrosshairScaleBase + 50;
 		iBarSize = (float)(ScreenWidth * iBarSize) / m_iCrosshairScaleBase;
 	}
 
@@ -613,9 +613,11 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 		DrawCrosshairEx(flTime, weaponid, iBarSize, flCrosshairDistance, false, 250, 50, 50, m_iAlpha);
 	else if (g_iBTEWeapon == WPN_JANUS && (g_iWeaponStat == 51 || g_iWeaponStat == 52))
 		DrawCrosshairEx(flTime, weaponid, iBarSize, flCrosshairDistance, m_bAdditive, 170, 83, 196, m_iAlpha);
-	else
-		DrawCrosshairEx(flTime, weaponid, iBarSize, flCrosshairDistance, m_bAdditive, m_R, m_G, m_B, m_iAlpha);
-
+	else { 
+		//DrawCrosshairEx(flTime, weaponid, iBarSize, flCrosshairDistance, m_bAdditive, m_R, m_G, m_B, m_iAlpha);
+	} 
+	int txt = Hud().m_TGA.FindTexture("gfx\\charSystem\\Crosshair\\C\\cross");
+	GL_DrawTGA(g_Texture[txt].iTexture, m_R, m_G, m_B, 255, ScreenWidth /2 - (g_Texture[txt].iWidth * flCrosshairDistance / 10) / 2 + 1, ScreenHeight / 2 - (g_Texture[txt].iHeight * flCrosshairDistance / 10) / 2 + 1 * 1.5, flCrosshairDistance /10);
 	return 1;
 } 
 void CHudAmmo::SetNvgOn(bool bNvg)
@@ -757,14 +759,14 @@ int CHudAmmo::DrawCrosshairEx(float flTime, int weaponid, int iBarSize, float fl
 		{
 			int size = sqrt((radius * radius) - (float)(i * i));
 
-			pfnFillRGBA((ScreenWidth / 2) + i, (ScreenHeight / 2) + size, 1, 1, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) + i, (ScreenHeight / 2) - size, 1, 1, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) - i, (ScreenHeight / 2) + size, 1, 1, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) - i, (ScreenHeight / 2) - size, 1, 1, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) + size, (ScreenHeight / 2) + i, 1, 1, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) + size, (ScreenHeight / 2) - i, 1, 1, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) - size, (ScreenHeight / 2) + i, 1, 1, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) - size, (ScreenHeight / 2) - i, 1, 1, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) + i, (ScreenHeight / 2) + size, 2, 2, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) + i, (ScreenHeight / 2) - size, 2, 2, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) - i, (ScreenHeight / 2) + size, 2, 2, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) - i, (ScreenHeight / 2) - size, 2, 2, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) + size, (ScreenHeight / 2) + i, 2, 2, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) + size, (ScreenHeight / 2) - i, 2, 2, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) - size, (ScreenHeight / 2) + i, 2, 2, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) - size, (ScreenHeight / 2) - i, 2, 2, r, g, b, a);
 		}
 #else
 		float radius = flCrosshairDistance * 1.1 + (iBarSize / 2);

@@ -152,8 +152,9 @@ public:
 
 	inline CustomWeapon &GetPlayerWeapon(int idx, int iSlot)
 	{
-		if (!m_pPlayerWeapon[idx][iSlot])
+		if (!m_pPlayerWeapon[idx][iSlot]) { 
 			return m_NullWeapon;
+		} 
 		return *m_pPlayerWeapon[idx][iSlot];
 	}
 	inline CustomWeapon &SetPlayerWeapon(int idx, int iSlot, const char *szName)
