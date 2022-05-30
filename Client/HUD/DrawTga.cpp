@@ -9,6 +9,7 @@
 #include "BaseUI.h"
 #include "util.h"
 
+#include "Encode.h"
 #include "DrawTGA.h"
 
 static CHudTGAElements g_HudTGAElements;
@@ -157,7 +158,7 @@ void CHudTGAElements::AddElement(DrawTgaItem rgTempDrawImage)
 		{
 			if (!g_Tga[i].flEndDisplayTime)
 			{
-				g_Tga[i] = rgTempDrawImage;
+				g_Tga[i] = rgTempDrawImage; 
 				break;
 			}
 		}
@@ -187,6 +188,7 @@ void CHudTGAElements::Draw(float time)
 		r = g_Tga[i].r;
 		g = g_Tga[i].g;
 		b = g_Tga[i].b;
+		 
 		float fA;
 
 		switch (g_Tga[i].iMode)
@@ -214,6 +216,41 @@ void CHudTGAElements::Draw(float time)
 					fA = 2.0-fA;
 				break;
 			}
+			case 4:
+			{
+				float flHasDisplayTime = time - g_Tga[i].flStartDisplayTime;
+				float flNeedDisplayTime = g_Tga[i].flEndDisplayTime - g_Tga[i].flStartDisplayTime;
+				
+				if (time <= g_Tga[i].flStartDisplayTime + 0.1) g_Tga[i].fScale = 0.2f;
+
+				if (time <= g_Tga[i].flStartDisplayTime + 0.2f) {
+					if (g_Tga[i].fScale <= 1.2f) g_Tga[i].fScale += 0.25f;
+				}
+				else if (time > g_Tga[i].flStartDisplayTime + 0.2f && time <= g_Tga[i].flStartDisplayTime + 0.3f) {
+					if (g_Tga[i].fScale > 1.2f) g_Tga[i].fScale -= 0.1f;
+				}
+				 
+				fA =  1.0 - (flHasDisplayTime / flNeedDisplayTime);
+				break;
+			}
+			case 5: 
+			{
+				float flHasDisplayTime = time - g_Tga[i].flStartDisplayTime;
+				float flNeedDisplayTime = g_Tga[i].flEndDisplayTime - g_Tga[i].flStartDisplayTime;
+
+				if (time <= g_Tga[i].flStartDisplayTime + 0.1) g_Tga[i].fScale = 0.2f;
+
+				if (time <= g_Tga[i].flStartDisplayTime + 0.3f) {
+					if (g_Tga[i].fScale <= 1.7f) g_Tga[i].fScale += 0.3f;
+				}
+				else if (time > g_Tga[i].flStartDisplayTime + 0.3f && time <= g_Tga[i].flStartDisplayTime + 0.4f) {
+					if (g_Tga[i].fScale >= 1.0f)
+						g_Tga[i].fScale -= 0.1f;
+				}
+
+				fA = 1.0 - (flHasDisplayTime / flNeedDisplayTime);
+				break;
+			}
 			default: 
 			{
 				fA = 1.0;
@@ -232,6 +269,17 @@ void CHudTGAElements::Draw(float time)
 		{
 			width = g_MHTga[g_Tga[i].iMHTgaID].width * g_Tga[i].fScale ;
 			height = g_MHTga[g_Tga[i].iMHTgaID].height * g_Tga[i].fScale ;
+
+			/*if (g_Tga[i].iMode == 4) {
+				if ((int)(time * 10) % 2 == 0) {
+					width++;
+					height++;
+				}
+				else {
+					width--;
+					height--;
+				}
+			}*/
 		}
 
 		if (g_Tga[i].iCenter)
@@ -243,6 +291,27 @@ void CHudTGAElements::Draw(float time)
 		{
 			iX = g_Tga[i].x;
 			iY = g_Tga[i].y;
+		}
+		 
+		if (g_Tga[i].iMode == 4 && (time > g_Tga[i].flStartDisplayTime + 0.3f && time <= g_Tga[i].flStartDisplayTime + 0.7f)) {
+			if ((int)(time * 10) % 2 == 0) {
+				iX++;
+				iY++;
+			}
+			else {
+				iX--;
+				iY--;
+			}
+		}
+		if (g_Tga[i].iMode == 5 && (time > g_Tga[i].flStartDisplayTime + 0.3f && time <= g_Tga[i].flStartDisplayTime + 0.7f)) {
+			if ((int)(time * 10) % 2 == 0) {
+				iX++;
+				iY++;
+			}
+			else {
+				iX--;
+				iY--;
+			}
 		}
 
 		Tri_Enable(GL_TEXTURE_2D);

@@ -21,9 +21,7 @@
 #include "Client/HUD/DrawTGA.h"
 #include <calcscreen.h>
 #include <TextureManager.h>
-
-#include "Fonts.h" 
-#include "Encode.h"
+ 
 
 static CHudDeathNotice g_HudDeathNotice;
 CHudDeathNotice &HudDeathNotice()
@@ -708,7 +706,8 @@ void CHudDeathNotice::Draw(float flTime)
 				}
 
 				x -= (5 + ConsoleStringLen( m_rgDeathNoticeList[i].szKiller ) )+BORDER;
-				// Draw killers name
+				// Draw killers name 
+
 				if(m_rgDeathNoticeList[i].Killer == 1) gEngfuncs.pfnDrawSetTextColor(0.6, 0.8, 1);
 				else gEngfuncs.pfnDrawSetTextColor(0.949, 0.905, 0.552);
 

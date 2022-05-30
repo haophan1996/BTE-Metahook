@@ -25,7 +25,7 @@ private:
 	BOOL m_bOn;
 	float m_flShowTime, m_flStartTime;
 
-	int m_iBG, m_iBar;
+	int m_iBG, m_BAR, m_GAUGEEFFECT;
 };
 
 CHudRespawnBar &HudRespawnBar();
