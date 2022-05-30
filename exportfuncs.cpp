@@ -1298,7 +1298,7 @@ void V_CalcRefdef(struct ref_params_s *pParams)
 			}
 		}
 
-		if (g_iMod == MOD_GHOST)
+		if (g_iMod == MOD_TDM)
 		{
 			if (vPlayer[g_iUser2].team == 2 || (g_iTeam == 2 && g_bAlive))
 			{

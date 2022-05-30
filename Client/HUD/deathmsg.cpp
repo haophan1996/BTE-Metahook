@@ -22,6 +22,9 @@
 #include <calcscreen.h>
 #include <TextureManager.h>
 
+#include "Fonts.h" 
+#include "Encode.h"
+
 static CHudDeathNotice g_HudDeathNotice;
 CHudDeathNotice &HudDeathNotice()
 {
@@ -137,6 +140,15 @@ void CHudDeathNotice::VidInit(void)
 	m_iDeathTga[1][1] = Hud().m_TGA.FindTexture("resource\\hud\\deathnotice\\deathbg_center");
 	m_iDeathTga[1][2] = Hud().m_TGA.FindTexture("resource\\hud\\deathnotice\\deathbg_right");
 	memset(m_rgDeathNoticeList,0,sizeof(m_rgDeathNoticeList));
+
+
+	SHOT_MULTIKILL2 = Hud().m_TGA.FindTexture("gfx\\charSystem\\KILLMSG\\SHOT_MULTIKILL2");
+	SHOT_MULTIKILL3 = Hud().m_TGA.FindTexture("gfx\\charSystem\\KILLMSG\\SHOT_MULTIKILL3");
+	SHOT_MULTIKILL4 = Hud().m_TGA.FindTexture("gfx\\charSystem\\KILLMSG\\SHOT_MULTIKILL4");
+	SHOT_MULTIKILL5 = Hud().m_TGA.FindTexture("gfx\\charSystem\\KILLMSG\\SHOT_MULTIKILL5");
+	SHOT_MULTIKILL6 = Hud().m_TGA.FindTexture("gfx\\charSystem\\KILLMSG\\SHOT_MULTIKILL6");
+	SHOT_MULTIKILLMAX = Hud().m_TGA.FindTexture("gfx\\charSystem\\KILLMSG\\SHOT_MULTIKILLMAX");
+	SHOT_HEAD = Hud().m_TGA.FindTexture("gfx\\charSystem\\KILLMSG\\SHOT_HEAD");
 
 	m_iInfects = m_iKills = m_iTotalKills = m_iDeaths = m_iRoundDidNotKill = 0;
 	m_bLastRoundKilled = 1;
@@ -275,7 +287,23 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 	m_rgDeathNoticeList[i].iHeadShot = iHeadShot;
 	m_rgDeathNoticeList[i].Killer = vPlayer[iKiller].team;
 	m_rgDeathNoticeList[i].Victim = vPlayer[iVictim].team;
+	  
 
+	if (Hud().m_flTime - killerLastFloat[m_rgDeathNoticeList[i].idKiller][0] <= 5.0f) {
+		if (killerLastFloat[m_rgDeathNoticeList[i].idKiller][0] > 0.0f) { 
+			killerLastFloat[m_rgDeathNoticeList[i].idKiller][1] = killerLastFloat[m_rgDeathNoticeList[i].idKiller][1] + 1.0f;
+			m_rgDeathNoticeList[i].killerMSG = (int)killerLastFloat[m_rgDeathNoticeList[i].idKiller][1];
+		} 
+	}
+	else { 
+		killerLastFloat[m_rgDeathNoticeList[i].idKiller][1] = 1.0f;
+		m_rgDeathNoticeList[i].killerMSG = (int)killerLastFloat[m_rgDeathNoticeList[i].idKiller][1];
+	}
+	killerLastFloat[m_rgDeathNoticeList[i].idKiller][0] = Hud().m_flTime;
+
+
+
+	 
 	if(iKiller == iIndex)
 	{
 		if ((vPlayer[iIndex].team != vPlayer[iVictim].team || g_iMod == MOD_DM) && (g_iMod != MOD_GHOST || vPlayer[iVictim].team != 2))
@@ -518,7 +546,7 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 
 	return 0;
 }
-#define Y_RES	120
+#define Y_RES	50
 #define X_RES	30
 #define BORDER	10
 #define DRAW_FIX	-10
@@ -597,8 +625,9 @@ void CHudDeathNotice::Draw(float flTime)
 		m_rgDeathNoticeList[i].flDisplayTime = min( m_rgDeathNoticeList[i].flDisplayTime, Hud().m_flTime +flLast );
 
 		if(!toggle) return;
+		 
+			y = (Y_RES + 2 + (30 * (i - iOffset)));  //!!!
 
-			y = (Y_RES + 2 + (22 * (i - iOffset)));  //!!!
 
 			if(g_iMod == MOD_GD)
 			{
@@ -616,19 +645,19 @@ void CHudDeathNotice::Draw(float flTime)
 			int iWidth = ConsoleStringLen(m_rgDeathNoticeList[i].szVictim) + (Hud().GetSpriteRect(id).right - Hud().GetSpriteRect(id).left);
 
 
-			int m_Head;
+			//int m_Head;
 			
-			if(g_iMod != MOD_ZB4)
-				m_Head = Hud().GetSpriteIndex("d_headshot");
-			else
-				m_Head = Hud().GetSpriteIndex("d_adrenalineshot");
+			//if(g_iMod != MOD_ZB4)
+			//	m_Head = Hud().GetSpriteIndex("d_headshot");
+			//else
+			//	m_Head = Hud().GetSpriteIndex("d_adrenalineshot");
 
-			if(m_rgDeathNoticeList[i].iHeadShot)
-			{
-				x -= (Hud().GetSpriteRect(m_Head).right - Hud().GetSpriteRect(m_Head).left) ;
-				iFillX = x;
-				iWidth += (Hud().GetSpriteRect(m_Head).right - Hud().GetSpriteRect(m_Head).left);
-			}
+			//if(m_rgDeathNoticeList[i].iHeadShot)
+			//{
+			//	x -= (Hud().GetSpriteRect(m_Head).right - Hud().GetSpriteRect(m_Head).left) ;
+			//	iFillX = x;
+			//	iWidth += (Hud().GetSpriteRect(m_Head).right - Hud().GetSpriteRect(m_Head).left);
+			//}
 			if ( !m_rgDeathNoticeList[i].iSuicide )
 			{
 				iFillX  -= (5 + ConsoleStringLen( m_rgDeathNoticeList[i].szKiller )+BORDER);
@@ -653,7 +682,7 @@ void CHudDeathNotice::Draw(float flTime)
 				GL_DrawTGA2(g_Texture[m_iDeathTga[1][1]].iTexture,iFillX-2,y,iDrawLen-6,20,255);
 				GL_DrawTGA2(g_Texture[m_iDeathTga[1][2]].iTexture,iFillX-5+iDrawLen-3,y,3,20,255);
 			}
-			y = (Y_RES + 2 + (22 * (i - iOffset)));
+			y = (Y_RES + 2 + (30 * (i - iOffset)));
 			if(g_iMod == MOD_GD)
 			{
 				y = HudGunDeathBoard().m_iY + 2 + (22 * (i - iOffset));
@@ -680,40 +709,67 @@ void CHudDeathNotice::Draw(float flTime)
 
 				x -= (5 + ConsoleStringLen( m_rgDeathNoticeList[i].szKiller ) )+BORDER;
 				// Draw killers name
-				if(m_rgDeathNoticeList[i].Killer == 1)
-				{
-					gEngfuncs.pfnDrawSetTextColor(0.6, 0.8, 1.0);
-				}
-				else gEngfuncs.pfnDrawSetTextColor(1.0, 0.25, 0.25);
-				
+				if(m_rgDeathNoticeList[i].Killer == 1) gEngfuncs.pfnDrawSetTextColor(0.6, 0.8, 1);
+				else gEngfuncs.pfnDrawSetTextColor(0.949, 0.905, 0.552);
+
 				x = 5 + DrawConsoleString( x, y, m_rgDeathNoticeList[i].szKiller )+BORDER;
+  
+				if (m_rgDeathNoticeList[i].iHeadShot) {
+					GL_DrawTGA(g_Texture[SHOT_HEAD].iTexture, 255, 255, 255, 255, iFillX - g_Texture[SHOT_HEAD].iWidth / 2.5, y - 8, 1.0);
+				} 
+				
+				if (m_rgDeathNoticeList[i].killerMSG == 2) {
+					GL_DrawTGA(g_Texture[SHOT_MULTIKILL2].iTexture, 255, 255, 255, 255, iFillX - g_Texture[SHOT_MULTIKILL2].iWidth / (m_rgDeathNoticeList[i].iHeadShot ? 1.2 : 1.7), y - 3, 1.0);
+				} else if (m_rgDeathNoticeList[i].killerMSG == 3) {
+					GL_DrawTGA(g_Texture[SHOT_MULTIKILL3].iTexture, 255, 255, 255, 255, iFillX - g_Texture[SHOT_MULTIKILL3].iWidth / (m_rgDeathNoticeList[i].iHeadShot ? 1.2 : 1.7), y - 3, 1.0);
+				} else if (m_rgDeathNoticeList[i].killerMSG == 4) {
+					GL_DrawTGA(g_Texture[SHOT_MULTIKILL4].iTexture, 255, 255, 255, 255, iFillX - g_Texture[SHOT_MULTIKILL4].iWidth / (m_rgDeathNoticeList[i].iHeadShot ? 1.2 : 1.7), y - 3, 1.0);
+				} else if (m_rgDeathNoticeList[i].killerMSG == 5) {
+					GL_DrawTGA(g_Texture[SHOT_MULTIKILL5].iTexture, 255, 255, 255, 255, iFillX - g_Texture[SHOT_MULTIKILL5].iWidth / (m_rgDeathNoticeList[i].iHeadShot ? 1.2 : 1.7), y - 3, 1.0);
+				} else if (m_rgDeathNoticeList[i].killerMSG == 6) {
+					GL_DrawTGA(g_Texture[SHOT_MULTIKILL6].iTexture, 255, 255, 255, 255, iFillX - g_Texture[SHOT_MULTIKILL6].iWidth / (m_rgDeathNoticeList[i].iHeadShot ? 1.2 : 1.7), y - 3, 1.0);
+				} else if (m_rgDeathNoticeList[i].killerMSG > 6) {
+					GL_DrawTGA(g_Texture[SHOT_MULTIKILLMAX].iTexture, 255, 255, 255, 255, iFillX - g_Texture[SHOT_MULTIKILLMAX].iWidth / (m_rgDeathNoticeList[i].iHeadShot ? 1.2 : 1.7), y - 3, 1.0);
+				}
+				 
 			}
 
-			if(m_rgDeathNoticeList[i].iHeadShot) x -= HEADX;
-			
-			r = 255;  g = 80;	b = 0;
+			//if(m_rgDeathNoticeList[i].iHeadShot) x -= HEADX;
+			//RGB Hud weapon 
+			r = 255;  g = 255;	b = 255;
 
 			// Draw death weapon
-			gEngfuncs.pfnSPR_Set( Hud().GetSprite(id), r, g, b );
+			
+			gEngfuncs.pfnSPR_Set(Hud().GetSprite(id), r, g, b);
 			gEngfuncs.pfnSPR_DrawAdditive( 0, x, y, &Hud().GetSpriteRect(id) );
 			
 			x += (Hud().GetSpriteRect(id).right - Hud().GetSpriteRect(id).left);
-			if(m_rgDeathNoticeList[i].iHeadShot) 
-			{
-				gEngfuncs.pfnSPR_Set( Hud().GetSprite(m_Head), r, g, b );
-				gEngfuncs.pfnSPR_DrawAdditive( 0, x + HEADX + 3 , y, &Hud().GetSpriteRect(m_Head));
-				x +=Hud().GetSpriteRect(m_Head).right - Hud().GetSpriteRect(m_Head).left;
-			}
+			//if(m_rgDeathNoticeList[i].iHeadShot) 
+			//{
+			//	gEngfuncs.pfnSPR_Set( Hud().GetSprite(m_Head), r, g, b );
+			//	gEngfuncs.pfnSPR_DrawAdditive( 0, x + HEADX + 3 , y, &Hud().GetSpriteRect(m_Head));
+			//	x +=Hud().GetSpriteRect(m_Head).right - Hud().GetSpriteRect(m_Head).left;
+			//}
+
+			// Set name victim
 			if (m_rgDeathNoticeList[i].iNonPlayerKill == FALSE)
-			{
-				if(m_rgDeathNoticeList[i].Victim == 1)
+			{ 
+				//g_FontBold.SetWidth(15);
+				if(m_rgDeathNoticeList[i].Victim == 1) 
 				{
-					gEngfuncs.pfnDrawSetTextColor(0.6, 0.8, 1.0);
+					gEngfuncs.pfnDrawSetTextColor(0.6, 0.8, 1);
 				}
-				else gEngfuncs.pfnDrawSetTextColor(1.0, 0.25, 0.25);
+				else {
+					gEngfuncs.pfnDrawSetTextColor(0.949, 0.905, 0.552);
+				}
 				x+=BORDER+5;
-				if(m_rgDeathNoticeList[i].iHeadShot) x = DrawConsoleString( x + HEADX, y, m_rgDeathNoticeList[i].szVictim );
-				else x = DrawConsoleString( x, y, m_rgDeathNoticeList[i].szVictim );
+				//if (m_rgDeathNoticeList[i].iHeadShot) {
+				//	x = DrawConsoleString(x + HEADX, y, m_rgDeathNoticeList[i].szVictim);
+				//}
+				//else {
+					x = DrawConsoleString(x, y, m_rgDeathNoticeList[i].szVictim); 
+				//}
+					 
 			}
 	}
 	return;

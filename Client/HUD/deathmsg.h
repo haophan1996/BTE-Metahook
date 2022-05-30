@@ -16,9 +16,11 @@ struct DeathNoticeItem {
 	int Victim;
 	int iHeadShot;
 	int iLocal;
-	int idKiller;
+	int idKiller; // Get id Killer to display KILLER on their head
+	float KillerLastKill;
+	int killerMSG;
 };
-
+ 
 int DrawConsoleString(int x, int y, const char *string);
 void GetConsoleStringSize(const char *string, int *width, int *height);
 int ConsoleStringLen(const char *string);
@@ -54,6 +56,8 @@ private:
 	float m_fLastKillTime;
 	int m_iTotalKills;
 	int m_bFirstKill, m_iInfects, m_iKills, m_iDeaths, m_iRoundDidNotKill, m_bLastRoundKilled;
+	float killerLastFloat[32][2];
+	int SHOT_MULTIKILL2, SHOT_MULTIKILL3, SHOT_MULTIKILL4, SHOT_MULTIKILL5, SHOT_MULTIKILL6, SHOT_MULTIKILLMAX, SHOT_HEAD;
 	float m_fCountResetTime[5];
 };
 

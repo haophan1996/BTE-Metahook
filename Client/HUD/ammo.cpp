@@ -422,7 +422,7 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 
 	case WEAPON_AK47:
 	{
-		iDistance = 4;
+		iDistance = 9;
 		iDeltaDistance = 4;
 		break;
 	}
@@ -438,15 +438,15 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 
 	case WEAPON_XM1014:
 	{
-		iDistance = 9;
-		iDeltaDistance = 4;
+		iDistance = 12;
+		iDeltaDistance = 5;
 		break;
 	}
 
 	case WEAPON_MAC10:
 	{
-		iDistance = 9;
-		iDeltaDistance = 3;
+		iDistance = 10;
+		iDeltaDistance = 4;
 		break;
 	}
 
@@ -461,24 +461,18 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 	case WEAPON_UMP45:
 	case WEAPON_M249:
 	{
-		iDistance = 6;
-		iDeltaDistance = 3;
+		iDistance = 11;
+		iDeltaDistance = 4;
 		break;
 	}
 
 	case WEAPON_SCOUT:
 	case WEAPON_SG550:
-	case WEAPON_SG552:
-	{
-		iDistance = 5;
-		iDeltaDistance = 3;
-		break;
-	}
-
+	case WEAPON_SG552: 
 	default:
 	{
-		iDistance = 4;
-		iDeltaDistance = 3;
+		iDistance = 9;
+		iDeltaDistance = 4;
 		break;
 	}
 	}
