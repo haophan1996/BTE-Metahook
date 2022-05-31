@@ -59,6 +59,7 @@ private:
 	float killerLastFloat[32][2];
 	int SHOT_MULTIKILL2, SHOT_MULTIKILL3, SHOT_MULTIKILL4, SHOT_MULTIKILL5, SHOT_MULTIKILL6, SHOT_MULTIKILLMAX, SHOT_HEAD;
 	float m_fCountResetTime[5];
+	float fKillMSG;
 };
 
 int RankFirst(int iTeam);

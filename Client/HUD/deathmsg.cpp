@@ -11,6 +11,8 @@
 #include "weapons.h"
 #include "Client/WeaponManager.h"
 
+#include "Util.h"
+
 #include "ammo.h"
 #include "deathmsg.h"
 #include "alarm.h"
@@ -151,6 +153,11 @@ void CHudDeathNotice::VidInit(void)
 	m_iInfects = m_iKills = m_iTotalKills = m_iDeaths = m_iRoundDidNotKill = 0;
 	m_bLastRoundKilled = 1;
 	m_bFirstKill = TRUE;
+	char killMSK[10];
+	GetPrivateProfileStringA("KillMSG", "TimeBetweenMULTIKILL", "4.36", killMSK, sizeof(killMSK), "cstrike/gfx/Settings.ini");
+	fKillMSG = atof(killMSK);
+	sprintf(killMSK, "%f", fKillMSG);
+	LogToFile(killMSK);
 } 
 
 void CHudDeathNotice::OnPlayerSpawn()
@@ -287,7 +294,7 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 	m_rgDeathNoticeList[i].Victim = vPlayer[iVictim].team;
 	  
 
-	if (Hud().m_flTime - killerLastFloat[m_rgDeathNoticeList[i].idKiller][0] <= 5.0f) {
+	if (Hud().m_flTime - killerLastFloat[m_rgDeathNoticeList[i].idKiller][0] < fKillMSG) {
 		if (killerLastFloat[m_rgDeathNoticeList[i].idKiller][0] > 0.0f) { 
 			killerLastFloat[m_rgDeathNoticeList[i].idKiller][1] = killerLastFloat[m_rgDeathNoticeList[i].idKiller][1] + 1.0f;
 			m_rgDeathNoticeList[i].killerMSG = (int)killerLastFloat[m_rgDeathNoticeList[i].idKiller][1];

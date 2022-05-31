@@ -272,12 +272,12 @@ bool CCounterStrikeViewport::IsTutorTextWindowOpen(void)
 
 void CCounterStrikeViewport::ShowSpectatorGUI(void)
 {
-	g_pfnShowSpectatorGUI(this, 0);
+	//g_pfnShowSpectatorGUI(this, 0);
 }
 
 void CCounterStrikeViewport::ShowSpectatorGUIBar(void)
 {
-	g_pfnShowSpectatorGUIBar(this, 0);
+	//g_pfnShowSpectatorGUIBar(this, 0);
 }
 
 void CCounterStrikeViewport::HideSpectatorGUI(void)
