@@ -281,7 +281,7 @@ void CheckViewEntity(void)
 	if (!viewent->model->name)
 		return;
 
-	model_t *model = IEngineStudio.Mod_ForName(viewent->model->name, false);
+	model_t *model = IEngineStudio.Mod_ForName(viewent->model->name, false); 
 
 	studiohdr_t	*pstudio;
 	mstudiotexture_t	*ptexture;
@@ -296,10 +296,10 @@ void CheckViewEntity(void)
 	if (PlayerClassManager()[id])
 		g_iViewEntityBody = PlayerClassManager()[id].hand;
 	 
-
-	//gEngfuncs.SetViewAngles();
+	 
+	//gEngfuncs.SetViewAngles(); 
 	if (viewent)
-	{ 
+	{  
 		if(viewent->model->name && !strstr(viewent->model->name, "v_foot"))
 		{
 			//g_iCurWeapon = 0;

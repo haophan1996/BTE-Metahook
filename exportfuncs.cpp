@@ -1300,7 +1300,7 @@ void V_CalcRefdef(struct ref_params_s *pParams)
 
 		if (g_iMod == MOD_TDM)
 		{
-			if (vPlayer[g_iUser2].team == 2 || (g_iTeam == 2 && g_bAlive))
+			/*if (vPlayer[g_iUser2].team == 2 || (g_iTeam == 2 && g_bAlive))
 			{
 				//g_iViewEntityRenderAmout = (int)VectorLength(g_velocity) / 250.0 * 56.0;
 				//g_velocity[2] = 0;
@@ -1330,7 +1330,7 @@ void V_CalcRefdef(struct ref_params_s *pParams)
 				g_iViewEntityRenderFX = kRenderFxNone;
 				g_iViewEntityRenderAmout = 0;
 				g_byViewEntityRenderColor.r = g_byViewEntityRenderColor.g = g_byViewEntityRenderColor.b = 255;
-			}
+			}*/
 		}
 	}
 

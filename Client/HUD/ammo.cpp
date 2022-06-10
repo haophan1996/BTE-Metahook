@@ -234,9 +234,7 @@ void CHudAmmo::DrawAmmo(float time)
 
 		sprintf(num, "%i", g_iWeaponData[g_iCurrentWeapon].iClip <= 0 ? 0 : g_iWeaponData[g_iCurrentWeapon].iClip);
 		g_Font.DrawString(UTF8ToUnicode(num), ScreenWidth - 178 - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 8, 1000, 1000);
-	}
-	 
-	 
+	} 
 }
 
 int DrawExtraAmmoNumber(int x, int y, int iNumber, int r, int g, int b)

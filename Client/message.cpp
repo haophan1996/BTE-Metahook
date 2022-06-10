@@ -907,7 +907,36 @@ int MsgFunc_MetaHook(const char *pszName, int iSize, void *pbuf)
 		g_byViewEntityRenderColor.b = READ_BYTE();
 	}
 	else if (!strcmp(szFunction, "ChangeTattoo"))
-	{
+	{ 
+		 
+		char name[256]; 
+		sprintf(name, "%s", READ_STRING()); 
+		int iType = READ_BYTE(); 
+		 
+
+		switch (iType) 
+		{
+			case 1: { 
+				int r, g, b, mode, fx;
+				float a;
+				sscanf(name, "%d,%d,%d,%f,%d,%d", &r, &g, &b, &a, &mode, &fx);
+				g_iViewEntityRenderMode = mode;
+				g_iViewEntityRenderFX = fx;
+				g_iViewEntityRenderAmout = a;
+				g_byViewEntityRenderColor.r = r;
+				g_byViewEntityRenderColor.g = g;
+				g_byViewEntityRenderColor.b = b;
+				sprintf(name, "%d,%d,%d,%f,%d,%d", r, g, b, a,mode, fx);
+				LogToFile(name);
+			}
+				 
+		}
+
+		//sprintf(name, "%i %i %i %i %i %i ", r,g,b,a,mode,fx); 
+		//LogToFile(name);
+
+
+
 		// NO MORE USE
 		/*
 		char name[32];
