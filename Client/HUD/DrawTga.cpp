@@ -150,7 +150,10 @@ int CHudTGAElements::GetBMP(char *pszName)
 
 void CHudTGAElements::AddElement(DrawTgaItem rgTempDrawImage)
 {
+	 
 	if(rgTempDrawImage.fScale==0.0) rgTempDrawImage.fScale = 1.0;
+	 else if(rgTempDrawImage.iMode > 3) rgTempDrawImage.fScale = 0.0;
+
 	rgTempDrawImage.iMHTgaID = GetTGA(rgTempDrawImage.szName);
 	if (rgTempDrawImage.iChanne <= 0 || rgTempDrawImage.iChanne >= MAX_TGA)
 	{
@@ -220,17 +223,18 @@ void CHudTGAElements::Draw(float time)
 			{
 				float flHasDisplayTime = time - g_Tga[i].flStartDisplayTime;
 				float flNeedDisplayTime = g_Tga[i].flEndDisplayTime - g_Tga[i].flStartDisplayTime;
-				
-				if (time <= g_Tga[i].flStartDisplayTime + 0.1) g_Tga[i].fScale = 0.2f;
 
-				if (time <= g_Tga[i].flStartDisplayTime + 0.2f) {
-					if (g_Tga[i].fScale <= 1.2f) g_Tga[i].fScale += 0.25f;
+				if (time <= g_Tga[i].flStartDisplayTime + flNeedDisplayTime * 0.05f) {
+					if (g_Tga[i].fScale <= 1.5f) 
+						g_Tga[i].fScale += 0.2f; 
 				}
-				else if (time > g_Tga[i].flStartDisplayTime + 0.2f && time <= g_Tga[i].flStartDisplayTime + 0.3f) {
-					if (g_Tga[i].fScale > 1.2f) g_Tga[i].fScale -= 0.1f;
+				else
+				{ 
+					if (g_Tga[i].fScale >= 1.1f) g_Tga[i].fScale -= 0.125f;
 				}
 				 
-				fA =  1.0 - (flHasDisplayTime / flNeedDisplayTime);
+				fA =  1.0 - (flHasDisplayTime / (flNeedDisplayTime * 0.5));
+				if (fA <= 0.0) fA = 0.0f;
 				break;
 			}
 			case 5: 
@@ -238,7 +242,7 @@ void CHudTGAElements::Draw(float time)
 				float flHasDisplayTime = time - g_Tga[i].flStartDisplayTime;
 				float flNeedDisplayTime = g_Tga[i].flEndDisplayTime - g_Tga[i].flStartDisplayTime;
 
-				if (time <= g_Tga[i].flStartDisplayTime + 0.1) g_Tga[i].fScale = 0.2f;
+				//if (time <= g_Tga[i].flStartDisplayTime + 0.1) g_Tga[i].fScale = 0.2f;
 
 				if (time <= g_Tga[i].flStartDisplayTime + 0.3f) {
 					if (g_Tga[i].fScale <= 1.7f) g_Tga[i].fScale += 0.3f;
@@ -248,7 +252,7 @@ void CHudTGAElements::Draw(float time)
 						g_Tga[i].fScale -= 0.1f;
 				}
 
-				fA = 1.0 - (flHasDisplayTime / flNeedDisplayTime);
+				fA = 1.0 - (flHasDisplayTime / flNeedDisplayTime); 
 				break;
 			}
 			default: 

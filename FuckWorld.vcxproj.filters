@@ -1139,6 +1139,9 @@
     <ClCompile Include="GameUI\CSBTEBulletin.cpp">
       <Filter>GameUI</Filter>
     </ClCompile>
+    <ClCompile Include="DeathBoard.cpp">
+      <Filter>Client\HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceSDK\appframework\IAppSystem.h">
@@ -3072,6 +3075,9 @@
     </ClInclude>
     <ClInclude Include="GameUI\CSBTEBulletin.h">
       <Filter>GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="DeathBoard.h">
+      <Filter>Client\HUD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -38,10 +38,10 @@ CCSBTEMyWpnElement::CCSBTEMyWpnElement(Panel *parent, const char *name) : ImageP
 	m_pWeaponImage->SetBounds(0, 0, 235, 81);
 	m_pWeaponImage->SetMouseInputEnabled(false);
 
-	m_pTeamImage = new ImagePanel(this, "CSBTETeamImage");
+	/* m_pTeamImage = new ImagePanel(this, "CSBTETeamImage");
 	m_pTeamImage->SetImage(scheme()->GetImage("resource/teamtype0", false));
 	m_pTeamImage->SetBounds(180, 60, 41, 11);
-	m_pTeamImage->SetMouseInputEnabled(false);
+	m_pTeamImage->SetMouseInputEnabled(false);*/
 	
 	m_pTextLine = new ImagePanel(this, "CSBTETextLine");
 	m_pTextLine->SetImage(scheme()->GetImage("resource/itemline", false));
@@ -80,9 +80,9 @@ void CCSBTEMyWpnElement::SetWeapon(char *szWeaponName, int iTeam)
 
 	int w, h;
 	pImage->GetSize(w, h);
-	m_pWeaponImage->SetBounds((235 - w) / 2, (81 - h) / 2, 235, 81);
+	m_pWeaponImage->SetBounds((235 - w) / 2, (81 - h) / 2, 235, 100);
 	
-	m_pTeamImage->SetImage(scheme()->GetImage(va("resource/teamtype%i", iTeam), false));
+	//m_pTeamImage->SetImage(scheme()->GetImage(va("resource/teamtype%i", iTeam), false));
 	
 	m_pText->SetText(GetWeaponNameFormat(szWeaponName));
 	int textwide, texttall;

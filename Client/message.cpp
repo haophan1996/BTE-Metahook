@@ -53,6 +53,7 @@
 #include "MGUI/mgui.h"
 #include "MGUI/BTEPanel.h"
 #include "ViewPort.h"
+#include <DeathBoard.h>
 
 pfnUserMsgHook pmTeamScore;
 pfnUserMsgHook pmResetHUD;
@@ -909,8 +910,8 @@ int MsgFunc_MetaHook(const char *pszName, int iSize, void *pbuf)
 	else if (!strcmp(szFunction, "ChangeTattoo"))
 	{ 
 		 
-		char name[256]; 
-		sprintf(name, "%s", READ_STRING()); 
+		char data[256]; 
+		sprintf(data, "%s", READ_STRING()); 
 		int iType = READ_BYTE(); 
 		 
 
@@ -919,15 +920,23 @@ int MsgFunc_MetaHook(const char *pszName, int iSize, void *pbuf)
 			case 1: { 
 				int r, g, b, mode, fx;
 				float a;
-				sscanf(name, "%d,%d,%d,%f,%d,%d", &r, &g, &b, &a, &mode, &fx);
+				sscanf(data, "%d,%d,%d,%f,%d,%d", &r, &g, &b, &a, &mode, &fx);
 				g_iViewEntityRenderMode = mode;
 				g_iViewEntityRenderFX = fx;
 				g_iViewEntityRenderAmout = a;
 				g_byViewEntityRenderColor.r = r;
 				g_byViewEntityRenderColor.g = g;
 				g_byViewEntityRenderColor.b = b;
-				sprintf(name, "%d,%d,%d,%f,%d,%d", r, g, b, a,mode, fx);
-				LogToFile(name);
+				sprintf(data, "%d,%d,%d,%f,%d,%d", r, g, b, a,mode, fx);
+				LogToFile(data);
+				break;
+			}
+			case 2: {
+				HudDeathBoard().isBackSpacePress = true;
+				HudDeathBoard().currentY = ScreenHeight;
+				HudDeathBoard().startTime = cl.time;
+				LogToFile(data);
+				break;
 			}
 				 
 		}

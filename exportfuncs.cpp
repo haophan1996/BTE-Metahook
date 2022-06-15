@@ -134,6 +134,7 @@ char TranslateKeyCharacter(int keynum, BOOL bIgnoreShift, BOOL bIgnorePad)
 		if (keynum == 169)
 			return '0';
 	}
+	 
 	if (GetKeyState(VK_SHIFT) < 0 && !bIgnoreShift)	// Shift key has been pressed
 	{
 		switch (keynum)
@@ -552,9 +553,8 @@ int HUD_VidInit(void)
 
 	gHud3D.VidInit();
 	gHud3D_ZB.VidInit();
-
-	Event_VidInit();
-
+	 
+	Event_VidInit(); 
 	g_fMuzzleTime = 0;
 	key_last_press = 0.0;
 	g_Next_Key_CanUse = 0.0;
@@ -721,6 +721,7 @@ float g_skycolor[3];
 bool g_bNvg;
 
 #include <list>
+#include <BTE-Metahook/DeathBoard.h>
 extern void(*g_pfnR_DrawSpriteModel)(cl_entity_t *);
 
 void V_CalcRefdef(struct ref_params_s *pParams)
@@ -2271,7 +2272,14 @@ int HUD_AddEntity(int iType, struct cl_entity_s *pEntity, const char *pszModel)
 
 int HUD_Key_Event(int eventcode, int keynum, const char *pszCurrentBinding)
 {
-	/**/
+	 
+	if (keynum == 127 || keynum == 8) {
+		  
+		if (HudDeathBoard().isBackSpacePress) HudDeathBoard().isBackSpacePress = false;
+		else HudDeathBoard().isBackSpacePress = true; 
+		HudDeathBoard().startTime = cl.time; 
+	} 
+
 	if (keynum == 53)
 	{
 		//g_mgui_candraw = 1 - g_mgui_candraw;

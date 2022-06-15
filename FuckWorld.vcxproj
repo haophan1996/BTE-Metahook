@@ -219,6 +219,7 @@
     <ClCompile Include="configs.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="CVARs.cpp" />
+    <ClCompile Include="DeathBoard.cpp" />
     <ClCompile Include="dGPU.cpp" />
     <ClCompile Include="display.cpp" />
     <ClCompile Include="DrawTargaImage.cpp" />
@@ -563,6 +564,7 @@
     <ClInclude Include="configs.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="CVARs.h" />
+    <ClInclude Include="DeathBoard.h" />
     <ClInclude Include="display.h" />
     <ClInclude Include="DrawTargaImage.h" />
     <ClInclude Include="engfunchook.h" />
