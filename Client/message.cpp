@@ -910,32 +910,59 @@ int MsgFunc_MetaHook(const char *pszName, int iSize, void *pbuf)
 	else if (!strcmp(szFunction, "ChangeTattoo"))
 	{ 
 		 
-		char data[256]; 
-		sprintf(data, "%s", READ_STRING()); 
-		int iType = READ_BYTE(); 
-		 
-
+		char line[256]; 
+		sprintf(line, "%s", READ_STRING());
+		int iType = READ_BYTE();  
 		switch (iType) 
 		{
 			case 1: { 
 				int r, g, b, mode, fx;
 				float a;
-				sscanf(data, "%d,%d,%d,%f,%d,%d", &r, &g, &b, &a, &mode, &fx);
+				sscanf(line, "%d,%d,%d,%f,%d,%d", &r, &g, &b, &a, &mode, &fx);
 				g_iViewEntityRenderMode = mode;
 				g_iViewEntityRenderFX = fx;
 				g_iViewEntityRenderAmout = a;
 				g_byViewEntityRenderColor.r = r;
 				g_byViewEntityRenderColor.g = g;
 				g_byViewEntityRenderColor.b = b;
-				sprintf(data, "%d,%d,%d,%f,%d,%d", r, g, b, a,mode, fx);
-				LogToFile(data);
+				//sprintf(data, "%d,%d,%d,%f,%d,%d", r, g, b, a,mode, fx);
+				//LogToFile(data);
 				break;
 			}
 			case 2: {
+				 
+				g_DeathBoardMSG.clear();
+				//Thanks to Jonathan Leffler https://stackoverflow.com/a/3975254
+				 
+
+				//*************Get wpn of Killer*************//
+				sscanf(line, "%d %s", &HudDeathBoard().iKillerID, HudDeathBoard().szWpnNameKiller);
+				for (int i = 0; i <= strlen(line); i++) {
+					if (line[i] == ',') {
+						strncpy(line, line + i + 2, strlen(line));
+						break;
+					}
+				}
+				//*********************END********************// 
+
+				char* data = line;
+				int offset, n, i = 0;
+				DeathBoardMSG deathBoardMSG;
+				while (sscanf(data, "%d%n", &n, &offset) == 1) { 
+					data += offset;
+					if (i % 2 == 0) {
+						deathBoardMSG.victimID = n; 
+					} else {
+						deathBoardMSG.victimDamage = n;
+						g_DeathBoardMSG.push_back(deathBoardMSG);
+					} 
+					i += 1;
+				} 
 				HudDeathBoard().isBackSpacePress = true;
 				HudDeathBoard().currentY = ScreenHeight;
 				HudDeathBoard().startTime = cl.time;
-				LogToFile(data);
+				sprintf(line, "%i %s ", HudDeathBoard().iKillerID, HudDeathBoard().szWpnNameKiller);
+				LogToFile(line); 
 				break;
 			}
 				 

@@ -6,6 +6,8 @@ struct DeathBoardMSG {
 	int victimDamage; //victimDamage, if victimDamage == -10 Headshot, if victimDamage == -20 Knife, if victimDamage == -30 Normal 
 };
 
+extern std::vector<DeathBoardMSG> g_DeathBoardMSG;
+
 class CHudDeathBoard : public CHudBase
 {
 public:
@@ -14,6 +16,9 @@ public:
 	void Draw(float flTime);  
 
 public:
+	int SPECTATE_HITNODE_10, SPECTATE_HITNODE_20, SPECTATE_HITNODE_30;
+	char szWpnNameKiller[64];
+	int iKillerID;
 	int maxY;
 	bool isBackSpacePress;
 	bool isToggle;
@@ -26,8 +31,7 @@ private:
 	float currentTime;
 	float BezierBlend(float t, float duration);
 	int SPECTATE_MAIN, SPECTATE_UNDER;
-	int SPECTATE_UNDER_USERINFO;
-	int SPECTATE_HITNODE_10, SPECTATE_HITNODE_20, SPECTATE_HITNODE_30;
+	int SPECTATE_UNDER_USERINFO; 
 	int KillerHint_ICON_Start, KillerHint_ICON_SpaceBetween, KillerHint_Name_Start, KillerHint_Name_SpaceBetween;
 
 };

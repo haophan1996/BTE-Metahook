@@ -13,9 +13,11 @@
  
 #include "Client/HUD/DrawTGA.h"
 #include <BTE-Metahook/DrawTargaImage.h>
+#include <HUD/DrawTABPanel.h>
 
 static CHudDeathBoard g_HudDeathBoard; 
- 
+std::vector<DeathBoardMSG> g_DeathBoardMSG;
+
 CHudDeathBoard& HudDeathBoard()
 {
 	return g_HudDeathBoard;
@@ -25,7 +27,7 @@ void CHudDeathBoard::Init(void)
 {
 	m_iFlags |= HUD_ACTIVE; 
 	isBackSpacePress = false;
-	isToggle = false;
+	isToggle = false; 
 }
 
 void CHudDeathBoard::VidInit(void)
@@ -34,8 +36,8 @@ void CHudDeathBoard::VidInit(void)
 	SPECTATE_UNDER = Hud().m_TGA.FindTexture("gfx\\charSystem\\SPECTATEUI\\SPECTATE_UNDER");
 	SPECTATE_UNDER_USERINFO = Hud().m_TGA.FindTexture("gfx\\charSystem\\SPECTATEUI\\SPECTATE_UNDER_USERINFO");
 	SPECTATE_HITNODE_10 = Hud().m_TGA.FindTexture("gfx\\charSystem\\SPECTATEUI\\SPECTATE_HITNODE-10");
-	SPECTATE_HITNODE_30 = Hud().m_TGA.FindTexture("gfx\\charSystem\\SPECTATEUI\\SPECTATE_HITNODE-20");
-	SPECTATE_HITNODE_20 = Hud().m_TGA.FindTexture("gfx\\charSystem\\SPECTATEUI\\SPECTATE_HITNODE-30");
+	SPECTATE_HITNODE_20 = Hud().m_TGA.FindTexture("gfx\\charSystem\\SPECTATEUI\\SPECTATE_HITNODE-20");
+	SPECTATE_HITNODE_30 = Hud().m_TGA.FindTexture("gfx\\charSystem\\SPECTATEUI\\SPECTATE_HITNODE-30");
 	maxY = ScreenHeight - g_Texture[SPECTATE_MAIN].iHeight - 30;
 
 	char iData[10];
@@ -71,8 +73,8 @@ void CHudDeathBoard::Draw(float flTime)
 			isBackSpacePress = false; 
 		}
 
-		char test[256];
-		sprintf(test, "Hide Round Info: BackSpace", maxY, currentY);
+		char vicName[129];
+		sprintf(vicName, "Hide Round Info: BackSpace", maxY, currentY);
 		 
 		 
 		/// <summary>
@@ -82,41 +84,74 @@ void CHudDeathBoard::Draw(float flTime)
 		GL_DrawTGA(g_Texture[SPECTATE_MAIN].iTexture, 255, 255, 255, 255, ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth, currentY, 1.0);  
 		GL_DrawTGA(g_Texture[SPECTATE_UNDER].iTexture, 255, 255, 255, 255, ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth, ScreenHeight - 33, 1.0);
 
-		g_FontBold.SetColor(180, 200, 78, 255);
+		g_FontBold.SetColor(130, 164, 164, 255);
 		g_FontBold.SetWidth(12);
-		g_FontBold.DrawString(UTF8ToUnicode(test), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, ScreenHeight - 15, 1000, 1000);//26
+		g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, ScreenHeight - 15, 1000, 1000);//26
 
-		/////////////Show Infomation Victim
+		//*****Displayer Killer that killed Victim
+		g_FontBold.DrawString(UTF8ToUnicode(g_PlayerInfoList[iKillerID].name), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 55, 1000, 1000);
+		g_FontBold.DrawString(GetWeaponNameFormat(szWpnNameKiller), ScreenWidth - 105 - (g_FontBold.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2), currentY + 82, 1000, 1000);
+		sprintf(vicName, "gfx\\vgui\\AMMOICON\\%s_line", szWpnNameKiller);
+		GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(vicName)].iTexture, 255, 255, 255, 255, ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth - 55, currentY + 85, 1.0);
+		// left ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12
+		// Right ScreenWidth - (g_Texture[SPECTATE_MAIN].iWidth + 12 - 28) - (g_FontBold.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2)
+		// 
+		// 
+		// 
+		//*****Show Infomation take damage from Victim 
 		g_FontBold.SetColor(243, 166, 28, 255);
-		g_FontBold.SetWidth(12);
-		sprintf(test, "maxY %i curr %i", maxY, currentY);
-		g_FontBold.DrawString(UTF8ToUnicode(test), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 172, 1000, 1000);//26
-		GL_DrawTGA(g_Texture[SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 157, 1.0);//26
-
-		g_FontBold.DrawString(UTF8ToUnicode(test), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 198, 1000, 1000);//26
-		GL_DrawTGA(g_Texture[SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 183, 1.0);//26
-
-		g_FontBold.DrawString(UTF8ToUnicode(test), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 224, 1000, 1000);//26
-		GL_DrawTGA(g_Texture[SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 209, 1.0);//26 
+		g_FontBold.SetWidth(12);  
+		for (int i = 0; i < g_DeathBoardMSG.size(); i++) {
+			sprintf(vicName, "%s", g_PlayerInfoList[g_DeathBoardMSG[i].victimID].name);
+			g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 175 + (i * 26), 1000, 1000);//26
+			if (g_DeathBoardMSG[i].victimDamage < 0) { 
+				GL_DrawTGA(g_Texture[(g_DeathBoardMSG[i].victimDamage == -30) ? SPECTATE_HITNODE_30 : (g_DeathBoardMSG[i].victimDamage == -20) ? SPECTATE_HITNODE_20 : SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 157 + (i * 26), 1.0);//26
+			} else {
+				sprintf(vicName, "%i", g_DeathBoardMSG[i].victimDamage);
+				g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - 28, currentY + 175 + (i * 26), 1000, 1000);//26 
+			}
+			 
+		}
 	}
 	else if (!isBackSpacePress || !autoDisappear) {
 		if (currentY == ScreenHeight) return;
+		char vicName[128];
 		currentY = currentY * (1.0 + BezierBlend(flTime - startTime, 0.8f));
 		  
+		sprintf(vicName, "Hide Round Info: BackSpace", maxY, currentY);
 		GL_DrawTGA(g_Texture[SPECTATE_MAIN].iTexture, 255, 255, 255, 255, ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth, currentY, 1.0);
+		GL_DrawTGA(g_Texture[SPECTATE_UNDER].iTexture, 255, 255, 255, 255, ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth, ScreenHeight - 33, 1.0);
+		g_FontBold.SetColor(130, 164, 164, 255);
+		g_FontBold.SetWidth(12);
+		g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, ScreenHeight - 15, 1000, 1000);//26
 
-		char test[256];
-		sprintf(test, "maxY %i curr %i", maxY, currentY);
+
+		//*****Displayer Killer that killed Victim
+		g_FontBold.DrawString(UTF8ToUnicode(g_PlayerInfoList[iKillerID].name), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 55, 1000, 1000);
+		g_FontBold.DrawString(GetWeaponNameFormat(szWpnNameKiller), ScreenWidth - 105 - (g_FontBold.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2), currentY + 82, 1000, 1000);
+		sprintf(vicName, "gfx\\vgui\\AMMOICON\\%s_line", szWpnNameKiller);
+		GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(vicName)].iTexture, 255, 255, 255, 255, ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth - 55, currentY + 85, 1.0);
+		// left ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12
+		// Right ScreenWidth - (g_Texture[SPECTATE_MAIN].iWidth + 12 - 28) - (g_FontBold.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2)
+		// 
+		// 
+		// 
+		//*****Show Infomation take damage from Victim 
+		/////////////Show Infomation Victim
 		g_FontBold.SetColor(243, 166, 28, 255);
 		g_FontBold.SetWidth(12);
-		g_FontBold.DrawString(UTF8ToUnicode(test), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 172, 1000, 1000);//26
-		GL_DrawTGA(g_Texture[SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 157, 1.0);//26
+		 
+		for (int i = 0; i < g_DeathBoardMSG.size(); i++) {
+			sprintf(vicName, "%s", g_PlayerInfoList[g_DeathBoardMSG[i].victimID].name);
+			g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 175 + (i * 26), 1000, 1000);//26
+			if (g_DeathBoardMSG[i].victimDamage < 0) {
+				GL_DrawTGA(g_Texture[(g_DeathBoardMSG[i].victimDamage == -30) ? SPECTATE_HITNODE_30 : (g_DeathBoardMSG[i].victimDamage == -20) ? SPECTATE_HITNODE_20 : SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 157 + (i * 26), 1.0);//26
+			} else {
+				sprintf(vicName, "%i", g_DeathBoardMSG[i].victimDamage);
+				g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - 28, currentY + 175 + (i * 26), 1000, 1000);//26 
+			}
 
-		g_FontBold.DrawString(UTF8ToUnicode(test), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 198, 1000, 1000);//26
-		GL_DrawTGA(g_Texture[SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 183, 1.0);//26
-
-		g_FontBold.DrawString(UTF8ToUnicode(test), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 224, 1000, 1000);//26
-		GL_DrawTGA(g_Texture[SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 209, 1.0);//26 
+		}
 
 
 		if (currentY > ScreenHeight) {
