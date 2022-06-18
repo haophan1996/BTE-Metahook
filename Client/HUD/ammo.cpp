@@ -135,8 +135,8 @@ void CHudAmmo::Draw(float flTime)
 			}
 			sprintf(wpnChar, "gfx\\vgui\\AMMOICON\\%s_LINE", cstr);
 			GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(wpnChar)].iTexture, 255, 255, 255, 255, ScreenWidth - 256, ScreenHeight - 65, 1.0);
-
-			g_FontBold.SetColor(255, 255, 255, 255);
+			 
+			g_FontBold.SetColor(141, 187, 231, 255);
 			g_FontBold.SetWidth(15);  
 			g_FontBold.DrawString(g_szCurWeapon2, ScreenWidth - g_Font.GetLen(g_szCurWeapon2) - 80, ScreenHeight - 67, 1000, 1000);  
 			 

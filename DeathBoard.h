@@ -6,6 +6,14 @@ struct DeathBoardMSG {
 	int victimDamage; //victimDamage, if victimDamage == -10 Headshot, if victimDamage == -20 Knife, if victimDamage == -30 Normal 
 };
 
+enum PanelController
+{
+	removePanel = 0,
+	autoDis = 1,
+	manual = 2
+	 
+};
+
 extern std::vector<DeathBoardMSG> g_DeathBoardMSG;
 
 class CHudDeathBoard : public CHudBase
@@ -20,13 +28,13 @@ public:
 	char szWpnNameKiller[64];
 	int iKillerID;
 	int maxY;
+	int autoDisappear;
 	bool isBackSpacePress;
 	bool isToggle;
 	int currentY;
 	float startTime;
 
 private: 
-	bool autoDisappear = false;
 	float disappearTime; //5s
 	float currentTime;
 	float BezierBlend(float t, float duration);

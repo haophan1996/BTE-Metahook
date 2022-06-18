@@ -915,6 +915,9 @@ int MsgFunc_MetaHook(const char *pszName, int iSize, void *pbuf)
 		int iType = READ_BYTE();  
 		switch (iType) 
 		{
+			/// <summary>
+			/// Set Color skin when player spawn
+			/// </summary> 
 			case 1: { 
 				int r, g, b, mode, fx;
 				float a;
@@ -929,7 +932,10 @@ int MsgFunc_MetaHook(const char *pszName, int iSize, void *pbuf)
 				//LogToFile(data);
 				break;
 			}
-			case 2: {
+			/// <summary>
+			/// Show Death Board
+			/// </summary> 
+			case 2: { 
 				 
 				g_DeathBoardMSG.clear();
 				//Thanks to Jonathan Leffler https://stackoverflow.com/a/3975254
@@ -961,18 +967,24 @@ int MsgFunc_MetaHook(const char *pszName, int iSize, void *pbuf)
 				HudDeathBoard().isBackSpacePress = true;
 				HudDeathBoard().currentY = ScreenHeight;
 				HudDeathBoard().startTime = cl.time;
-				sprintf(line, "%i %s ", HudDeathBoard().iKillerID, HudDeathBoard().szWpnNameKiller);
-				LogToFile(line); 
+				HudDeathBoard().autoDisappear = autoDis;
+				//sprintf(line, "%i %s ", HudDeathBoard().iKillerID, HudDeathBoard().szWpnNameKiller);
+				//LogToFile(line); 
+				break;
+			}
+			/// <summary>
+			/// Remove Death Board
+			/// </summary>
+			case 3: { 
+				HudDeathBoard().currentY = ScreenHeight;
+				//HudDeathBoard().startTime = cl.time; //no need
+				HudDeathBoard().autoDisappear = removePanel;
+				HudDeathBoard().isBackSpacePress = false;
 				break;
 			}
 				 
 		}
-
-		//sprintf(name, "%i %i %i %i %i %i ", r,g,b,a,mode,fx); 
-		//LogToFile(name);
-
-
-
+		 
 		// NO MORE USE
 		/*
 		char name[32];
