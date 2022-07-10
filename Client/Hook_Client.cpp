@@ -17,6 +17,7 @@
 #include "Client/HUD/destroyer.h"
 #include "Client/HUD/buffawp.h"
 #include "Client/HUD/DrawTGA.h"
+#include <util.h>
 
 int __fastcall CHudRoundTimer_Draw(void *pthis, int i, float flTime)
 {
@@ -87,7 +88,11 @@ int __fastcall HudSniperScope_Draw(void *p, int i, float f)
 	}
 	if (pCvar_DrawScope->value != 0 && g_iBTEWeapon != WPN_SFSNIPER && g_iBTEWeapon != WPN_DESTROYER && g_iBTEWeapon != WPN_BUFFAWP && 0.0 < Hud().m_FOV && Hud().m_FOV <= 40.0)
 	{
-		//LogToFile("BreakPoint");
+		char wpnChar[128];
+		sprintf(wpnChar, "%s", strupr(WeaponManager().GetCurWeapon().szName)); 
+		GetPrivateProfileStringA(wpnChar, "Scope", "other\\scope", wpnChar, sizeof(wpnChar), "cstrike/weapons.ini");
+		//LogToFile(wpnChar);
+
 		int tid;
 		float scale;
 		float x, y, w, h;
@@ -95,7 +100,7 @@ int __fastcall HudSniperScope_Draw(void *p, int i, float f)
 		if (g_iBTEWeapon == WPN_M200)
 			tid = Hud().m_TGA.GetTGA("other\\scope_m200");
 		else
-			tid = Hud().m_TGA.GetTGA("other\\scope");
+			tid = Hud().m_TGA.GetTGA(wpnChar);
 
 		scale = ScreenHeight / 0.85 / g_MHTga[tid].height;
 

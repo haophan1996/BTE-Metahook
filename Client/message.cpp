@@ -922,12 +922,23 @@ int MsgFunc_MetaHook(const char *pszName, int iSize, void *pbuf)
 				int r, g, b, mode, fx;
 				float a;
 				sscanf(line, "%d,%d,%d,%f,%d,%d", &r, &g, &b, &a, &mode, &fx);
-				g_iViewEntityRenderMode = mode;
-				g_iViewEntityRenderFX = fx;
-				g_iViewEntityRenderAmout = a;
-				g_byViewEntityRenderColor.r = r;
-				g_byViewEntityRenderColor.g = g;
-				g_byViewEntityRenderColor.b = b;
+				if (mode < 0) {
+					cl_entity_t* local = gEngfuncs.GetLocalPlayer();
+					int alpha = local->curstate.renderamt;
+					g_iViewEntityRenderMode = kRenderTransAlpha;
+					g_iViewEntityRenderFX = kRenderFxGlowShell; 
+					g_byViewEntityRenderColor.r = g_byViewEntityRenderColor.g = g_byViewEntityRenderColor.b = alpha * 1.5;
+					g_iViewEntityRenderAmout = 0;
+				}
+				else {
+					g_iViewEntityRenderMode = mode;
+					g_iViewEntityRenderFX = fx;
+					g_iViewEntityRenderAmout = a;
+					g_byViewEntityRenderColor.r = r;
+					g_byViewEntityRenderColor.g = g;
+					g_byViewEntityRenderColor.b = b;
+				}
+				 
 				//sprintf(data, "%d,%d,%d,%f,%d,%d", r, g, b, a,mode, fx);
 				//LogToFile(data);
 				break;
