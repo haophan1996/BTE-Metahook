@@ -123,6 +123,10 @@ void CHudDeathBoard::Draw(float flTime)
 		g_FontBold.SetWidth(12);  
 		for (int i = 0; i < g_DeathBoardMSG.size(); i++) {
 			sprintf(vicName, "%s", g_PlayerInfoList[g_DeathBoardMSG[i].victimID].name);
+
+			if (g_DeathBoardMSG[i].victimDamage < 0) g_FontBold.SetColor(243, 166, 28, 255);
+			else g_FontBold.SetColor(255, 255, 255, 255);
+
 			g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 175 + (i * 26), 1000, 1000);//26
 			if (g_DeathBoardMSG[i].victimDamage < 0) { 
 				GL_DrawTGA(g_Texture[(g_DeathBoardMSG[i].victimDamage == -30) ? SPECTATE_HITNODE_30 : (g_DeathBoardMSG[i].victimDamage == -20) ? SPECTATE_HITNODE_20 : SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 157 + (i * 26), 1.0);//26
@@ -162,6 +166,10 @@ void CHudDeathBoard::Draw(float flTime)
 		 
 		for (int i = 0; i < g_DeathBoardMSG.size(); i++) {
 			sprintf(vicName, "%s", g_PlayerInfoList[g_DeathBoardMSG[i].victimID].name);
+
+			if (g_DeathBoardMSG[i].victimDamage < 0) g_FontBold.SetColor(243, 166, 28, 255);
+			else g_FontBold.SetColor(255, 255, 255, 255);
+
 			g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 175 + (i * 26), 1000, 1000);//26
 			if (g_DeathBoardMSG[i].victimDamage < 0) {
 				GL_DrawTGA(g_Texture[(g_DeathBoardMSG[i].victimDamage == -30) ? SPECTATE_HITNODE_30 : (g_DeathBoardMSG[i].victimDamage == -20) ? SPECTATE_HITNODE_20 : SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 157 + (i * 26), 1.0);//26

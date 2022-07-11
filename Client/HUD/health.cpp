@@ -84,7 +84,7 @@ void CHudHealth::Think(void)
 
 void CHudHealth::DrawHealth(float time)
 { 
-	g_Font.SetColor(251, 201, 96, 255);
+	g_Font.SetColor(255, 255, 255, 255);
 	g_Font.SetWidth(20);
 	 
 	//Display HP & AC tga image

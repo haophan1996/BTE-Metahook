@@ -8,6 +8,7 @@
 struct DeathNoticeItem {
 	char szKiller[32 * 32 + 3];
 	char szVictim[32];
+	int isVipWPN;
 	int iId;
 	int iSuicide;
 	int iNonPlayerKill;

@@ -37,8 +37,11 @@ private:
 	bool m_bNvgOn;
 	int m_HUD_bucket0;
 	int m_HUD_selection;
-	HSPRITE m_hObserverCrosshair, m_hBuffHit, m_hInfinite;
+	HSPRITE m_hObserverCrosshair, m_hInfinite;
 	wrect_t m_rcObserverCrosshair, m_rcInfinite;
+
+	int m_tgaBuffHit;
+
 	int m_bObserverCrosshair;
 	int m_iAmmoLastCheck;
 	int m_iBuffHitWidth, m_iBuffHitHeight;

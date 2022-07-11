@@ -56,8 +56,7 @@ void CHudAmmo::Draw(float flTime)
 
 	if (m_flLastBuffHit > cl.time)
 	{
-		SPR_Set(m_hBuffHit, 255, 0, 0);
-		SPR_DrawAdditive(0, ScreenWidth / 2 - m_iBuffHitWidth / 2, ScreenHeight / 2 - m_iBuffHitHeight / 2, NULL);
+		GL_DrawTGA(g_Texture[m_tgaBuffHit].iTexture, 255, 255, 255, 255, ScreenWidth / 2 - m_iBuffHitWidth / 2, ScreenHeight / 2 - m_iBuffHitHeight / 2, 1.0);
 	}
 
 	DrawAmmo(flTime);
@@ -229,9 +228,17 @@ void CHudAmmo::DrawAmmo(float time)
 		g_Font.DrawString(UTF8ToUnicode(num), ScreenWidth - 178 - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 8, 1000, 1000); 
 	}
 	else {
+		LogToFile(g_iWeaponData[g_iCurrentWeapon].szName);
+		 
+		 
 		sprintf(num, "%i", m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType]);
 		g_Font.DrawString(UTF8ToUnicode(num), ScreenWidth - 167, ScreenHeight - 8, 1000, 1000);
 
+		 
+		if (g_iWeaponData[g_iCurrentWeapon].szName[7] == 'v' && g_iWeaponData[g_iCurrentWeapon].szName[8] == 'i' && g_iWeaponData[g_iCurrentWeapon].szName[9] == 'p') {
+			g_Font.SetColor(255, 255, 0, 255);
+		}
+		 
 		sprintf(num, "%i", g_iWeaponData[g_iCurrentWeapon].iClip <= 0 ? 0 : g_iWeaponData[g_iCurrentWeapon].iClip);
 		g_Font.DrawString(UTF8ToUnicode(num), ScreenWidth - 178 - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 8, 1000, 1000);
 	} 
@@ -366,15 +373,17 @@ void CHudAmmo::VidInit(void)
 
 	int iInfinite = Hud().GetSpriteIndex("infinite");
 
-	m_hBuffHit = SPR_Load("sprites/buffhit.spr");
-	m_hInfinite = Hud().GetSprite(iInfinite);
-	m_iBuffHitHeight = SPR_Height(m_hBuffHit, 0);
-	m_iBuffHitWidth = SPR_Width(m_hBuffHit, 0);
+
+	m_tgaBuffHit = Hud().m_TGA.FindTexture("gfx\\CrossHair_Damage");
+	m_iBuffHitHeight = g_Texture[m_tgaBuffHit].iHeight;
+	m_iBuffHitWidth = g_Texture[m_tgaBuffHit].iWidth;
+	 
+	m_hInfinite = Hud().GetSprite(iInfinite); 
 	m_rcInfinite = Hud().GetSpriteRect(iInfinite);
 }
 
 int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
-{ 
+{
 	int iDistance;
 	int iDeltaDistance;
 	int iWeaponAccuracyFlags;
@@ -400,9 +409,9 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 
 	case WEAPON_MP5NAVY:
 	{
-		 iDistance = 6;
-		 iDeltaDistance = 2;
-		 break;
+		iDistance = 6;
+		iDeltaDistance = 2;
+		break;
 	}
 
 	case WEAPON_M3:
@@ -421,7 +430,7 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 
 	case WEAPON_AK47:
 	{
-		iDistance = 9;
+		iDistance = 4;
 		iDeltaDistance = 4;
 		break;
 	}
@@ -437,22 +446,22 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 
 	case WEAPON_XM1014:
 	{
-		iDistance = 12;
-		iDeltaDistance = 5;
+		iDistance = 9;
+		iDeltaDistance = 4;
 		break;
 	}
 
 	case WEAPON_MAC10:
 	{
-		iDistance = 10;
-		iDeltaDistance = 4;
+		iDistance = 9;
+		iDeltaDistance = 3;
 		break;
 	}
 
 	case WEAPON_AUG:
 	{
-		iDistance = 9;
-		iDeltaDistance = 4;
+		iDistance = 3;
+		iDeltaDistance = 3;
 		break;
 	}
 
@@ -460,18 +469,24 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 	case WEAPON_UMP45:
 	case WEAPON_M249:
 	{
-		iDistance = 11;
-		iDeltaDistance = 4;
+		iDistance = 6;
+		iDeltaDistance = 3;
 		break;
 	}
 
 	case WEAPON_SCOUT:
 	case WEAPON_SG550:
-	case WEAPON_SG552: 
+	case WEAPON_SG552:
+	{
+		iDistance = 5;
+		iDeltaDistance = 3;
+		break;
+	}
+
 	default:
 	{
-		iDistance = 9;
-		iDeltaDistance = 4;
+		iDistance = 4;
+		iDeltaDistance = 3;
 		break;
 	}
 	}
@@ -479,7 +494,7 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 	iWeaponAccuracyFlags = GetWeaponAccuracyFlags(weaponid);
 
 	if (iWeaponAccuracyFlags != 0 && cl_dynamiccrosshair && cl_dynamiccrosshair->value != 0.0)
-	{ 
+	{
 		if ((g_iPlayerFlags & FL_ONGROUND) || !(iWeaponAccuracyFlags & 1))
 		{
 			if ((g_iPlayerFlags & FL_DUCKING) && (iWeaponAccuracyFlags & 4))
@@ -532,7 +547,7 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 	}
 
 	if (g_iShotsFired > m_iAmmoLastCheck)
-	{ 
+	{
 		shooting = true;
 		m_flCrosshairDistance += iDeltaDistance;
 		m_iAlpha -= 40;
@@ -544,10 +559,10 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 			m_iAlpha = 120;
 	}
 	else
-	{ 
-		m_flCrosshairDistance -= (0.013 * m_flCrosshairDistance) + 0.1;
-		m_iAlpha += 2; 
+	{
 		shooting = false;
+		m_flCrosshairDistance -= (0.013 * m_flCrosshairDistance) + 0.1;
+		m_iAlpha += 2;
 	}
 
 	if (g_iShotsFired > 600)
@@ -598,7 +613,7 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 
 	if (m_iCrosshairScaleBase != ScreenWidth)
 	{
-		flCrosshairDistance *= (float)(ScreenWidth) / m_iCrosshairScaleBase + 50;
+		flCrosshairDistance *= (float)(ScreenWidth) / m_iCrosshairScaleBase;
 		iBarSize = (float)(ScreenWidth * iBarSize) / m_iCrosshairScaleBase;
 	}
 
@@ -606,13 +621,11 @@ int CHudAmmo::DrawCrosshair(float flTime, int weaponid)
 		DrawCrosshairEx(flTime, weaponid, iBarSize, flCrosshairDistance, false, 250, 50, 50, m_iAlpha);
 	else if (g_iBTEWeapon == WPN_JANUS && (g_iWeaponStat == 51 || g_iWeaponStat == 52))
 		DrawCrosshairEx(flTime, weaponid, iBarSize, flCrosshairDistance, m_bAdditive, 170, 83, 196, m_iAlpha);
-	else { 
-		//DrawCrosshairEx(flTime, weaponid, iBarSize, flCrosshairDistance, m_bAdditive, m_R, m_G, m_B, m_iAlpha);
-	} 
-	int txt = Hud().m_TGA.FindTexture("gfx\\charSystem\\Crosshair\\C\\cross");
-	GL_DrawTGA(g_Texture[txt].iTexture, m_R, m_G, m_B, 255, ScreenWidth /2 - (g_Texture[txt].iWidth * flCrosshairDistance / 10) / 2 + 1, ScreenHeight / 2 - (g_Texture[txt].iHeight * flCrosshairDistance / 10) / 2 + 1 * 1.5, flCrosshairDistance /10);
+	else
+		DrawCrosshairEx(flTime, weaponid, iBarSize, flCrosshairDistance, m_bAdditive, m_R, m_G, m_B, m_iAlpha);
+
 	return 1;
-} 
+}
 void CHudAmmo::SetNvgOn(bool bNvg)
 {
 	m_bNvgOn = bNvg;
@@ -752,37 +765,32 @@ int CHudAmmo::DrawCrosshairEx(float flTime, int weaponid, int iBarSize, float fl
 		{
 			int size = sqrt((radius * radius) - (float)(i * i));
 
-			pfnFillRGBA((ScreenWidth / 2) + i, (ScreenHeight / 2) + size, 2, 2, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) + i, (ScreenHeight / 2) - size, 2, 2, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) - i, (ScreenHeight / 2) + size, 2, 2, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) - i, (ScreenHeight / 2) - size, 2, 2, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) + size, (ScreenHeight / 2) + i, 2, 2, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) + size, (ScreenHeight / 2) - i, 2, 2, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) - size, (ScreenHeight / 2) + i, 2, 2, r, g, b, a);
-			pfnFillRGBA((ScreenWidth / 2) - size, (ScreenHeight / 2) - i, 2, 2, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) + i, (ScreenHeight / 2) + size, 1, 1, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) + i, (ScreenHeight / 2) - size, 1, 1, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) - i, (ScreenHeight / 2) + size, 1, 1, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) - i, (ScreenHeight / 2) - size, 1, 1, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) + size, (ScreenHeight / 2) + i, 1, 1, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) + size, (ScreenHeight / 2) - i, 1, 1, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) - size, (ScreenHeight / 2) + i, 1, 1, r, g, b, a);
+			pfnFillRGBA((ScreenWidth / 2) - size, (ScreenHeight / 2) - i, 1, 1, r, g, b, a);
 		}
 #else
 		float radius = flCrosshairDistance * 1.1 + (iBarSize / 2);
 		int count = radius * 3;
-
 		qglDisable(GL_TEXTURE_2D);
 		qglEnable(GL_BLEND);
 		qglTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
 		if (m_bAdditive == false)
 			qglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		else
 			qglBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
 		qglColor4f(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
 		qglBegin(GL_LINE_LOOP);
-
 		for (int i = 0; i < count; i++)
 		{
 			float angles = 2 * M_PI / count * i;
 			qglVertex2f((ScreenWidth / 2) + radius * cos(angles), (ScreenHeight / 2) + radius * sin(angles));
 		}
-
 		qglEnd();
 		qglColor3f(1, 1, 1);
 		qglEnable(GL_TEXTURE_2D);
@@ -818,7 +826,7 @@ void CHudAmmo::CalculateCrosshairDrawMode(void)
 
 void CHudAmmo::CalculateCrosshairSize(void)
 {
-	char *value = cl_crosshair_size->string;
+	char* value = cl_crosshair_size->string;
 
 	if (!value)
 		return;
@@ -887,137 +895,108 @@ void CHudAmmo::CalculateCrosshairSize(void)
 
 /*
 static char s_shared_token[1500];
-
 char *SharedParse(char *data)
 {
 	int len = 0, c;
 	s_shared_token[0] = '\0';
-
 	if (!data)
 		return NULL;
-
 skipwhite:
 	while ((c = *data) <= ' ')
 	{
 		if (c == 0)
 			return NULL;
-
 		data++;
 	}
-
 	if (c == '/' && data[1] == '/')
 	{
 		while (*data && *data != '\n')
 			data++;
-
 		goto skipwhite;
 	}
-
 	if (c == '\"')
 	{
 		data++;
-
 		while (1)
 		{
 			c = *data++;
-
 			if (c == '\"' || !c)
 			{
 				s_shared_token[len] = '\0';
 				return data;
 			}
-
 			s_shared_token[len++] = c;
 		}
 	}
-
 	if (c == '{' || c == '}' || c == ')' || c == '(' || c == '\'' || c == ',')
 	{
 		s_shared_token[len++] = c;
 		s_shared_token[len] = '\0';
 		return data + 1;
 	}
-
 	do
 	{
 		s_shared_token[len] = c;
 		data++;
 		len++;
 		c = *data;
-
 		if (c == '{' || c == '}' || c == ')' || c == '(' || c == '\'' || c == ',')
 			break;
 	} while (c > 32);
-
 	s_shared_token[len] = '\0';
 	return data;
 }
-
 const char *SharedParse(const char *data)
 {
 	int len = 0, c;
 	s_shared_token[0] = '\0';
-
 	if (!data)
 		return NULL;
-
 skipwhite:
 	while ((c = *data) <= ' ')
 	{
 		if (c == 0)
 			return NULL;
-
 		data++;
 	}
-
 	if (c == '/' && data[1] == '/')
 	{
 		while (*data && *data != '\n')
 			data++;
-
 		goto skipwhite;
 	}
-
 	if (c == '\"')
 	{
 		data++;
-
 		while (1)
 		{
 			c = *data++;
-
 			if (c == '\"' || !c)
 			{
 				s_shared_token[len] = '\0';
 				return data;
 			}
-
 			s_shared_token[len++] = c;
 		}
 	}
-
 	if (c == '{' || c == '}' || c == ')' || c == '(' || c == '\'' || c == ',')
 	{
 		s_shared_token[len++] = c;
 		s_shared_token[len] = '\0';
 		return data + 1;
 	}
-
 	do
 	{
 		s_shared_token[len] = c;
 		data++;
 		len++;
 		c = *data;
-
 		if (c == '{' || c == '}' || c == ')' || c == '(' || c == '\'' || c == ',')
 			break;
 	} while (c > 32);
-
 	s_shared_token[len] = '\0';
 	return data;
 }
-
 char *SharedVarArgs(char *format, ...)
 {
 	va_list argptr;
@@ -1025,16 +1004,12 @@ char *SharedVarArgs(char *format, ...)
 	const int NumBuffers = 4;
 	static char string[NumBuffers][BufLen];
 	static int curstring = 0;
-
 	curstring = (curstring + 1) % NumBuffers;
-
 	va_start(argptr, format);
 	_vsnprintf(string[curstring], BufLen, format, argptr);
 	va_end(argptr);
-
 	return string[curstring];
 }
-
 char *SharedGetToken(void)
 {
 	return s_shared_token;
@@ -1046,13 +1021,13 @@ void CHudAmmo::CalculateCrosshairColor(void)
 #ifdef TIMETEST_CALCCROSSHAIRCOLOR
 	float startTime = gPerformanceCounter.GetCurTime();
 #endif
-	char *value = cl_crosshair_color->string;
+	char* value = cl_crosshair_color->string;
 
 	if (value && strcmp(value, m_szLastCrosshairColor))
 	{
 		int cvarR, cvarG, cvarB;
-		char *token;
-		char *data = value;
+		char* token;
+		char* data = value;
 
 		data = SharedParse(data);
 		token = SharedGetToken();

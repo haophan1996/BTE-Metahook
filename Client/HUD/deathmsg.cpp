@@ -251,7 +251,7 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 	{
 		strncpy( m_rgDeathNoticeList[i].szKiller, killer_name, MAX_PLAYER_NAME_LENGTH );
 		m_rgDeathNoticeList[i].szKiller[MAX_PLAYER_NAME_LENGTH-1] = 0;
-		m_rgDeathNoticeList[i].idKiller = iKiller;
+		m_rgDeathNoticeList[i].idKiller = iKiller; 
 	}
 	// Get the Victim's name
 	char *victim_name = NULL;
@@ -285,13 +285,16 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 			m_rgDeathNoticeList[i].iSuicide = TRUE;
 	}
 
-	int iIndex= gEngfuncs.GetLocalPlayer()->index;
-
+	int iIndex= gEngfuncs.GetLocalPlayer()->index; 
+	 
 	m_rgDeathNoticeList[i].iId = Hud().GetSpriteIndex(szWpnName);
 	m_rgDeathNoticeList[i].flDisplayTime = Hud().m_flTime + 6.0f;
 	m_rgDeathNoticeList[i].iHeadShot = iHeadShot;
 	m_rgDeathNoticeList[i].Killer = vPlayer[iKiller].team;
 	m_rgDeathNoticeList[i].Victim = vPlayer[iVictim].team;
+	//m_rgDeathNoticeList[i].isVipWPN = 1;
+	if (szWpnName[2] == 'v' && szWpnName[3] == 'i' && szWpnName[4] == 'p') m_rgDeathNoticeList[i].isVipWPN = 1;
+	else m_rgDeathNoticeList[i].isVipWPN = 0; 
 	  
 
 	if (Hud().m_flTime - killerLastFloat[m_rgDeathNoticeList[i].idKiller][0] < fKillMSG) {
@@ -743,6 +746,11 @@ void CHudDeathNotice::Draw(float flTime)
 			//if(m_rgDeathNoticeList[i].iHeadShot) x -= HEADX;
 			//RGB Hud weapon 
 			r = 255;  g = 255;	b = 255;
+			 
+			if (m_rgDeathNoticeList[i].isVipWPN == 1 && (int)(flTime * 10) % 2 == 0) {
+				r = 64, g = 140, b = 85; // green 
+			}
+				 
 
 			// Draw death weapon
 			
