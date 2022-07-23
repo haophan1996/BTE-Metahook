@@ -293,7 +293,7 @@ private:
 	CToolBar *m_pToolBar;
 
 public:
-	CGL_BinkTexture *m_pBinkTexture;
+	//CGL_BinkTexture *m_pBinkTexture;
 
 
 public:

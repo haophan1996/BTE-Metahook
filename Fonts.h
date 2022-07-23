@@ -10,6 +10,7 @@
 
 struct CHARINFO
 {
+	bool isOutline;
 	int m_iTexture;
 	int m_iWidth,m_iHeight;
 	int m_iDeltaWidth,m_iDeltaHeight;
@@ -23,7 +24,7 @@ struct CHARINFO
 class Font
 {
 public:
-	int Init(char *name);
+	int Init(char *name); 
 	int CheckCharExists(wchar_t ch);
 	int LoadChar(wchar_t ch);
 	CHARINFO *GetChar(wchar_t ch);
@@ -40,7 +41,8 @@ public:
 	int AddCharInToPage(CHARINFO *pChar);
 	void C2W(wchar_t *pwstr, size_t len, const char *str);
 	void LoadStr(wchar_t* _strText);
-	
+	bool isOutline;
+
 private:
 	FT_Library  m_sLibrary;
 	FT_Face     m_sFace;
@@ -53,6 +55,7 @@ private:
 private:
 	int m_iCharCount;
 	int m_iWidth,m_iHeight;
+	 
 	int m_iBuffer[FONTS_MAX_BUFFER];
 	CHARINFO m_tFontTexture[FONTS_MAX_BUFFER];
 	int m_iLastDrawTexture;
@@ -60,4 +63,5 @@ private:
 };
 
 extern Font g_Font;
+extern Font g_FontOutLine;
 extern Font g_FontBold;

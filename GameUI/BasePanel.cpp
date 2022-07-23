@@ -505,8 +505,8 @@ KeyValues *CBasePanel::GetConsoleControlSettings(void)
 CBasePanel::~CBasePanel(void)
 {
 	g_pBasePanel = NULL;
-	if (m_pBinkTexture)
-		delete m_pBinkTexture;
+	//if (m_pBinkTexture)
+	//	delete m_pBinkTexture;
 }
 
 void CBasePanel::PaintBackground(void)
@@ -777,10 +777,10 @@ void CBasePanel::DrawBackgroundImage(void)
 		}
 	}
 
-	if (m_pBinkTexture)
+	/* if (m_pBinkTexture)
 	{
 		m_pBinkTexture->Draw(0, 0, wide, tall);
-	}
+	}*/
 	
 	if (m_bFadingInMenus)
 	{

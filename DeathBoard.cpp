@@ -57,13 +57,18 @@ void CHudDeathBoard::VidInit(void)
 
 void CHudDeathBoard::Draw(float flTime)
 {
-	if (g_bAlive == false) {
-		char test[256]; 
-		sprintf(test, "%s", g_PlayerInfoList[g_iUser2].name);
-		g_FontBold.SetColor(130, 164, 164, 255);
-		g_FontBold.SetWidth(15);
-		g_FontBold.DrawString(UTF8ToUnicode(test), ScreenWidth / 2, ScreenHeight / 2, 1000, 1000);//26
-	}
+	//if (g_bAlive == false) {
+	//	char test[256]; 
+	//	sprintf(test, "%s", g_PlayerInfoList[g_iUser2].name);
+
+	//	g_FontOutLine.SetColor(0, 0, 0, 255);
+	//	g_FontOutLine.SetWidth(15);
+	//	g_FontOutLine.DrawString(UTF8ToUnicode(test), ScreenWidth / 2, ScreenHeight / 2, 1000, 1000);//26
+
+	//	g_Font.SetColor(130, 164, 164, 255);
+	//	g_Font.SetWidth(15);
+	//	g_Font.DrawString(UTF8ToUnicode(test), ScreenWidth / 2, ScreenHeight / 2, 1000, 1000);//26
+	//}
 
 
 
@@ -71,9 +76,14 @@ void CHudDeathBoard::Draw(float flTime)
 		char vicName[129];
 		sprintf(vicName, "Hide Round Info: BackSpace", maxY, currentY);
 		GL_DrawTGA(g_Texture[SPECTATE_UNDER].iTexture, 255, 255, 255, 255, ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth, ScreenHeight - 33, 1.0);
-		g_FontBold.SetColor(130, 164, 164, 255);
-		g_FontBold.SetWidth(12);
-		g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, ScreenHeight - 15, 1000, 1000);//26
+
+		g_FontOutLine.SetColor(0, 0, 0, 255);
+		g_FontOutLine.SetWidth(12);
+		g_FontOutLine.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, ScreenHeight - 15, 1000, 1000);//26
+
+		g_Font.SetColor(130, 164, 164, 255);
+		g_Font.SetWidth(12);
+		g_Font.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, ScreenHeight - 15, 1000, 1000);//26
 	}
 
 	if (isBackSpacePress && autoDisappear != removePanel) {
@@ -106,33 +116,42 @@ void CHudDeathBoard::Draw(float flTime)
 
 		//*****Displayer Killer that killed Victim
 		if (strlen(szWpnNameKiller) > 2) {
-			g_FontBold.SetColor(130, 164, 164, 255);
-			g_FontBold.SetWidth(12);
-			g_FontBold.DrawString(UTF8ToUnicode(g_PlayerInfoList[iKillerID].name), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 55, 1000, 1000);
-			g_FontBold.DrawString(GetWeaponNameFormat(szWpnNameKiller), ScreenWidth - 105 - (g_FontBold.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2), currentY + 82, 1000, 1000);
+			g_FontOutLine.SetColor(0, 0, 0, 255);
+			g_FontOutLine.SetWidth(12);
+			g_FontOutLine.DrawString(UTF8ToUnicode(g_PlayerInfoList[iKillerID].name), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 55, 1000, 1000);
+			g_FontOutLine.DrawString(GetWeaponNameFormat(szWpnNameKiller), ScreenWidth - 105 - (g_FontOutLine.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2), currentY + 82, 1000, 1000);
+
+			g_Font.SetColor(130, 164, 164, 255);
+			g_Font.SetWidth(12);
+			g_Font.DrawString(UTF8ToUnicode(g_PlayerInfoList[iKillerID].name), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 55, 1000, 1000);
+			g_Font.DrawString(GetWeaponNameFormat(szWpnNameKiller), ScreenWidth - 105 - (g_Font.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2), currentY + 82, 1000, 1000);
+
 			sprintf(vicName, "gfx\\vgui\\AMMOICON\\%s_line", szWpnNameKiller);
 			GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(vicName)].iTexture, 255, 255, 255, 255, ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth - 55, currentY + 85, 1.0);
 		} 
 		// left ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12
-		// Right ScreenWidth - (g_Texture[SPECTATE_MAIN].iWidth + 12 - 28) - (g_FontBold.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2)
+		// Right ScreenWidth - (g_Texture[SPECTATE_MAIN].iWidth + 12 - 28) - (g_Font.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2)
 		// 
 		// 
 		// 
 		//*****Show Infomation take damage from Victim 
-		g_FontBold.SetColor(243, 166, 28, 255);
-		g_FontBold.SetWidth(12);  
+		 
+		g_FontOutLine.SetColor(0, 0, 0, 255);
+		g_FontOutLine.SetWidth(12);
 		for (int i = 0; i < g_DeathBoardMSG.size(); i++) {
 			sprintf(vicName, "%s", g_PlayerInfoList[g_DeathBoardMSG[i].victimID].name);
 
-			if (g_DeathBoardMSG[i].victimDamage < 0) g_FontBold.SetColor(243, 166, 28, 255);
-			else g_FontBold.SetColor(255, 255, 255, 255);
+			if (g_DeathBoardMSG[i].victimDamage < 0) g_Font.SetColor(243, 166, 28, 255);
+			else g_Font.SetColor(255, 255, 255, 255);
 
-			g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 175 + (i * 26), 1000, 1000);//26
+			g_FontOutLine.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 175 + (i * 26), 1000, 1000);//26
+			g_Font.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 175 + (i * 26), 1000, 1000);//26
 			if (g_DeathBoardMSG[i].victimDamage < 0) { 
 				GL_DrawTGA(g_Texture[(g_DeathBoardMSG[i].victimDamage == -30) ? SPECTATE_HITNODE_30 : (g_DeathBoardMSG[i].victimDamage == -20) ? SPECTATE_HITNODE_20 : SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 157 + (i * 26), 1.0);//26
 			} else {
 				sprintf(vicName, "%i", g_DeathBoardMSG[i].victimDamage);
-				g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - 28, currentY + 175 + (i * 26), 1000, 1000);//26 
+				g_FontOutLine.DrawString(UTF8ToUnicode(vicName), ScreenWidth - 28, currentY + 175 + (i * 26), 1000, 1000);//26 
+				g_Font.DrawString(UTF8ToUnicode(vicName), ScreenWidth - 28, currentY + 175 + (i * 26), 1000, 1000);//26  
 			}
 			 
 		}
@@ -147,35 +166,42 @@ void CHudDeathBoard::Draw(float flTime)
 
 		//*****Displayer Killer that killed Victim
 		if (strlen(szWpnNameKiller) > 2) {
-			g_FontBold.SetColor(130, 164, 164, 255);
-			g_FontBold.SetWidth(12);
-			g_FontBold.DrawString(UTF8ToUnicode(g_PlayerInfoList[iKillerID].name), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 55, 1000, 1000);
-			g_FontBold.DrawString(GetWeaponNameFormat(szWpnNameKiller), ScreenWidth - 105 - (g_FontBold.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2), currentY + 82, 1000, 1000);
+			g_FontOutLine.SetColor(0, 0, 0, 255);
+			g_FontOutLine.SetWidth(12);
+			g_FontOutLine.DrawString(UTF8ToUnicode(g_PlayerInfoList[iKillerID].name), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 55, 1000, 1000);
+			g_FontOutLine.DrawString(GetWeaponNameFormat(szWpnNameKiller), ScreenWidth - 105 - (g_FontOutLine.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2), currentY + 82, 1000, 1000);
+			
+			g_Font.SetColor(130, 164, 164, 255);
+			g_Font.SetWidth(12);
+			g_Font.DrawString(UTF8ToUnicode(g_PlayerInfoList[iKillerID].name), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 55, 1000, 1000);
+			g_Font.DrawString(GetWeaponNameFormat(szWpnNameKiller), ScreenWidth - 105 - (g_Font.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2), currentY + 82, 1000, 1000);
+
 			sprintf(vicName, "gfx\\vgui\\AMMOICON\\%s_line", szWpnNameKiller);
 			GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(vicName)].iTexture, 255, 255, 255, 255, ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth - 55, currentY + 85, 1.0);
 		} 
 		// left ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12
-		// Right ScreenWidth - (g_Texture[SPECTATE_MAIN].iWidth + 12 - 28) - (g_FontBold.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2)
+		// Right ScreenWidth - (g_Texture[SPECTATE_MAIN].iWidth + 12 - 28) - (g_Font.GetLen(GetWeaponNameFormat(szWpnNameKiller)) / 2)
 		// 
 		// 
 		// 
 		//*****Show Infomation take damage from Victim 
-		/////////////Show Infomation Victim
-		g_FontBold.SetColor(243, 166, 28, 255);
-		g_FontBold.SetWidth(12);
-		 
+		/////////////Show Infomation Victim 
+		g_Font.SetWidth(12);
+		g_FontOutLine.SetWidth(12);
 		for (int i = 0; i < g_DeathBoardMSG.size(); i++) {
 			sprintf(vicName, "%s", g_PlayerInfoList[g_DeathBoardMSG[i].victimID].name);
 
-			if (g_DeathBoardMSG[i].victimDamage < 0) g_FontBold.SetColor(243, 166, 28, 255);
-			else g_FontBold.SetColor(255, 255, 255, 255);
+			if (g_DeathBoardMSG[i].victimDamage < 0) g_Font.SetColor(243, 166, 28, 255);
+			else g_Font.SetColor(255, 255, 255, 255);
 
-			g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 175 + (i * 26), 1000, 1000);//26
+			g_FontOutLine.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 175 + (i * 26), 1000, 1000);//26
+			g_Font.DrawString(UTF8ToUnicode(vicName), ScreenWidth - g_Texture[SPECTATE_MAIN].iWidth + 12, currentY + 175 + (i * 26), 1000, 1000);//26
 			if (g_DeathBoardMSG[i].victimDamage < 0) {
 				GL_DrawTGA(g_Texture[(g_DeathBoardMSG[i].victimDamage == -30) ? SPECTATE_HITNODE_30 : (g_DeathBoardMSG[i].victimDamage == -20) ? SPECTATE_HITNODE_20 : SPECTATE_HITNODE_10].iTexture, 255, 255, 255, 255, ScreenWidth - 30, currentY + 157 + (i * 26), 1.0);//26
 			} else {
 				sprintf(vicName, "%i", g_DeathBoardMSG[i].victimDamage);
-				g_FontBold.DrawString(UTF8ToUnicode(vicName), ScreenWidth - 28, currentY + 175 + (i * 26), 1000, 1000);//26 
+				g_FontOutLine.DrawString(UTF8ToUnicode(vicName), ScreenWidth - 28, currentY + 175 + (i * 26), 1000, 1000);//26 
+				g_Font.DrawString(UTF8ToUnicode(vicName), ScreenWidth - 28, currentY + 175 + (i * 26), 1000, 1000);//26 
 			}
 
 		}

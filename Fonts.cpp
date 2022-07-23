@@ -5,9 +5,11 @@
 #include "TriAPI.h"
 #include "Fonts.h" 
 #include "BaseUI.h" 
+#include <freetype/ftstroke.h>
 
 Font g_Font;
 Font g_FontBold;
+Font g_FontOutLine;
 
 int Font::Init(char *name)
 {
@@ -134,6 +136,20 @@ int Font::LoadChar(wchar_t ch)
 
 	FT_Glyph sGlyph;
 	if (FT_Get_Glyph(m_sFace->glyph, &sGlyph)) return 0;
+
+
+	if (isOutline == true) {
+		FT_Stroker stroker;
+		FT_Stroker_New(m_sLibrary, &stroker);
+		FT_Stroker_Set(stroker,
+						(int)(2 * 64),
+						FT_STROKER_LINECAP_ROUND,
+						FT_STROKER_LINEJOIN_ROUND,
+						0);
+		FT_Glyph_StrokeBorder(&sGlyph, stroker, 0, 1);
+	}
+	 
+
 	FT_Render_Glyph(m_sFace->glyph, FT_RENDER_MODE_LCD);
 	FT_Glyph_To_Bitmap(&sGlyph, ft_render_mode_normal, 0, 1);
 	FT_BitmapGlyph sBitmapGlyph = (FT_BitmapGlyph)sGlyph;
