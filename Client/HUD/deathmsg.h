@@ -41,7 +41,7 @@ public:
 		Init();
 	};
 
-
+	int iRevenge;
 	void Init(void);
 	void VidInit(void);
 	void Draw(float time);

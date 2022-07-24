@@ -30,22 +30,22 @@ public:
 	void VidInit(void);
 	void Draw(float time);
 	void Think(void);
-
+	void CalculateFrameRate(void);
 	void ResetLevel(void);
 	void ResetServerName(char *pszName);
 	void ResetSpec(void);
 	void ResetAlivePlayer(void);
 	void DrawScore(bool bDivideTeam);
 	void SetCanDraw(bool x) { m_bCanDraw = x; }
-	bool GetCanDraw() { return m_bCanDraw; }
-
+	bool GetCanDraw() { return m_bCanDraw; } 
+	void DrawScoreDM(int localIndex);
+	 
 public:
 	Vector2D m_vecOrigin;
 
 	int m_iHeight;
 
-	model_t *m_rgpPlayerDead[2];
-
+	model_t *m_rgpPlayerDead[2]; 
 	float m_flOffsetScale;
 	int m_iSortedId[33];
 	int m_iTeamScore[2];
@@ -73,6 +73,12 @@ private:
 	bool m_bLargeFont;
 	bool m_bHostOwnBuff;
 	bool m_bCanDraw;
+
+	bool modeTeam;
+	int Panel1, Panel2, PanelDM, BL, BLEnemy, GR, GREnemy, LocalPlayerTga, RevengeTga, C4Tga, NANOGHOSTICON, NANO3HEROICON;
+	int currentYPanel, currentYTop, currentYBot, localPlayerTeam;
+	int panelStartX;
+	float fps; 
 
 public:
 	void SetHostOwnBuff(bool x) { m_bHostOwnBuff = x; }

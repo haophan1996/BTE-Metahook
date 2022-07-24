@@ -41,7 +41,7 @@ void CHudDestroyerSniperScope::VidInit(void)
 	m_iRange = Hud().m_TGA.FindTexture("sprites\\destroyer_range");
 	m_iNumberZero = Hud().GetSpriteIndex("destroyer_count0");
 	m_iMeter = Hud().GetSpriteIndex("destroyer_countM");
-	m_rcMeter = Hud().GetSpriteRect(m_iMeter);
+ 	m_rcMeter = Hud().GetSpriteRect(m_iMeter);
 }
 
 int CHudDestroyerSniperScope::DrawDestroyerSniperScopeNumbers(int x, int y, int iFlags, int iNumber, int r, int g, int b)

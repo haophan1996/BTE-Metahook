@@ -9,8 +9,7 @@
 
 
 struct CHARINFO
-{
-	bool isOutline;
+{ 
 	int m_iTexture;
 	int m_iWidth,m_iHeight;
 	int m_iDeltaWidth,m_iDeltaHeight;

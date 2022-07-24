@@ -139,7 +139,7 @@ void CHudAmmo::Draw(float flTime)
 			g_FontOutLine.SetWidth(15);
 			g_FontOutLine.DrawString(g_szCurWeapon2, ScreenWidth - g_FontOutLine.GetLen(g_szCurWeapon2) - 80, ScreenHeight - 67, 1000, 1000);
 
-			g_Font.SetColor(130, 164, 164, 250);
+			g_Font.SetColor(173, 218, 218, 255);
 			g_Font.SetWidth(15);
 			g_Font.DrawString(g_szCurWeapon2, ScreenWidth - g_Font.GetLen(g_szCurWeapon2) - 80, ScreenHeight - 67, 1000, 1000);
 		}

@@ -13,9 +13,10 @@
 #include "DrawTABPanel.h"
 
 #include "Client/HUD/DrawTGA.h"
+#include <HUD/deathmsg.h>
 
 static CHudTABBoard g_HudTABBoard;
-CHudTABBoard &HudTABBoard()
+CHudTABBoard& HudTABBoard()
 {
 	return g_HudTABBoard;
 }
@@ -36,7 +37,7 @@ int iValidPlayer[33];
 
 float fUpdateTime = 0;
 
-wchar_t *g_szLeaderNames[] = { L"csoldjb", L"NoName", L"ltndkl" };
+wchar_t* g_szLeaderNames[] = { L"csoldjb", L"NoName", L"ltndkl" };
 
 void CHudTABBoard::Init()
 {
@@ -91,41 +92,199 @@ void CHudTABBoard::VidInit()
 
 	m_bHostOwnBuff = false;
 	m_iBuffIcon = Hud().m_TGA.FindTexture("resource\\icon\\buff");
+
+	Panel1 = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\Board1");
+	Panel2 = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\Board2");
+	PanelDM = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\BOARD_dm");
+	BL = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\BL");
+	BLEnemy = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\BL_Enemy");
+	GR = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\GR");
+	GREnemy = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\GR_Enemy");
+	LocalPlayerTga = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\LocalPlayerTeam");
+	RevengeTga = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\REVENGE_SCORE");
+	C4Tga = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\C4");
+	NANOGHOSTICON = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\NANOGHOSTICON");
+	NANO3HEROICON = Hud().m_TGA.FindTexture("gfx\\charSystem\\TabPanel\\NANO3HEROICON");
+	panelStartX = (ScreenWidth - 512) / 2;
 }
 
 void CHudTABBoard::Draw(float time)
 {
 	if (!m_bCanDraw)
 		return;
+	CalculateFrameRate();
 
-	
 	m_flScale2 = m_flScale / 0.6328125;
 
 	if (m_bLargeFont)
 		m_flScale2 *= 1.05;
 
-	GL_DrawFullPanel(g_UI_Panel, m_iX, m_iY, m_iW, m_iH, 255);
+	//GL_DrawFullPanel(g_UI_Panel, m_iX, m_iY, m_iW, m_iH, 255);
 
-	// Draw Server Name
-	if (!m_bLargeFont)
-		g_FontBold.SetWidth(20);
-	else
-		g_FontBold.SetWidth(22);
-	g_FontBold.SetColor(255, 255, 255, 255);
-	
+	// Draw Server Name 
+	g_Font.SetWidth(12);
+
+	g_FontOutLine.SetColor(0, 0, 0, 255);
+	g_FontOutLine.SetWidth(12);
+
+
+	int iLocalIndex = gEngfuncs.GetLocalPlayer()->index;
+	localPlayerTeam = vPlayer[iLocalIndex].team;
+
+	currentYPanel = (ScreenHeight - 412) / 2;
+	currentYTop = currentYPanel + 30;//35;
+	if ((g_iMod == MOD_ZB || g_iMod == MOD_ZB2 || g_iMod == MOD_ZB3 || g_iMod == MOD_ZB4 || g_iMod == MOD_ZB5 || g_iMod == MOD_ZSE || g_iMod == MOD_DM)) {
+		modeTeam = false;
+		GL_DrawTGA(g_Texture[PanelDM].iTexture, 255, 255, 255, 255, panelStartX, currentYPanel, 1.0);
+	}
+	else {
+		modeTeam = true;
+		GL_DrawTGA(g_Texture[localPlayerTeam == 1 ? GR : BL].iTexture, 255, 255, 255, 255, panelStartX, currentYPanel, 1.0);
+
+		currentYPanel = (currentYPanel + g_Texture[GR].iHeight);
+		GL_DrawTGA(g_Texture[Panel1].iTexture, 255, 255, 255, 255, panelStartX, currentYPanel, 1.0);
+
+		currentYPanel = (currentYPanel + g_Texture[Panel1].iHeight);
+		currentYBot = currentYPanel + 15;
+		GL_DrawTGA(g_Texture[localPlayerTeam == 1 ? BLEnemy : GREnemy].iTexture, 255, 255, 255, 255, panelStartX, currentYPanel, 1.0);
+
+		currentYPanel = (currentYPanel + g_Texture[BLEnemy].iHeight);
+		GL_DrawTGA(g_Texture[Panel2].iTexture, 255, 255, 255, 255, panelStartX, currentYPanel, 1.0);
+	}
+
+
+
 	static wchar_t szBuffer[96];
-	swprintf(szBuffer, L"%s (%s)", m_szServerName, m_szGameMode);
-	
-	int iCenterX = ScreenWidth / 2;
-	int iTextLen = g_FontBold.GetLen(szBuffer);
-	g_FontBold.DrawString(szBuffer, iCenterX - iTextLen / 2, m_iY + 35, 1000);
-	
+	char szBuf[128];
+	swprintf(szBuffer, L"%.2f FPS				%s (%s)", fps, m_szServerName, m_szGameMode);
+	g_Font.SetColor(168, 255, 255, 250);
+	g_FontOutLine.DrawString(szBuffer, panelStartX + 82, currentYPanel + g_Texture[modeTeam ? Panel2 : PanelDM].iHeight + 15, 1000);
+	g_Font.DrawString(szBuffer, panelStartX + 82, currentYPanel + g_Texture[modeTeam ? Panel2 : PanelDM].iHeight + 15, 1000);
+
+	Think();
+
+	if (modeTeam == false) {
+		DrawScoreDM(iLocalIndex);
+		return;
+	}
+
+	 //Draw Player  
+	for (int i = 0; i <= 32; i++) {
+
+		int id = m_iSortedId[i];
+
+		if (!g_PlayerInfoList[id].name)
+			continue;
+
+		if (vPlayer[id].team != 1 && vPlayer[id].team != 2)
+			continue;
+
+		if (vPlayer[id].team == localPlayerTeam) {
+			if (g_PlayerExtraInfo[id].iFlag & SCOREATTRIB_DEAD) {
+				g_Font.SetColor(136, 137, 138, 250);
+			}
+			else {
+				if (id == iLocalIndex) {
+					g_Font.SetColor(255, 255, 255, 250);
+					GL_DrawTGA(g_Texture[LocalPlayerTga].iTexture, 255, 255, 255, 255, panelStartX + 14, currentYTop + 5, 1.0);
+				}
+				else g_Font.SetColor(72, 198, 248, 250);
+			}
+
+			if (g_PlayerExtraInfo[id].iFlag & SCOREATTRIB_BOMB) {
+				GL_DrawTGA(g_Texture[C4Tga].iTexture, 255, 255, 255, 255, panelStartX + 51, currentYTop + 8, 1.0);
+			}
+			currentYTop += 19;
+			g_FontOutLine.DrawString(UTF8ToUnicode(g_PlayerInfoList[id].name), panelStartX + 123, currentYTop, 1000);
+			g_Font.DrawString(UTF8ToUnicode(g_PlayerInfoList[id].name), panelStartX + 123, currentYTop, 1000);
+
+			sprintf(szBuf, "%d", g_PlayerExtraInfo[id].frags);
+			g_FontOutLine.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 368) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYTop, 1000);
+			g_Font.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 368) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYTop, 1000);
+
+			sprintf(szBuf, "%d", g_PlayerExtraInfo[id].deaths);
+			g_FontOutLine.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 404) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYTop, 1000);
+			g_Font.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 404) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYTop, 1000);
+		}
+		else {
+			if (g_PlayerExtraInfo[id].iFlag & SCOREATTRIB_DEAD) {
+				g_Font.SetColor(136, 137, 138, 250);
+			}
+			else g_Font.SetColor(132, 164, 168, 250);
+
+			if (HudDeathNotice().iRevenge == id) {
+				GL_DrawTGA(g_Texture[RevengeTga].iTexture, 255, 255, 255, 255, panelStartX + 14, currentYBot + 2, 1.0);
+			}
+			currentYBot += 19;
+			g_FontOutLine.DrawString(UTF8ToUnicode(g_PlayerInfoList[id].name), panelStartX + 123, currentYBot, 1000);
+			g_Font.DrawString(UTF8ToUnicode(g_PlayerInfoList[id].name), panelStartX + 123, currentYBot, 1000);
+
+			sprintf(szBuf, "%d", g_PlayerExtraInfo[id].frags);
+			g_FontOutLine.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 368) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYBot, 1000);
+			g_Font.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 368) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYBot, 1000);
+
+			sprintf(szBuf, "%d", g_PlayerExtraInfo[id].deaths);
+			g_FontOutLine.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 404) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYBot, 1000);
+			g_Font.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 404) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYBot, 1000);
+
+		}
+
+	}
+	//1 = gr
+	// 2 = bl
+	//char test[32];
+	//sprintf(test, "%i \n ", vPlayer[iLocalIndex].team);
+	//gEngfuncs.pfnConsolePrint(test);
+
+	/*
 	Think();
 
 	if ((g_iMod == MOD_ZB || g_iMod == MOD_ZB2 || g_iMod == MOD_ZB3 || g_iMod == MOD_ZB4 || g_iMod == MOD_ZB5 || g_iMod == MOD_ZSE || g_iMod == MOD_DM))
 		DrawScore(false);
 	else
-		DrawScore(true);
+		DrawScore(true);*/
+}
+
+void CHudTABBoard::DrawScoreDM(int iLocalIndex) {
+	char szBuf[128];
+	for (int i = 0; i <= 32; i++) {
+		int id = m_iSortedId[i];
+
+		if (!g_PlayerInfoList[id].name)
+			continue;
+
+		if (vPlayer[id].team != 1 && vPlayer[id].team != 2)
+			continue;
+
+		if (g_PlayerExtraInfo[id].iFlag & SCOREATTRIB_DEAD) {
+			g_Font.SetColor(136, 137, 138, 250);
+		}
+		else {
+			if (id == iLocalIndex) {
+				g_Font.SetColor(255, 255, 255, 250);
+				GL_DrawTGA(g_Texture[LocalPlayerTga].iTexture, 255, 255, 255, 255, panelStartX + 14, currentYTop + 5, 1.0);
+			}
+			else g_Font.SetColor(72, 198, 248, 250);
+		}
+		if (IS_ZOMBIE_MODE && vPlayer[id].team == 2) {
+			GL_DrawTGA(g_Texture[NANOGHOSTICON].iTexture, 255, 255, 255, 255, panelStartX + 25, currentYTop + 5, 1.0);
+		}
+		else if (g_PlayerExtraInfo[id].iFlag & SCOREATTRIB_HERO && (g_iTeam == 1 || (!g_iTeam || g_iTeam == 3))) {
+			GL_DrawTGA(g_Texture[NANO3HEROICON].iTexture, 255, 255, 255, 255, panelStartX + 25, currentYTop + 5, 1.0);
+		}
+
+		currentYTop += 19;
+		g_FontOutLine.DrawString(UTF8ToUnicode(g_PlayerInfoList[id].name), panelStartX + 123, currentYTop, 1000);
+		g_Font.DrawString(UTF8ToUnicode(g_PlayerInfoList[id].name), panelStartX + 123, currentYTop, 1000);
+
+		sprintf(szBuf, "%d", g_PlayerExtraInfo[id].frags);
+		g_FontOutLine.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 356) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYTop, 1000);
+		g_Font.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 356) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYTop, 1000);
+
+		sprintf(szBuf, "%d", g_PlayerExtraInfo[id].deaths);
+		g_FontOutLine.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 393) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYTop, 1000);
+		g_Font.DrawString(UTF8ToUnicode(szBuf), (panelStartX + 393) - g_Font.GetLen(UTF8ToUnicode(szBuf)) + (g_PlayerExtraInfo[id].frags == 0 ? 1 : 0), currentYTop, 1000);
+	}
 }
 
 void CHudTABBoard::DrawScore(bool bDivideTeam)
@@ -160,7 +319,7 @@ void CHudTABBoard::DrawScore(bool bDivideTeam)
 			if (vPlayer[id].team != 1 && vPlayer[id].team != 2)
 				continue;
 
-			if (bDivideTeam && vPlayer[id].team != (iColumn == 1 ? 2:1))
+			if (bDivideTeam && vPlayer[id].team != (iColumn == 1 ? 2 : 1))
 				continue;
 
 			if (!bDivideTeam && ((i & 1) != (iColumn - 1)))
@@ -220,7 +379,7 @@ void CHudTABBoard::DrawScore(bool bDivideTeam)
 
 			if (g_PlayerInfoList[id].ping == 0)
 			{
-				const char *isBotString = gEngfuncs.PlayerInfo_ValueForKey(id, "*bot");
+				const char* isBotString = gEngfuncs.PlayerInfo_ValueForKey(id, "*bot");
 				if (isBotString && atoi(isBotString) > 0)
 					g_FontBold.DrawString(m_szBOT, x + (m_iW / 2) - 5 - g_FontBold.GetLen(m_szBOT), y + offsetY, 1000);
 				else
@@ -232,7 +391,7 @@ void CHudTABBoard::DrawScore(bool bDivideTeam)
 				wchar_t pping[8];
 				sprintf(ping, "%d", g_PlayerInfoList[id].ping);
 				g_FontBold.C2W(pping, 255, ping);
-				
+
 				g_FontBold.DrawString(pping, x + (m_iW / 2) - 5 - g_FontBold.GetLen(pping), y + offsetY, 1000);
 			}
 
@@ -274,7 +433,7 @@ void CHudTABBoard::DrawScore(bool bDivideTeam)
 			g_FontBold.DrawString(szText, x + (m_iW / 2) - 5 - 75 - g_FontBold.GetLen(szText), y + 110 + 12, 1000);
 
 			if (iPingDivider)
-			{ 
+			{
 				swprintf(szText, L"%d", iTotalPing / iPingDivider);
 				g_FontBold.DrawString(szText, x + (m_iW / 2) - 5 - g_FontBold.GetLen(szText), y + 110 + 12, 1000);
 			}
@@ -287,9 +446,9 @@ void CHudTABBoard::DrawScore(bool bDivideTeam)
 			else
 				swprintf(szText, L"%s  (%d)", IS_ZOMBIE_MODE ? m_szZB : m_szTR, m_iPlayer[iColumn == 1 ? 1 : 0][0]);
 			g_FontBold.DrawString(szText, x + 105, y + 110 + 12, 1000);
-			
-			
-			swprintf(szText, L"%d (%s)", m_iTeamScore[iColumn == 1 ? 1:0], GetLangUni("CSO_Round"));
+
+
+			swprintf(szText, L"%d (%s)", m_iTeamScore[iColumn == 1 ? 1 : 0], GetLangUni("CSO_Round"));
 			g_FontBold.DrawString(szText, x + (m_iW / 2) - 7 - g_FontBold.GetLen(szText), y + 110 + 12, 1000);
 
 			gEngfuncs.pfnFillRGBA(x + 10, y + 125, (m_iW / 2) - 15, 1, 188, 112, 0, 255);
@@ -353,7 +512,7 @@ void CHudTABBoard::DrawScore(bool bDivideTeam)
 		}
 	}
 
-	
+
 }
 
 void CHudTABBoard::ResetLevel()
@@ -405,7 +564,7 @@ void CHudTABBoard::ResetLevel()
 	wcscpy(m_szGameMode, UTF8ToUnicode(va("%s / %s", mode, wpnlimit)));
 }
 
-void CHudTABBoard::ResetServerName(char *pszName)
+void CHudTABBoard::ResetServerName(char* pszName)
 {
 	wcscpy(m_szServerName, UTF8ToUnicode(pszName));
 }
@@ -437,7 +596,7 @@ void CHudTABBoard::ResetSpec()
 		return;
 	}
 
-	wchar_t *pBuf;
+	wchar_t* pBuf;
 	pBuf = vgui::localize()->Find("CSBTE_TabPanel_Spec");
 
 	if (!pBuf)
@@ -451,7 +610,7 @@ void CHudTABBoard::ResetSpec()
 
 void CHudTABBoard::ResetAlivePlayer()
 {
-	wchar_t *pBuf;
+	wchar_t* pBuf;
 	pBuf = vgui::localize()->Find("CSBTE_TabPanel_Alive_PLayer");
 
 	for (int i = 0; i <= 1; i++)
@@ -523,7 +682,7 @@ void CHudTABBoard::Think()
 			if (!m_bValidPlayer[m_iSortedId[j]])
 				continue;
 
-			if (g_PlayerExtraInfo[m_iSortedId[j]].frags <= g_PlayerExtraInfo[m_iSortedId[j+1]].frags)
+			if (g_PlayerExtraInfo[m_iSortedId[j]].frags <= g_PlayerExtraInfo[m_iSortedId[j + 1]].frags)
 			{
 				if (g_PlayerExtraInfo[m_iSortedId[j]].frags == g_PlayerExtraInfo[m_iSortedId[j + 1]].frags)
 				{
@@ -549,3 +708,18 @@ void CHudTABBoard::Think()
 
 	ResetSpec();
 }
+
+void CHudTABBoard::CalculateFrameRate()
+{
+	static float framesPerSecond = 0.0f;
+	static float lastTime = 0.0f;
+	float currentTime = GetTickCount() * 0.001f;
+	++framesPerSecond;
+
+	if (currentTime - lastTime > 1.0f)
+	{
+		lastTime = currentTime;
+		fps = framesPerSecond;
+		framesPerSecond = 0;
+	}
+} 

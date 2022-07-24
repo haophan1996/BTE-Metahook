@@ -125,6 +125,7 @@ void CHudDeathNotice::Init(void)
 	m_iInfects = m_iKills = m_iTotalKills = m_iDeaths = m_iRoundDidNotKill = 0;
 	m_bLastRoundKilled = 1;
 	m_bFirstKill = TRUE;
+	iRevenge = 0;
 }
 
 void CHudDeathNotice::VidInit(void)
@@ -168,9 +169,9 @@ void CHudDeathNotice::OnPlayerSpawn()
 }
 
 void CHudDeathNotice::OnRoundStart()
-{
+{ 
 	m_bFirstKill = TRUE;
-	m_iKills = m_iTotalKills = 0;
+	m_iKills = m_iTotalKills = iRevenge =0;
 	HudAlarm().ClearAllHappenedTimes();
 }
 
@@ -205,7 +206,16 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 	char szWpnName[2048];
 	sprintf(szWpnName, "d_%s",READ_STRING());
 
-	int iAssist = READ_BYTE();
+	int iAssist = READ_BYTE(); 
+	
+	if (gEngfuncs.GetLocalPlayer()->index == iVictim) {
+		if (vPlayer[iKiller].team != vPlayer[iVictim].team) {
+			iRevenge = iKiller; 
+		}
+	}
+	else if (gEngfuncs.GetLocalPlayer()->index == iKiller && iVictim == iRevenge) {
+		iRevenge = 0;
+	}
 
 	if(iKiller && iVictim)
 	{
@@ -251,7 +261,7 @@ int CHudDeathNotice::MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf
 	{
 		strncpy( m_rgDeathNoticeList[i].szKiller, killer_name, MAX_PLAYER_NAME_LENGTH );
 		m_rgDeathNoticeList[i].szKiller[MAX_PLAYER_NAME_LENGTH-1] = 0;
-		m_rgDeathNoticeList[i].idKiller = iKiller; 
+		m_rgDeathNoticeList[i].idKiller = iKiller;  
 	}
 	// Get the Victim's name
 	char *victim_name = NULL;
