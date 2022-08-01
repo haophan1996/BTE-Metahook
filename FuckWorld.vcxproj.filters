@@ -1142,6 +1142,9 @@
     <ClCompile Include="DeathBoard.cpp">
       <Filter>Client\HUD</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerLevel.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceSDK\appframework\IAppSystem.h">
@@ -3078,6 +3081,9 @@
     </ClInclude>
     <ClInclude Include="DeathBoard.h">
       <Filter>Client\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerLevel.h">
+      <Filter>Client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

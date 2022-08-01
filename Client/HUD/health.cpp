@@ -84,23 +84,44 @@ void CHudHealth::Think(void)
 
 void CHudHealth::DrawHealth(float time)
 { 
+	char iF[5], iT[5], cName[MAXCHAR], buff[40];  
+
+	//Show zombi effect 
+	GetPrivateProfileStringA(PlayerClassManager()[gEngfuncs.GetLocalPlayer()->index].model, "Zombi", "0", buff, sizeof(buff), "cstrike/gfx/char.ini");
+	if (buff[0] != '0') {
+		GL_DrawTGA2(g_Texture[Hud().m_TGA.FindTexture(buff)].iTexture, 0, 0, ScreenWidth, ScreenHeight, 255);//30);
+	}
+
 	g_Font.SetColor(255, 255, 255, 255);
-	g_Font.SetWidth(20);
+	g_Font.SetWidth(17);
 	 
-	//Display HP & AC tga image
+	//Display HP & AC Tga 
 	int HPAC[2] = { Hud().m_TGA.FindTexture("gfx\\charSystem\\SPECTATE_HP_MAIN"),Hud().m_TGA.FindTexture("gfx\\charSystem\\SPECTATE_AC_MAIN") };
 	GL_DrawTGA(g_Texture[HPAC[1]].iTexture, 255, 255, 255, 255, ScreenWidth * 0.12, ScreenHeight - 63, 1.3);
 	GL_DrawTGA(g_Texture[HPAC[0]].iTexture, 255, 255, 255, 255, ScreenWidth * 0.12, ScreenHeight - 33, 1.3);
 
-	//Display Character Image
-	char iF[5], iT[5], iName[MAXCHAR], cFline[40], cFbg[40], cEffect[40];
+	//Display HP & AC Text
+	char num[10];
+	sprintf(num, "%i", HudHealth().m_iArmor <= 0 ? 0 : HudHealth().m_iArmor);
+	g_FontOutLine.SetColor(0, 0, 0, 255);
+	g_FontOutLine.SetWidth(17);
+	g_FontOutLine.DrawString(UTF8ToUnicode(num), (ScreenWidth / 6.5 + 40) - g_FontOutLine.GetLen(UTF8ToUnicode(num)), ScreenHeight - 44, 1000, 1000); // Display AC Outline 
+	g_Font.DrawString(UTF8ToUnicode(num), (ScreenWidth / 6.5 + 40) - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 44, 1000, 1000); // Display AC 
+
+	sprintf(num, "%i", HudHealth().m_iHealth <= 0 ? 0 : HudHealth().m_iHealth);
+	g_FontOutLine.DrawString(UTF8ToUnicode(num), (ScreenWidth / 6.5 + 40) - g_FontOutLine.GetLen(UTF8ToUnicode(num)), ScreenHeight - 14, 1000, 1000); // Display Health Outline
+	g_Font.DrawString(UTF8ToUnicode(num), (ScreenWidth / 6.5 + 40) - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 14, 1000, 1000); // Display Health
+
+	//Display Character Tga 
 	GetPrivateProfileStringA(PlayerClassManager()[gEngfuncs.GetLocalPlayer()->index].model, "CoorFrom", "0", iF, sizeof(iF), "cstrike/gfx/char.ini");
 	GetPrivateProfileStringA(PlayerClassManager()[gEngfuncs.GetLocalPlayer()->index].model, "CoorTo", "0", iT, sizeof(iT), "cstrike/gfx/char.ini");
-	GetPrivateProfileStringA(PlayerClassManager()[gEngfuncs.GetLocalPlayer()->index].model, "Name", "0", iName, sizeof(iName), "cstrike/gfx/char.ini");
+	GetPrivateProfileStringA(PlayerClassManager()[gEngfuncs.GetLocalPlayer()->index].model, "Name", "0", cName, sizeof(cName), "cstrike/gfx/char.ini");
+	  
+	if (cName[0] == '0') {
+		sprintf(cName, "Missing %s, fix char.ini", PlayerClassManager()[gEngfuncs.GetLocalPlayer()->index].model);
+		LogToFile(cName); 
+	} 
 	 
-	sprintf(cFbg, "gfx\\charSystem\\HP_FBG_%s", iName);
-	sprintf(cEffect, "gfx\\charSystem\\HP_FBGEFFECT_%s", iName);
-	sprintf(cFline, "gfx\\charSystem\\HP_FLINE_%s", iName);
 
 	int r, g, b, a;
 	if (HudHealth().m_iHealth >= 51) {
@@ -114,18 +135,15 @@ void CHudHealth::DrawHealth(float time)
 		if ((int)(time * 10) % 2 == 0) a = 255;
 		else a = 0;
 	}
-	GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(cFbg)].iTexture, 69, 154, 98, 255, 5, ScreenHeight - 90, 1.0);
-	GL_DrawTGACustom(g_Texture[Hud().m_TGA.FindTexture(cEffect)].iTexture, 5, ScreenHeight - 90, 128, 128, (atoi(iT) / 100.0f) - (float(HudHealth().m_iHealth) / 100) * ((atoi(iT) / 100.0f) - (atoi(iF) / 100.0f)), r, g, b,a);
-	GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(cFline)].iTexture, 255, 255, 255, 255, 5, ScreenHeight - 90, 1.0);
+	if (buff[0] == '0') { // 0=> zombi
+		sprintf(buff, "gfx\\charSystem\\HP_FBG_%s", cName);
+		GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(buff)].iTexture, 69, 154, 98, 255, 5, ScreenHeight - 90, 1.0);
 
-	//Display HP & AC
-	char num[10]; 
-	sprintf(num, "%i", HudHealth().m_iArmor <= 0 ? 0 : HudHealth().m_iArmor);
-	g_Font.DrawString(UTF8ToUnicode(num), (ScreenWidth / 6.5 + 40) - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 44, 1000, 1000); // Display AC 
-
-	sprintf(num, "%i", HudHealth().m_iHealth <= 0 ? 0 : HudHealth().m_iHealth);
-	g_Font.DrawString(UTF8ToUnicode(num), (ScreenWidth / 6.5 + 40) - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 14, 1000, 1000); // Display Health
-
+		sprintf(buff, "gfx\\charSystem\\HP_FBGEFFECT_%s", cName);
+		GL_DrawTGACustom(g_Texture[Hud().m_TGA.FindTexture(buff)].iTexture, 5, ScreenHeight - 90, 128, 128, (atoi(iT) / 100.0f) - (float(HudHealth().m_iHealth) / 100) * ((atoi(iT) / 100.0f) - (atoi(iF) / 100.0f)), r, g, b, a);
+	}
+	sprintf(buff, "gfx\\charSystem\\HP_FLINE_%s", cName);
+	GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(buff)].iTexture, 255, 255, 255, 255, 5, ScreenHeight - 90, 1.0);  
 }
 
 void CHudHealth::DrawHealthExtra(float time)

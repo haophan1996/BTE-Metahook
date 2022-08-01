@@ -304,6 +304,7 @@
     <ClCompile Include="msg_util.cpp" />
     <ClCompile Include="netapi.cpp" />
     <ClCompile Include="playaudio.cpp" />
+    <ClCompile Include="PlayerLevel.cpp" />
     <ClCompile Include="plugins.cpp" />
     <ClCompile Include="R.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -881,6 +882,7 @@
     <ClInclude Include="msghook.h" />
     <ClInclude Include="msg_util.h" />
     <ClInclude Include="playaudio.h" />
+    <ClInclude Include="PlayerLevel.h" />
     <ClInclude Include="plugins.h" />
     <ClInclude Include="R.h" />
     <ClInclude Include="Renderer.h" />

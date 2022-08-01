@@ -296,8 +296,8 @@ void CHudSayText::Draw(float time)
 		}
 	}
 
-	if (!gConfigs.bEnableNewHud)
-		return;
+	//if (!gConfigs.bEnableNewHud)
+	//	return;
 	
 	line *m = head;
 	line *last;
@@ -425,8 +425,8 @@ void CHudSayText::Add(wchar_t *text, int team)
 
 void CHudSayText::MsgFunc_SayText(const char *pszName, int iSize, void *pbuf)
 {
-	if (!gConfigs.bEnableNewHud)
-		return;
+	//if (!gConfigs.bEnableNewHud)
+	//	return;
 
 	BEGIN_READ(pbuf, iSize);
 

@@ -7,9 +7,11 @@
 #include "BaseUI.h" 
 #include <freetype/ftstroke.h>
 
+
 Font g_Font;
 Font g_FontBold;
 Font g_FontOutLine;
+Font g_FontBoldOutLine;
 
 int Font::Init(char *name)
 {

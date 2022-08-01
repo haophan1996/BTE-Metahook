@@ -177,12 +177,12 @@ void CCSBaseBuyMenu::UpdateGameMode()
 	if (m_pMainMenu)
 		m_pMainMenu->DeletePanel();
 
-	if (IS_ZOMBIE_MODE && (g_iMod != MOD_ZB4))
+	//if (IS_ZOMBIE_MODE && (g_iMod != MOD_ZB4))
 		m_pMainMenu = new CCSBuySubMenu_ZombieMod(this);
-	else if ((g_iMod == MOD_ZB4) || (g_iMod == MOD_TDM) || (g_iMod == MOD_DM))
-		m_pMainMenu = new CCSBuySubMenu_DeathMatch(this);
-	else
-		m_pMainMenu = new CCSBuySubMenu_DefaultMode(this);
+//	else if ((g_iMod == MOD_ZB4) || (g_iMod == MOD_TDM) || (g_iMod == MOD_DM))
+	//	m_pMainMenu = new CCSBuySubMenu_DeathMatch(this);
+	//else
+	//	m_pMainMenu = new CCSBuySubMenu_DefaultMode(this);
 
 
 	SetupControlSettings();

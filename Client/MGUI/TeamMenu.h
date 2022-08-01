@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Client/PlayerClassManager.h"
+#include <MGUI/TeamMenu.h>
 
 extern struct CLASS;
 

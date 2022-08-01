@@ -64,3 +64,4 @@ private:
 extern Font g_Font;
 extern Font g_FontOutLine;
 extern Font g_FontBold;
+extern Font g_FontBoldOutLine;

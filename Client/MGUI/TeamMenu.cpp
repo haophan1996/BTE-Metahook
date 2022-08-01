@@ -72,7 +72,7 @@ void CCSTeamMenu::BuildBaseFrame()
 		m_pButtonTeamSlot[i] = MGUI_CreateButton(m_pPanel, 0, 0, 0, 0);
 		m_pButtonTeamSlot[i]->SetEnabled(true);
 		m_pButtonTeamSlot[i]->SetLabel(GetLangUni(TeamSelections[i+1]));
-		m_pButtonTeamSlot[i]->SetCommand(va("MGUI.TeamMenuSwitchTeam%d", i + 1));
+		m_pButtonTeamSlot[i]->SetCommand(va("MGUI.TeamMenuSwitchTeam%d", i + 1));  
 		m_pButtonTeamSlot[i]->m_iSize = 10;
 		m_pButtonTeamSlot[i]->m_Tex_Type = MGUI_TEX_TYPE_3;
 		memcpy(m_pButtonTeamSlot[i]->iTga3, m_iColumnTexture, sizeof(m_iColumnTexture));
@@ -121,7 +121,7 @@ void CCSTeamMenu::BuildBaseFrame()
 
 		m_pImageInfo[i] = MGUI_CreateImage(m_pPanelInfo[i], 0, 0, 0, 0, true, false);
 		m_pLabelInfo[i] = MGUI_CreateLabel(m_pPanelInfo[i], 0, 0, 0, 0);
-		m_pLabelInfo[i]->SetColor(150, 100, 20, 255);
+		//m_pLabelInfo[i]->SetColor(150, 100, 20, 255);
 	}
 }
 
@@ -175,17 +175,18 @@ void CCSTeamMenu::Reset(void)
 		m_pPanelInfo[i]->w = int(256 * scale);
 		m_pPanelInfo[i]->h = int(256 * scale);
 
-		m_pImageInfo[i]->x = m_pImageInfo[i]->y = 0;
-		m_pImageInfo[i]->w = int(256 * scale);
-		m_pImageInfo[i]->h = int(196 * scale);
+		m_pImageInfo[i]->x = m_pImageInfo[i]->y = -10;
+		m_pImageInfo[i]->w = int(389);
+		m_pImageInfo[i]->h = int(255);
 
-		m_pLabelInfo[i]->x = 0;
+		/*m_pLabelInfo[i]->x = 0;
 		m_pLabelInfo[i]->y = int(200 * scale);
 		m_pLabelInfo[i]->w = int(256 * scale);
 		m_pLabelInfo[i]->h = int(46 * scale);
-		m_pLabelInfo[i]->SetSize(15);
+		m_pLabelInfo[i]->SetSize(15);*/
 
 	}
+
 
 	m_pButtonPage[0]->w = m_pButtonPage[1]->w = 97;
 	m_pButtonPage[0]->h = m_pButtonPage[1]->h = 25;
@@ -286,8 +287,8 @@ void CCSTeamMenu::SwitchToPage(unsigned iPage)
 				m_pButtonSlot[i]->SetCommand(va("jointeam %d; joinclass %d; bte_choose_player %s; ", m_iCurrentTeam,1, x.model));
 				m_pButtonSlotLabel[i]->SetLabel(GetClassNameFormat(x.model));
 				
-				m_pLabelInfo[i]->SetLabel(GetClassInfoFormat(x.model));
-				m_pImageInfo[i]->SetTexture(va("gfx\\vgui\\%s", x.model));
+				//m_pLabelInfo[i]->SetLabel(GetClassInfoFormat(x.model));
+				m_pImageInfo[i]->SetTexture(va("gfx\\player\\%s", x.model));
 
 			}
 			else
@@ -302,7 +303,7 @@ void CCSTeamMenu::SwitchToPage(unsigned iPage)
 			m_pButtonSlot[i]->SetCommand(va("jointeam %d;joinclass %d, bte_choose_player %s", m_iCurrentTeam,1, m_Classes[RANDOM_LONG(0, m_Classes.size() - 1)]->model));
 			m_pButtonSlotLabel[i]->SetLabel(GetLangUni("#Cstrike_Auto_Select"));
 
-			m_pLabelInfo[i]->SetLabel(GetLangUni("#Cstrike_AutoSelect_Label"));
+			//m_pLabelInfo[i]->SetLabel(GetLangUni("#Cstrike_AutoSelect_Label"));
 			m_pImageInfo[i]->SetTexture("gfx\\vgui\\t_random");
 		}
 

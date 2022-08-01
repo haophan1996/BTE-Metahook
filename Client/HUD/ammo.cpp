@@ -22,6 +22,7 @@
 #include <HUD/DrawTga.h>
 #include "DrawTargaImage.h"
 #include "Encode.h"
+#include <PlayerClassManager.h>
 
 
 Font myFont;
@@ -100,7 +101,8 @@ void CHudAmmo::Draw(float flTime)
 
 		if (g_iWeaponData[g_iCurrentWeapon].rcAutoaim.right > 0 && g_iWeaponData[g_iCurrentWeapon].rcAutoaim.bottom > 0)
 			gEngfuncs.pfnSPR_DrawHoles(0, x, y, &g_iWeaponData[g_iCurrentWeapon].rcAutoaim);
-	} 
+	}  
+
 	//Show weapons label
 	if (g_bAlive) {
 		std::string s = g_iWeaponData[g_iCurrentWeapon].szName; 
@@ -135,13 +137,13 @@ void CHudAmmo::Draw(float flTime)
 			sprintf(wpnChar, "gfx\\vgui\\AMMOICON\\%s_LINE", cstr);
 			GL_DrawTGA(g_Texture[Hud().m_TGA.FindTexture(wpnChar)].iTexture, 255, 255, 255, 255, ScreenWidth - 256, ScreenHeight - 65, 1.0);
 			  
-			g_FontOutLine.SetColor(0, 0, 0, 255);
-			g_FontOutLine.SetWidth(15);
-			g_FontOutLine.DrawString(g_szCurWeapon2, ScreenWidth - g_FontOutLine.GetLen(g_szCurWeapon2) - 80, ScreenHeight - 67, 1000, 1000);
+			g_FontBoldOutLine.SetColor(0, 0, 0, 255);
+			g_FontBoldOutLine.SetWidth(15);
+			g_FontBoldOutLine.DrawString(g_szCurWeapon2, ScreenWidth - g_FontBoldOutLine.GetLen(g_szCurWeapon2) - 80, ScreenHeight - 67, 1000, 1000);
 
-			g_Font.SetColor(173, 218, 218, 255);
-			g_Font.SetWidth(15);
-			g_Font.DrawString(g_szCurWeapon2, ScreenWidth - g_Font.GetLen(g_szCurWeapon2) - 80, ScreenHeight - 67, 1000, 1000);
+			g_FontBold.SetColor(173, 218, 218, 255);
+			g_FontBold.SetWidth(15);
+			g_FontBold.DrawString(g_szCurWeapon2, ScreenWidth - g_FontBold.GetLen(g_szCurWeapon2) - 80, ScreenHeight - 67, 1000, 1000);
 		}
 	}
 }
@@ -230,10 +232,7 @@ void CHudAmmo::DrawAmmo(float time)
 		sprintf(num, "%i", m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType]);
 		g_Font.DrawString(UTF8ToUnicode(num), ScreenWidth - 178 - g_Font.GetLen(UTF8ToUnicode(num)), ScreenHeight - 8, 1000, 1000); 
 	}
-	else {
-		LogToFile(g_iWeaponData[g_iCurrentWeapon].szName);
-		 
-		 
+	else { 
 		sprintf(num, "%i", m_iAmmo[g_iWeaponData[g_iCurrentWeapon].iAmmoType]);
 		g_Font.DrawString(UTF8ToUnicode(num), ScreenWidth - 167, ScreenHeight - 8, 1000, 1000);
 

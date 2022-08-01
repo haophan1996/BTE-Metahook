@@ -1473,14 +1473,17 @@ int HUD_GetStudioModelInterface(int iVersion, struct r_studio_interface_s **ppSt
 	CVAR_Init();
 
 
-	g_Font.Init("font.ttf");
+	g_Font.Init("font_regular.ttf");
 	g_Font.isOutline = false;
 
 	g_FontBold.Init("font_bold.ttf");
 	g_FontBold.isOutline = false;
 
-	g_FontOutLine.Init("font.ttf");
+	g_FontOutLine.Init("font_regular.ttf");
 	g_FontOutLine.isOutline = true;
+
+	g_FontBoldOutLine.Init("font_bold.ttf");
+	g_FontBoldOutLine.isOutline = true;
 
 	r_currententity = *(cl_entity_t ***)((DWORD)pEngineStudio->GetCurrentEntity + 0x1);
 
